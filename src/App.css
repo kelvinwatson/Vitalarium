@@ -1,0 +1,8 @@
+.App{
+  height: 100%;
+  /*background: url(https://static.pexels.com/photos/574116/pexels-photo-574116.jpeg);*/
+  position: relative;
+
+  background-color: #eaeceb;
+  background: linear-gradient(to bottom, #f0f2f1 0%, #e7e8e7 100%);
+}
