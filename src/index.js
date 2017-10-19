@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import Root from './Components/Root/Root'
 import registerServiceWorker from './registerServiceWorker';
 
 /**
@@ -12,7 +13,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import RootReducer from './Reducers';
-import { fetchMusic, getNavigation } from './Actions';
+import { getNavigation } from './Actions';
 
 import FirebaseUtil from './Utils/InitializeFirebase';
 
@@ -39,10 +40,7 @@ FirebaseUtil.init();
 
 store.dispatch(getNavigation());
 
-
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Root store={store} />,
   document.getElementById('root'));
 registerServiceWorker();

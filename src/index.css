@@ -1,20 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400');
-@import url('https://fonts.googleapis.com/css?family=Lora');
-@import url('https://fonts.googleapis.com/css?family=Noto+Serif');
-@import url('https://fonts.googleapis.com/css?family=Amiri|Bellefair|Martel:300|Scope+One');
-@import url('https://fonts.googleapis.com/css?family=Amiri|Aref+Ruqaa');
-
-@import url('https://fonts.googleapis.com/css?family=Poiret+One');
-
-@import url('https://fonts.googleapis.com/css?family=Catamaran:100|Yantramanav:100')
-html {
-  box-sizing: border-box;
-  font-family: 'Lato', sans-serif;
-  margin: 0px;
-  height: 100%;
-  width: 100%;
-}
-
+/*@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400');*/
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -24,6 +8,14 @@ html {
   box-sizing: inherit;
 }
 
+html {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -31,7 +23,7 @@ body {
   height: 100%;
 }
 
-#root{
+#root {
   height: 100%;
   overflow: hidden;
 }

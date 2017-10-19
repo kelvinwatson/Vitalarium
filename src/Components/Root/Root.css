@@ -1,15 +1,5 @@
-.NavigationSection {
-  font-weight: 300;
-}
-
-.NavigationList {
-  display: inline;
-  list-style: none;
-}
-
-.NavigationList__Item {
-  display: inline;
-  padding: 16px;
+.Route__HeightController {
+  height: 100%;
 }
 
 @media(max-width: 767px) {
