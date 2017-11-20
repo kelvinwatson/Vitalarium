@@ -35,9 +35,7 @@ if (process.env.NODE_ENV === 'production'){
   );
 }
 
-
 FirebaseUtil.init();
-
 store.dispatch(getNavigation());
 
 ReactDOM.render(

@@ -6,11 +6,11 @@ import './Navigation.css'
 const Navigation = ({ page, list, onNavigationClicked }) => (
 
   <section className={`NavigationSection`}>
-    <span>LOGO/NAME</span>
+    <span>VITALARIUM</span>
     <ul className="NavigationList">
       <li className="NavigationList__Item"><Link to="/" onClick={(e) => onNavigationClicked('me')}>Home</Link></li>
       <li className="NavigationList__Item"><Link to="/about" onClick={(e) => onNavigationClicked('me')}>About</Link></li>
-      <li className="NavigationList__Item"><Link to="/blog" onClick={(e) => onNavigationClicked('reach')}>Blog</Link></li>
+      <li className="NavigationList__Item"><Link to="/blog" onClick={(e) => onNavigationClicked('reach')}>Create Task</Link></li>
     </ul>
 
   </section>

@@ -3,13 +3,13 @@ import * as firebase from 'firebase';
 var FirebaseUtil = {
   init: function(){
     var config = {
-     apiKey: "AIzaSyBPY4upYrG7KTASEOS8McUXgZii4Mb0Gr4",
-     authDomain: "kelvinwatson-53204.firebaseapp.com",
-     databaseURL: "https://kelvinwatson-53204.firebaseio.com",
-     projectId: "kelvinwatson-53204",
-     storageBucket: "kelvinwatson-53204.appspot.com",
-     messagingSenderId: "565863015502"
-   };
+      apiKey: "AIzaSyAZQ0IZnW75Y4e7O2eUmq2F4c1mrXZHe3s",
+      authDomain: "vitalarium-ae815.firebaseapp.com",
+      databaseURL: "https://vitalarium-ae815.firebaseio.com",
+      projectId: "vitalarium-ae815",
+      storageBucket: "vitalarium-ae815.appspot.com",
+      messagingSenderId: "739292378240"
+    };
    firebase.initializeApp(config); //synchronous
   },
 
