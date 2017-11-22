@@ -13,32 +13,32 @@ export default class About extends React.Component {
     <div>
       <article className="cf pa3 mw9 center">
         <header className="fl w-100 w-50-l pa3-m pa4-l">
-          <h2 className="lh-title f3 b mt0">
+          <h2 className="lh-title f4 b mt0">
             What is Vitalarium?
-            It&apos;s a tool for scheduling and organizing your projects and tasks, Scrum style.
           </h2>
+          <div className="f3 lh-title fw3">It&apos;s a <strong className="fw5">Scrum project management tool</strong> for scheduling and organizing tasks in your <strong className="fw5">projects</strong> and <strong className="fw5">daily life</strong>.</div>
         </header>
         <section className="fl w-100">
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
-            <h3 className="">What&apos;s Scrum?</h3>
+            <h3 className="f4 fw4 lh-copy">What&apos;s Scrum?</h3>
             <p className="f6 lh-copy measure">
               Scrum is an agile methodology for scheduling your tasks. It is used by many professionals in a variety of fields.
             </p>
           </div>
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
-            <h3 className="">Why use Vitalarium?</h3>
+            <h3 className="f4 fw4 lh-copy">Why use Vitalarium?</h3>
             <p className="f6 lh-copy measure">
               Vitalarium helps manage your tasks, in your projects or daily life!
             </p>
           </div>
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
-            <h3 className="">How are we different from other agile project management tools?</h3>
+            <h3 className="f4 fw4 lh-copy">How are we different from other agile project management tools?</h3>
             <p className="f6 lh-copy measure">
               Vitalarium is completely <strong>free</strong> to use!
             </p>
           </div>
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
-            <h3 className="">Ready to organize your projects and your life?</h3>
+            <h3 className="f4 fw4 lh-copy">Ready to organize your projects and your life?</h3>
             <p className="f6 lh-copy measure">
               Start <Link to="/login" className="link dim dark-gray f6 f5-l dib mr3 mr4-l">here!</Link>
             </p>
