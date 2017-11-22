@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import DebugLog from '../../Utils/DebugLog';
 import './About.css'
 
@@ -11,44 +12,35 @@ export default class About extends React.Component {
     return (
     <div>
       <article className="cf pa3 mw9 center">
-        <header className="fl w-100 w-50-l pa3-m pa4-l mb3 mb5-l">
+        <header className="fl w-100 w-50-l pa3-m pa4-l">
           <h2 className="lh-title f3 b mt0">
-            What is Vitalarium? It is an tool for scheduling and organizing your tasks, Scrum style.
+            What is Vitalarium?
+            It&apos;s a tool for scheduling and organizing your projects and tasks, Scrum style.
           </h2>
         </header>
         <section className="fl w-100">
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
+            <h3 className="">What&apos;s Scrum?</h3>
             <p className="f6 lh-copy measure">
-              Scrum is a methodology for scheduling your tasks. It is used by many professionals in a variety of fields.
+              Scrum is an agile methodology for scheduling your tasks. It is used by many professionals in a variety of fields.
             </p>
           </div>
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
+            <h3 className="">Why use Vitalarium?</h3>
             <p className="f6 lh-copy measure">
-              True book design, therefore, is a matter of tact (tempo, rhythm,
-              touch) alone. It flows from something rarely appreciated today:
-              good taste. The book designer strives for perfection; yet every
-              perfect thing lives somewhere in the neighborhood of dullness and
-              is frequently mistaken for it by the insensitive. In a time that
-              hungers for tangible novelties, dull perfection holds no
-              advertising value at all.
+              Vitalarium helps manage your tasks, in your projects or daily life!
             </p>
           </div>
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
+            <h3 className="">How are we different from other agile project management tools?</h3>
             <p className="f6 lh-copy measure">
-              In a masterpiece of typography, the artists signature has been
-              eliminated. What some may praise as personal styles are in reality
-              small and empty peculiarities, frequently damaging, that masquerade
-              as innovations.
+              Vitalarium is completely <strong>free</strong> to use!
             </p>
           </div>
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
+            <h3 className="">Ready to organize your projects and your life?</h3>
             <p className="f6 lh-copy measure">
-              Only through constant practice and strictest self-criticism may we
-              develop a sense for a perfect piece of work. Unfortunately, most
-              seem content with a middling performance. Careful spacing of words
-              and the correct spacing of capital letters appear to be unknown or
-              unimportant to some typesetters, yet for him who investigates, the
-              correct rules are not difficult to discover.
+              Start <Link to="/login" className="link dim dark-gray f6 f5-l dib mr3 mr4-l">here!</Link>
             </p>
           </div>
         </section>
@@ -84,7 +76,7 @@ export default class About extends React.Component {
         </div>
       </article>
 
-      <article className="center ph3 ph5-ns tc br2 pv5 bg-washed-green dark-green mb5">
+      <article className="center ph3 ph5-ns tc br2 pv5 bg-washed-green dark-blue mb5">
         <h1 className="fw6 f3 f2-ns lh-title mt0 mb3">
           Ready to use Vitalarium?
         </h1>
@@ -96,11 +88,11 @@ export default class About extends React.Component {
           Sign up for beta access or learn more about Vitalarium.
         </p>
         <div>
-          <a className="f6 br-pill bg-dark-green no-underline washed-green ba b--dark-green grow pv2 ph3 dib mr3"
+          <a className="f6 br-pill bg-dark-blue no-underline washed-green ba b--dark-blue grow pv2 ph3 dib mr3"
             href="#">
             Sign Up
           </a>
-          <a className="f6 br-pill dark-green no-underline ba grow pv2 ph3 dib"
+          <a className="f6 br-pill dark-blue no-underline ba grow pv2 ph3 dib"
             href="#">
             Learn More
           </a>

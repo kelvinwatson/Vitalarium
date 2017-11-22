@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AboutContainer from './Containers/AboutContainer';
-import LoginContainer from './Containers/LoginContainer';
 import './App.css';
 
 /**
@@ -13,7 +12,6 @@ class App extends Component {
     return (
       <div className="App">
         <AboutContainer/>
-        <LoginContainer/>
       </div>
     );
   }
