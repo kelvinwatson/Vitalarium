@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import DebugLog from '../Utils/DebugLog';
 import Login from '../Components/Login/Login';
+import { login } from '../Actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -9,6 +10,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onClickSignIn: (provider)=>{
+      dispatch(login(provider));
+    }
   }
 }
 

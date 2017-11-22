@@ -1,39 +1,6 @@
-.NavigationFlex {
-  font-weight: 300;
-  display:flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
+.Navigation--LeftPadding{
+  padding-left: 3rem;
 }
-.NavigationFlex__Item{
-}
-.NavigationFlex__Logo{
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 20%;
-}
-.NavigationFlex__Slogan{
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 30%;
-
-}
-.NavigationFlex__List{
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 50%;
-  text-align: right;
-}
-.NavigationList {
-  display: inline;
-  list-style: none;
-}
-
-.NavigationList__Item {
-  display: inline;
-  padding: 16px;
-}
-
 @media(max-width: 767px) {
   /* phones */
 }

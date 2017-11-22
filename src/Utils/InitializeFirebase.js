@@ -2,12 +2,14 @@ import * as firebase from 'firebase';
 import mockData from '../Tests/MockData';
 import DebugLog from '../Utils/DebugLog';
 
+var FirebaseServer;
+
 var FirebaseUtil = {
   init: function(){
 
     let config;
     if (process.env.NODE_ENV === 'test'){
-      var FirebaseServer = require('firebase-server');
+      FirebaseServer = require('firebase-server');
       FirebaseServer = new FirebaseServer(5000, 'localhost.firebaseio.test', mockData);
       const config = {
         apiKey: 'fake-api-key-for-testing-purposes-only',

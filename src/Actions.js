@@ -11,6 +11,23 @@ export const NAVIGATION = {
   UNSET: 'UNSET_SELECTED_NAVIGATION'
 };
 
+export const USER = {
+  LOGIN: {
+    LOADING: 'LOADING_LOGIN_USER',
+    SUCCESS: 'SUCCESS_LOGIN_USER',
+    FAILURE: 'FAILURE_LOGIN_USER',
+  },
+  UPDATE: {
+
+  },
+  //TODO: assign to, assigned tasks?
+  LOGOUT: {
+    LOADING: 'LOADING_LOGOUT_USER',
+    SUCCESS: 'SUCCESS_LOGOUT_USER',
+    FAILURE: 'FAILURE_LOGOUT_USER',
+  }
+}
+
 export const TASK = {
   GET: {
     LOADING: 'LOADING_GET_TASK',
@@ -69,6 +86,67 @@ export const TASKS = {
 //   }
 // }
 
+/*
+ * User
+ */
+
+export function login(provider){
+  return function (dispatch) {
+    dispatch(loginLoading());
+    let firebase = FirebaseUtil.getFirebase();
+    let authProvider;
+    switch(provider){
+      case 'Google':
+        authProvider = new firebase.auth.GoogleAuthProvider();
+        break;
+    }
+    DebugLog('provider', provider);
+    DebugLog('authProvider', authProvider);
+    firebase.auth().signInWithRedirect(authProvider);
+    firebase.auth().getRedirectResult().then(function(result) {
+    if (result.credential) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      let token = result.credential.accessToken;
+    }
+    let user = result.user; //the signed-in user info
+    DebugLog('user', user);
+    }).catch(function(err) {
+      dispatch(loginFailure(err.message))
+    });
+
+    //TODO record user in database if not already exists
+
+    // return FirebaseUtil.getFirebase().database().ref('tasks').once('value').then((snap)=>{
+    //   // DebugLog('snap',snap.val());
+    //   dispatch(getTasksSuccess(snap && snap.val()));
+    // }).catch(err=>{
+    //   dispatch(getTasksFailure(err.message));
+    // });
+  }
+}
+
+export function loginLoading(){
+  return {
+    type: USER.LOGIN.LOADING,
+    status: 'Logging you in...',
+  }
+}
+
+export function loginSuccess(user){
+  return {
+    type: USER.LOGIN.SUCCESS,
+    status: 'Successfully logged in',
+    user,
+  }
+}
+
+export function loginFailure(err){
+  return {
+    type: USER.LOGIN.FAILURE,
+    status: err
+  }
+}
+
 export function getNavigation(){
   return {
     type: NAVIGATION.GET
@@ -88,6 +166,9 @@ export function unsetNavigation() {
   }
 }
 
+/*
+ * Get tasks
+ */
 export function getTasks(filter){
   //TODO: use filter
 
@@ -123,6 +204,9 @@ export function getTasksFailure(err){
   }
 }
 
+/*
+ * Create task
+ */
 export function createTask(task) {
   const t = Date.now();
   task.created = t;
@@ -133,7 +217,7 @@ export function createTask(task) {
       dispatch(createTaskSuccess(task));
     }).catch((err)=>{
       DebugLog('err',err);
-      dispatch(createTaskFailure(task, err))
+      dispatch(createTaskFailure(task, err.message))
     });
   }
 }

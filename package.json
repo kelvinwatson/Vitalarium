@@ -25,6 +25,7 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "test:watch": "npm test -- --watch",
+    "deploy": "npm run build && firebase deploy",
     "eject": "react-scripts eject"
   },
   "devDependencies": {

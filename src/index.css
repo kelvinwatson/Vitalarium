@@ -10,6 +10,7 @@
 
 html {
   box-sizing: border-box;
+  font-family: helvetica neue,helvetica,sans-serif;
   margin: 0px;
   height: 100%;
   width: 100%;
@@ -24,5 +25,4 @@ body {
 
 #root {
   height: 100%;
-  overflow: hidden;
 }
