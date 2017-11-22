@@ -5,9 +5,10 @@ import './Navigation.css'
 
 const Navigation = ({ page, list, onNavigationClicked }) => (
 
-  <section className={`NavigationSection`}>
-    <span>VITALARIUM</span>
-    <ul className="NavigationList">
+  <section className={`NavigationFlex`}>
+    <span className="NavigationFlex__Item NavigationFlex__Logo">VITALARIUM</span>
+    <span className="NavigationFlex__Item NavigationFlex__Slogan">Organize your life, Agile style</span>
+    <ul className="NavigationFlex__Item NavigationFlex__List NavigationList">
       <li className="NavigationList__Item"><Link to="/" onClick={(e) => onNavigationClicked('me')}>Home</Link></li>
       <li className="NavigationList__Item"><Link to="/about" onClick={(e) => onNavigationClicked('me')}>About</Link></li>
       <li className="NavigationList__Item"><Link to="/blog" onClick={(e) => onNavigationClicked('reach')}>Create Task</Link></li>
