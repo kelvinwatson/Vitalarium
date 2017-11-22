@@ -1,12 +1,12 @@
 import * as firebase from 'firebase';
 import mockData from '../Tests/MockData';
+import DebugLog from '../Utils/DebugLog';
 
 var FirebaseUtil = {
   init: function(){
 
     let config;
     if (process.env.NODE_ENV === 'test'){
-      console.log('mock',mockData);
       var FirebaseServer = require('firebase-server');
       FirebaseServer = new FirebaseServer(5000, 'localhost.firebaseio.test', mockData);
       const config = {
@@ -33,7 +33,6 @@ var FirebaseUtil = {
 
   close: function() {
     if (process.env.NODE_ENV === 'test') {
-      console.log('CLOSING FIREBASE');
       FirebaseServer.close();
     }
   }

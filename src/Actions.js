@@ -94,7 +94,7 @@ export function getTasks(filter){
   return function (dispatch) {
     dispatch(getTasksLoading(filter));
     return FirebaseUtil.getFirebase().database().ref('tasks').once('value').then((snap)=>{
-      console.log('snap',snap.val());
+      // DebugLog('snap',snap.val());
       dispatch(getTasksSuccess(snap && snap.val()));
     });
   }
@@ -124,10 +124,16 @@ export function getTasksFailure(err){
 }
 
 export function createTask(task) {
+  const t = Date.now();
+  task.created = t;
+  DebugLog('task',task);
   return function (dispatch) {
     dispatch(createTaskLoading());
-    return FirebaseUtil.getFirebase().database().ref('tasks').push(task, function(err){
-      err ? dispatch(createTaskFailure(task, err)) : dispatch(createTaskSuccess(task));
+    return FirebaseUtil.getFirebase().database().ref('tasks/'+t).set(task).then(()=>{
+      dispatch(createTaskSuccess(task));
+    }).catch((err)=>{
+      DebugLog('err',err);
+      dispatch(createTaskFailure(task, err))
     });
   }
 }

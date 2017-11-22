@@ -5,7 +5,7 @@ import Navigation from '../Components/Navigation/Navigation';
 
 const mapStateToProps = (state) => {
 
-  DebugLog('state',state);
+  // DebugLog('state',state);
   return {
     page: state.navigation.page,
     list: state.navigation.list
@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onNavigationClicked: (target) => {
       // dispatch(setNavigation(target));
-      DebugLog('nav clicked', target);
+      // DebugLog('nav clicked', target);
     }
   }
 }

@@ -1,6 +1,3 @@
-/*
- * Redux
- */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -12,20 +9,27 @@ import thunkMiddleware from 'redux-thunk';
 import FirebaseUtil from '../Utils/InitializeFirebase';
 import RootReducer from '../Reducers';
 import Root from '../Components/Root/Root';
+import DebugLog from '../Utils/DebugLog';
+
+/*
+ * Mocks
+ */
+const task = {
+  title: 'mock task',
+};
+
+const err = { errMsg: 'mock err' };
 
 beforeAll(() => {
-
   const store = createStore(
     RootReducer,
     applyMiddleware(
       thunkMiddleware // lets us dispatch() functions
     )
   );
-
   ReactDOM.render(
     <Root store={store} />,
     document.createElement('root'));
-
   return FirebaseUtil.init();
 });
 
@@ -45,13 +49,99 @@ describe('Actions: GET_NAVIGATION', () => {
   })
 });
 
+describe('Actions: TASK', () => {
+  describe('TASK.CREATE', ()=>{
+    it('TASK.CREATE should write task to database', (done)=>{
+      const dispatch = function(object) {
+        DebugLog('object', object);
+        switch(object){
+          case Actions.TASK.CREATE.LOADING:
+            expect(object).toEqual({
+              type: Actions.TASK.CREATE.LOADING,
+              status: 'Creating task...',
+              task: undefined
+            });
+            done();
+            break;
+          case Actions.TASK.CREATE.SUCCESS:
+            expect(object).toEqual({
+              type: Actions.TASK.CREATE.SUCCESS,
+              status: 'Successfully created task.',
+              task,
+            });
+            done();
+            break;
+          case Actions.TASK.CREATE.FAILURE:
+            expect(object).toEqual({
+              type: TASK.CREATE.FAILURE,
+              status: expect.anything(),
+              task,
+            });
+          default:
+            done();
+        }
+      };
+      Actions.createTask(task)(dispatch);
+    });
+
+    it('TASK.CREATE.LOADING should create a loading action', () => {
+      const expectedAction = {
+        type: Actions.TASK.CREATE.LOADING,
+        status: 'Creating task...',
+        task,
+      }
+      expect(Actions.createTaskLoading(task)).toEqual(expectedAction);
+    });
+
+    it('TASK.CREATE.SUCCESS should create a success action', () => {
+      const expectedAction = {
+        type: Actions.TASK.CREATE.SUCCESS,
+        status: 'Successfully created task.',
+        task,
+      }
+      expect(Actions.createTaskSuccess(task)).toEqual(expectedAction);
+    });
+
+    it('TASK.CREATE.FAILURE should create a failure action', () => {
+      const expectedAction = {
+        type: Actions.TASK.CREATE.FAILURE,
+        status: err,
+        task,
+      }
+      expect(Actions.createTaskFailure(task, err)).toEqual(expectedAction);
+    });
+  });
+});
 
 describe('Actions: TASKS', () => {
   describe('TASKS.GET', ()=>{
-
     it('TASKS.GET should retrieve tasks from database', (done)=>{
       const dispatch = function(object) {
-        console.log('Dispatch called: ', object);
+        switch(object){
+          case Actions.TASKS.GET.LOADING:
+            expect(object).toEqual({
+              type: Actions.TASKS.GET.LOADING,
+              status: 'Fetching tasks...',
+              filter,
+            });
+            done();
+            break;
+          case Actions.TASKS.GET.SUCCESS:
+            expect(object).toEqual({
+              type: Actions.TASKS.GET.SUCCESS,
+              status: 'Successfully retrieved tasks.',
+              tasks,
+            });
+            done();
+            break;
+          case Actions.TASKS.GET.FAILURE:
+            expect(object).toEqual({
+              type: Actions.TASKS.GET.FAILURE,
+              status: err
+            });
+          default:
+            done();
+        }
         if(object && object.tasks) {
           expect(object.tasks['12345']).toEqual({
             title: 'mock task title 1',
@@ -64,7 +154,7 @@ describe('Actions: TASKS', () => {
       Actions.getTasks()(dispatch);
     });
 
-    it('TASKS.GET.LOADING should create an action to load existing tasks', () => {
+    it('TASKS.GET.LOADING should create a loading action', () => {
       const expectedAction = {
         type: Actions.TASKS.GET.LOADING,
         status: 'Fetching tasks...',
@@ -73,7 +163,7 @@ describe('Actions: TASKS', () => {
       expect(Actions.getTasksLoading()).toEqual(expectedAction);
     });
 
-    it('TASKS.GET.LOADING should create an action to load filtered tasks', () => {
+    it('TASKS.GET.LOADING should create a loading action', () => {
       const filter = {
         type: 'BACKLOG',
       };
