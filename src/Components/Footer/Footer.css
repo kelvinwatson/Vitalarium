@@ -1,0 +1,15 @@
+.Footer__Background{
+  background-image:url(../../Images/rotating.gif)
+}
+
+@media(max-width: 767px) {
+  /* phones */
+}
+
+@media(max-width: 767px) and (orientation: portrait) {
+  /* portrait phones */
+}
+
+@media(min-width: 768px) {
+  /* tablets and desktop */
+}

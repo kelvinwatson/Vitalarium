@@ -2,7 +2,12 @@
   color: black;
   text-decoration: none;
 }
-
+.LoginIconHeight{
+  height: 3rem;
+}
+.LoginList{
+  max-width: 18rem;
+}
 @media(max-width: 767px) {
   /* phones */
 }
