@@ -1,6 +1,17 @@
-.Navigation--LeftPadding{
+.Navigation--LeftPadding {
   padding-left: 3rem;
 }
+
+.Navigation__Logo {
+  letter-spacing: 0.05rem;
+  font-family: 'Julius Sans One', sans-serif;
+}
+
+.Navigation__Logo--Border{
+  /*letter-spacing: -0.8rem;
+  padding-top:-1rem;*/
+}
+
 @media(max-width: 767px) {
   /* phones */
 }

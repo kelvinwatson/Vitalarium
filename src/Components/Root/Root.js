@@ -6,7 +6,7 @@ import { BrowserRouter, HashRouter } from 'react-router-dom';
 import AboutContainer from '../../Containers/AboutContainer';
 import NavigationContainer from '../../Containers/NavigationContainer';
 import LoginContainer from '../../Containers/LoginContainer';
-// import FooterContainer from '../../Containers/FooterContainer';
+import FooterContainer from '../../Containers/FooterContainer';
 import App from '../../App';
 import BlogContainer from '../../Containers/BlogContainer';
 import './Root.css';
@@ -22,7 +22,8 @@ const Root = ({ store }) => (
         <Route path="/blog" component={BlogContainer} />
         <Route path="/about" component={AboutContainer} />
         <Route exact path="/" component={App} />
-        {/*<FooterContainer/>*/}
+
+        <FooterContainer/>
       </div>
     </BrowserRouter>
   </Provider>

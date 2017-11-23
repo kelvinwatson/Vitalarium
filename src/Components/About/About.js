@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import DebugLog from '../../Utils/DebugLog';
+import { switchTheme } from '../../Utils/Themes';
 import './About.css'
 
 export default class About extends React.Component {
@@ -11,14 +12,18 @@ export default class About extends React.Component {
   render(){
     return (
     <div>
-      <article className="cf pa3 mw9 center">
-        <header className="fl w-100 w-50-l pa3-m pa4-l">
-          <h2 className="lh-title f4 b mt0">
-            What is Vitalarium?
-          </h2>
-          <div className="f3 lh-title fw3">It&apos;s a <strong className="fw5">Scrum project management tool</strong> for scheduling and organizing tasks in your <strong className="fw5">projects</strong> and <strong className="fw5">daily life</strong>.</div>
+      <article className="cf mw9 center">
+        <header className={`fl w-100 pv5 ph3 ph5-l ph4-m ${switchTheme()}`}>
+          <div className="w-50-l">
+            <h2 className="lh-title f4 b mt0">
+              What is Vitalarium?
+            </h2>
+            <div className="f3 lh-title fw3">
+              It&apos;s a <strong className="fw5">Scrum project management tool</strong> for scheduling and organizing tasks in your <strong className="fw5">projects</strong> and <strong className="fw5">daily life</strong>.
+            </div>
+          </div>
         </header>
-        <section className="fl w-100">
+        <section className="fl w-100 ph3 ph4-l ph3-m">
           <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
             <h3 className="f4 fw4 lh-copy">What&apos;s Scrum?</h3>
             <p className="f6 lh-copy measure">
@@ -46,7 +51,7 @@ export default class About extends React.Component {
         </section>
       </article>
 
-      <article className="pa3 pa5-ns" data-name="slab-stat-small">
+      <article className="pa3 pa5-ns">
         <h3 className="f6 ttu tracked">Today</h3>
         <div className="cf">
           <dl className="fl fn-l w-50 dib-l w-auto-l lh-title mr5-l">
@@ -76,23 +81,22 @@ export default class About extends React.Component {
         </div>
       </article>
 
-      <article className="center ph3 ph5-ns tc br2 pv5 bg-washed-green dark-blue mb5">
+      <article className="center ph3 ph5-ns tc br2 pv5 bg-yellow near-black">
         <h1 className="fw6 f3 f2-ns lh-title mt0 mb3">
           Ready to use Vitalarium?
         </h1>
-        <h2 className="fw2 f4 lh-copy mt0 mb3">
-          This will change things. And we want you to be involved. This text needs to
-          be longer for testing sake.
+        <h2 className="fw4 f4 lh-copy mt0 mb3">
+          Use it for free.
         </h2>
-        <p className="fw1 f5 mt0 mb3">
+        <p className="f5 mt0 mb3">
           Sign up for beta access or learn more about Vitalarium.
         </p>
         <div>
-          <a className="f6 br-pill bg-dark-blue no-underline washed-green ba b--dark-blue grow pv2 ph3 dib mr3"
+          <a className="fw6 f6 br-pill no-underline b--near-black bg-near-black yellow ba grow pv2 ph3 dib mr3"
             href="#">
             Sign Up
           </a>
-          <a className="f6 br-pill dark-blue no-underline ba grow pv2 ph3 dib"
+          <a className="f6 br-pill near-black b--near-black no-underline ba grow pv2 ph3 dib"
             href="#">
             Learn More
           </a>
