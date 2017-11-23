@@ -9,7 +9,7 @@ export default class About extends React.Component {
     return (
     <div>
       <article className="cf mw9 center">
-        <header className={`fl w-100 pv5 ph3 ph5-l ph4-m ${switchTheme()}`}>
+        <header className={`fl w-100 pv5 ph3 ph5-l ph4-m AboutHeaderBackground ${switchTheme()}`}>
           <div className="w-50-l">
             <h2 className="lh-title f4 b mt0">
               What is Vitalarium?
