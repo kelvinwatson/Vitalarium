@@ -3,7 +3,30 @@ import mockData from './MockData';
 
 var FirebaseServer;
 
+var getRedirectResult = function(){
+	return new Promise((resolve, reject) => {
+		resolve({
+			credential: {
+				accessToken: 'mockToken',
+			},
+			user: {
+				name: 'Mock name'
+			}
+		})
+	});
+};
+
+var getRedirectResultFailure = function(){
+	return new Promise((resolve, reject) => {
+		throw { error: 'Mock exception.' };
+	});
+}
+
 let FirebaseMock = {
+
+	changeRedirectFunction: function(newRedirectFunction) {
+		firebase.redirectFunction = newRedirectFunction;
+	},
 	init: function(){
     let config;
     FirebaseServer = require('firebase-server');
@@ -16,21 +39,11 @@ let FirebaseMock = {
     firebase.initializeApp(config);
   },
 	getFirebase: () => {
+		var self = this;
 		let auth = function() {
 			return {
 				signInWithRedirect: function(provider){ return {}; },
-				getRedirectResult: function(){
-					return new Promise((resolve, reject) => {
-						resolve({
-							credential: {
-								accessToken: 'mockToken',
-							},
-							user: {
-								name: 'Mock name'
-							}
-						})
-					});
-				}
+				getRedirectResult: firebase.redirectFunction || getRedirectResult
 			}
 		};
 		auth.GoogleAuthProvider = () => { return { mock: 'GoogleAuthProvider' }; };
