@@ -8,25 +8,19 @@ import './Login.css'
 export default class Login extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      isLoginInProgress: this.props.isLoginInProgress,
-    }
     this.onClickSignIn = this.onClickSignIn.bind(this);
   }
 
   onClickSignIn(provider){
-    DebugLog('props',this.props);
     this.props.onClickSignIn(provider);
   }
 
-  componentWillReceiveProps(newProps){
-    DebugLog('newProps.isLoginInProgress',newProps.isLoginInProgress);
-    this.setState({
-      isLoginInProgress: newProps.isLoginInProgress && (!newProps.isSuccess || !newProps.isFailure),
-    });
-  }
-
   render(){
+
+    if (this.props.user){
+      this.props.history.push("/dashboard");
+    }
+
     let ren;
 
     if (this.props.isLoginInProgress){

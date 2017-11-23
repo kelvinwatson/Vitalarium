@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
-// import DebugLog from '../Utils/DebugLog';
+import DebugLog from '../Utils/DebugLog';
 import Navigation from '../Components/Navigation/Navigation';
-// import { setNavigation, unsetNavigation } from '../Actions';
+import { login, logout } from '../Actions';
 
 const mapStateToProps = (state) => {
 
   // DebugLog('state',state);
   return {
+    isLoggedIn: Boolean(state.login.user),
     // page: state.navigation.page,
     // list: state.navigation.list
   }
@@ -17,7 +18,15 @@ const mapDispatchToProps = (dispatch) => {
     onNavigationClicked: (target) => {
       // dispatch(setNavigation(target));
       // DebugLog('nav clicked', target);
-    }
+    },
+    onLoginLogoutClicked: (isLoggedIn)=>{
+      DebugLog('isLoggedIn',isLoggedIn);
+      if (isLoggedIn){
+        dispatch(logout());
+      } else {
+        dispatch(login());
+      }
+    },
   }
 }
 
