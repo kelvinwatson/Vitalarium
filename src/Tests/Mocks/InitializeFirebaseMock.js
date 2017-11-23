@@ -16,9 +16,9 @@ var getRedirectResult = function(){
 	});
 };
 
-var getRedirectResultFailure = function(){
+var signOutFunction = function() {
 	return new Promise((resolve, reject) => {
-		throw { error: 'Mock exception.' };
+		resolve();
 	});
 }
 
@@ -47,7 +47,8 @@ let FirebaseMock = {
 			return {
 				signInWithRedirect: function(provider){ return {}; },
 				onAuthStateChanged: firebase.authStateFunction || function(callback){ callback({name: 'Mock name'}) },
-				getRedirectResult: firebase.redirectFunction || getRedirectResult
+				getRedirectResult: firebase.redirectFunction || getRedirectResult,
+				signOut: firebase.signOutFunction || signOutFunction
 			}
 		};
 		auth.GoogleAuthProvider = () => { return { mock: 'GoogleAuthProvider' }; };
