@@ -1,16 +1,20 @@
-.Login__Icon{
+.Login__Icon {
   color: black;
   text-decoration: none;
 }
-.LoginIconHeight{
+
+.LoginIconHeight {
   height: 3rem;
 }
-.LoginList{
-  max-width: 18rem;
+
+.LoginList {
+  max-width: 16rem;
 }
-.LoginList__Item{
+
+.LoginList__Item {
   cursor: pointer;
 }
+
 @media(max-width: 767px) {
   /* phones */
 }
