@@ -14,7 +14,7 @@ const Navigation = ({ isLoggedIn, onLoginLogoutClicked, onNavigationClicked }) =
       <a className="link dim dark-gray f6 f5-l dib mr3 mr4-l" title="Blog">Blog</a>
       <a className="link dim dark-gray f6 f5-l dib mr3 mr4-l" title="Press">Press</a>
       <Link to="/blog" className="link dim dark-gray f6 f5-l dib mr3 mr4-l" onClick={(e) => onNavigationClicked('reach')}>Reach</Link>
-      <Link to="/login" className="link dim dark-gray f6 f5-l dib mr3 mr4-l" onClick={(e) => {e.preventDefault(); onLoginLogoutClicked(isLoggedIn)}}>{isLoggedIn?'Logout':'Login'}</Link>
+      <Link to="/login" className="link dim dark-gray f6 f5-l dib mr3 mr4-l" onClick={(e) => {onLoginLogoutClicked(e, isLoggedIn)}}>{isLoggedIn?'Logout':'Login'}</Link>
     </div>
   </nav>
 )
