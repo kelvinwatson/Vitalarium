@@ -99,17 +99,31 @@ export function login(provider){
       case 'Google':
         authProvider = new firebase.auth.GoogleAuthProvider();
         break;
+			case 'Facebook':
+				authProvider = new firebase.auth.FacebookAuthProvider();
+				break;
+			case 'Twitter':
+				authProvider = new firebase.auth.TwitterAuthProvider();
+				break;
+			case 'Github':
+				authProvider = new firebase.auth.GithubAuthProvider();
+				break;
+			default:
+				DebugLog('Provider not supported', provider);
+				dispatch(loginFailure('Provider not supported'));
+				break;
     }
-    DebugLog('provider', provider);
-    DebugLog('authProvider', authProvider);
     firebase.auth().signInWithRedirect(authProvider);
     firebase.auth().getRedirectResult().then(function(result) {
-    if (result.credential) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      let token = result.credential.accessToken;
-    }
-    let user = result.user; //the signed-in user info
-    DebugLog('user', user);
+	    if (result.credential) {
+	      // This gives you a Google Access Token. You can use it to access the Google API.
+	      let token = result.credential.accessToken;
+				let user = result.user; //the signed-in user info
+				dispatch(loginSuccess(user));
+	    } else {
+				dispatch(loginFailure('Authentication failed: missing credential.'));
+			}
+
     }).catch(function(err) {
       dispatch(loginFailure(err.message))
     });
@@ -210,7 +224,6 @@ export function getTasksFailure(err){
 export function createTask(task) {
   const t = Date.now();
   task.created = t;
-  DebugLog('task',task);
   return function (dispatch) {
     dispatch(createTaskLoading());
     return FirebaseUtil.getFirebase().database().ref('tasks/'+t).set(task).then(()=>{

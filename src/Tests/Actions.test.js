@@ -49,11 +49,43 @@ describe('Actions: GET_NAVIGATION', () => {
   })
 });
 
+describe('Actions: USER', () => {
+	describe('USER.LOGIN', () => {
+		it('USER.LOGIN should authenticate with Google & return success', (done) => {
+			const dispatch = function(object) {
+				switch(object.type){
+					case Actions.USER.LOGIN.LOADING:
+						expect(object).toEqual({
+					    type: Actions.USER.LOGIN.LOADING,
+					    status: 'Logging you in...',
+					  });
+						return;
+					case Actions.USER.LOGIN.SUCCESS:
+						expect(object).toEqual({
+					    type: Actions.USER.LOGIN.SUCCESS,
+					    status: 'Successfully logged in',
+					    user: { name: 'Mock name' },
+					  });
+						done();
+						break;
+					case Actions.USER.LOGIN.FAILURE:
+						expect(object).toEqual({
+					    type: Actions.USER.LOGIN.FAILURE,
+					    status: {} //TODO: Add error object
+					  });
+						done();
+						break;
+				}
+			};
+			Actions.login('Google')(dispatch);
+		});
+	});
+});
+
 describe('Actions: TASK', () => {
   describe('TASK.CREATE', ()=>{
     it('TASK.CREATE should write task to database', (done)=>{
       const dispatch = function(object) {
-        DebugLog('object', object);
         switch(object){
           case Actions.TASK.CREATE.LOADING:
             expect(object).toEqual({

@@ -11,6 +11,13 @@ import thunkMiddleware from 'redux-thunk';
 import Root from '../Components/Root/Root';
 
 it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
+	const store = createStore(
+    RootReducer,
+    applyMiddleware(
+      thunkMiddleware // lets us dispatch() functions
+    )
+  );
+	ReactDOM.render(
+    <Root store={store} />,
+    document.createElement('root'));
 });

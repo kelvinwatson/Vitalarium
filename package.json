@@ -24,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && rm build/static/js/*.map && rm build/static/css/*.map",
-    "test": "jest",
+    "test": "jest --forceExit",
     "coverage": "jest --coverage",
     "test:watch": "npm test -- --watch",
     "deploy": "npm run build && firebase deploy",
@@ -46,7 +46,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(css)$": "<rootDir>/node_modules/jest-css-modules"
+      "\\.(css)$": "<rootDir>/node_modules/jest-css-modules",
+			"./Utils/InitializeFirebase": "<rootDir>/src/Tests/Mocks/InitializeFirebaseMock.js"
     }
   }
 }
