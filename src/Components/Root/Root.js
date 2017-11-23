@@ -4,11 +4,12 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import AboutContainer from '../../Containers/AboutContainer';
+import DashboardContainer from '../../Containers/DashboardContainer';
+import FooterContainer from '../../Containers/FooterContainer';
 import NavigationContainer from '../../Containers/NavigationContainer';
 import LoginContainer from '../../Containers/LoginContainer';
-import FooterContainer from '../../Containers/FooterContainer';
-import App from '../../App';
 // import BlogContainer from '../../Containers/BlogContainer';
+import App from '../../App';
 import './Root.css';
 
 const Root = ({ store }) => (
@@ -19,6 +20,7 @@ const Root = ({ store }) => (
         <NavigationContainer/>
 
         <Route path="/login" component={LoginContainer} />
+        <Route path="/dashboard" component={DashboardContainer} />
         {/*<Route path="/blog" component={BlogContainer} />*/}
         <Route path="/about" component={AboutContainer} />
         <Route exact path="/" component={App} />

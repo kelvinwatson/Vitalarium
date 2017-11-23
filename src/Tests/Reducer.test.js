@@ -11,7 +11,7 @@ import thunkMiddleware from 'redux-thunk';
 describe('Reducer: login (initial state)', () => {
   it('should return the initial state', () => {
     expect(Reducer.login(undefined, Actions.USER.LOGIN)).toEqual({
-      isLoading: false,
+      isLoading: true,
       isSuccess: false,
       isFailure: false,
       status: undefined,
