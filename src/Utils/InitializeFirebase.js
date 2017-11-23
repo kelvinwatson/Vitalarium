@@ -1,5 +1,4 @@
 import * as firebase from 'firebase';
-import mockData from '../Tests/MockData';
 import DebugLog from '../Utils/DebugLog';
 
 var FirebaseServer;
@@ -7,14 +6,14 @@ var FirebaseServer;
 var FirebaseUtil = {
   init: function(){
     let config = {
-        apiKey: "AIzaSyAZQ0IZnW75Y4e7O2eUmq2F4c1mrXZHe3s",
-        authDomain: "vitalarium-ae815.firebaseapp.com",
-        databaseURL: "https://vitalarium-ae815.firebaseio.com",
-        projectId: "vitalarium-ae815",
-        storageBucket: "vitalarium-ae815.appspot.com",
-        messagingSenderId: "739292378240"
-      };
-      firebase.initializeApp(config); //synchronous
+      apiKey: "AIzaSyAZQ0IZnW75Y4e7O2eUmq2F4c1mrXZHe3s",
+      authDomain: "vitalarium-ae815.firebaseapp.com",
+      databaseURL: "https://vitalarium-ae815.firebaseio.com",
+      projectId: "vitalarium-ae815",
+      storageBucket: "vitalarium-ae815.appspot.com",
+      messagingSenderId: "739292378240"
+    };
+    firebase.initializeApp(config); //synchronous
   },
 
   getFirebase: function(){

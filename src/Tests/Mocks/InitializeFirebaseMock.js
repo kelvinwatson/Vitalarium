@@ -1,5 +1,5 @@
 import * as firebase from 'firebase';
-import mockData from '../MockData';
+import mockData from './MockData';
 
 var FirebaseServer;
 

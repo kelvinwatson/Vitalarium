@@ -25,7 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build && rm build/static/js/*.map && rm build/static/css/*.map",
     "test": "jest --forceExit",
-    "coverage": "jest --coverage",
+    "coverage": "jest --coverage --forceExit",
     "test:watch": "npm test -- --watch",
     "deploy": "npm run build && firebase deploy",
     "eject": "react-scripts eject"
