@@ -1,15 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import DebugLog from '../../Utils/DebugLog';
+// import { Link } from 'react-router-dom';
+// import DebugLog from '../../Utils/DebugLog';
 import './Footer.css'
 
 export default class Footer extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
   //SVG Icons are from https://simpleicons.org
-
   render(){
     return (
       <footer className="tc-l bg-center cover bg-black Footer__Background">

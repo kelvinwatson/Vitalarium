@@ -1,14 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import DebugLog from '../../Utils/DebugLog';
+// import DebugLog from '../../Utils/DebugLog';
 import { switchTheme } from '../../Utils/Themes';
 import './About.css'
 
 export default class About extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
   render(){
     return (
     <div>
@@ -92,12 +88,10 @@ export default class About extends React.Component {
           Sign up for beta access or learn more about Vitalarium.
         </p>
         <div>
-          <a className="fw6 f6 br-pill no-underline b--near-black bg-near-black yellow ba grow pv2 ph3 dib mr3"
-            href="#">
+          <a className="fw6 f6 br-pill no-underline b--near-black bg-near-black yellow ba grow pv2 ph3 dib mr3">
             Sign Up
           </a>
-          <a className="f6 br-pill near-black b--near-black no-underline ba grow pv2 ph3 dib"
-            href="#">
+          <a className="f6 br-pill near-black b--near-black no-underline ba grow pv2 ph3 dib">
             Learn More
           </a>
         </div>

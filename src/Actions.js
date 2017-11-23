@@ -5,6 +5,10 @@ import DebugLog from './Utils/DebugLog';
  * action types
  */
 
+export const APP = {
+  INITIALIZE: 'INITIALIZE_APP',
+};
+
 export const NAVIGATION = {
   GET: 'GET_NAVIGATION',
   SET: 'SET_SELECTED_NAVIGATION',
@@ -87,9 +91,34 @@ export const TASKS = {
 // }
 
 /*
+ * App
+ */
+ export function initializeApp(filter){
+   return function (dispatch) {
+
+     //NOTE Perform all app initialization
+
+     FirebaseUtil.getFirebase().auth().getRedirectResult().then(function(result) {
+      //  DebugLog('result', result);
+       if (result.credential) {
+ 	      // This gives you a Google Access Token. You can use it to access the Google API.
+ 	      // let token = result.credential.accessToken;
+ 			  let user = result.user; //the signed-in user info
+        if (user) {
+          dispatch(loginSuccess(user));
+        }
+      } else {
+        dispatch(loginFailure('Authentication failed: missing credential.'));
+      }
+     }).catch(function(err) {
+       dispatch(loginFailure(err.message))
+     });
+   }
+ }
+
+/*
  * User
  */
-
 export function login(provider){
   return function (dispatch) {
     dispatch(loginLoading());
@@ -109,24 +138,11 @@ export function login(provider){
 				authProvider = new firebase.auth.GithubAuthProvider();
 				break;
 			default:
-				DebugLog('Provider not supported', provider);
+				// DebugLog('Provider not supported', provider);
 				dispatch(loginFailure('Provider not supported'));
 				break;
     }
     firebase.auth().signInWithRedirect(authProvider);
-    firebase.auth().getRedirectResult().then(function(result) {
-	    if (result.credential) {
-	      // This gives you a Google Access Token. You can use it to access the Google API.
-	      let token = result.credential.accessToken;
-				let user = result.user; //the signed-in user info
-				dispatch(loginSuccess(user));
-	    } else {
-				dispatch(loginFailure('Authentication failed: missing credential.'));
-			}
-
-    }).catch(function(err) {
-      dispatch(loginFailure(err.message))
-    });
 
     //TODO record user in database if not already exists
 
@@ -185,7 +201,6 @@ export function unsetNavigation() {
  */
 export function getTasks(filter){
   //TODO: use filter
-
   return function (dispatch) {
     dispatch(getTasksLoading(filter));
     return FirebaseUtil.getFirebase().database().ref('tasks').once('value').then((snap)=>{
@@ -229,7 +244,6 @@ export function createTask(task) {
     return FirebaseUtil.getFirebase().database().ref('tasks/'+t).set(task).then(()=>{
       dispatch(createTaskSuccess(task));
     }).catch((err)=>{
-      DebugLog('err',err);
       dispatch(createTaskFailure(task, err.message))
     });
   }

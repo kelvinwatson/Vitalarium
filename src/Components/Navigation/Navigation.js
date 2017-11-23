@@ -1,11 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import './Navigation.css'
 
 const Navigation = ({ page, list, onNavigationClicked }) => (
   <nav className="db dt-l w-100 border-box bb b--black-10 ph5 pv3">
-    <a className="db dtc-l v-mid mid-gray link dim w-100 w-25-l tc tl-l mb2 mb0-l" href="#" title="Vitalarium">
+    <a className="db dtc-l v-mid mid-gray link dim w-100 w-25-l tc tl-l mb2 mb0-l" title="Vitalarium">
       {/*<img src="http://tachyons.io/img/logo.jpg" className="dib w2 h2 br-100" alt="Vitalarium"/>*/}
       <div className="f2 lh-copy Navigation__Logo near-black"><span className="Navigation__Logo--Border">_</span>Vitalarium</div>
       <div>Scrum Task Organizer</div>

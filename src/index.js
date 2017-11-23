@@ -1,19 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import Root from './Components/Root/Root'
 import registerServiceWorker from './registerServiceWorker';
 
 /**
  * REDUX
  */
-import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import RootReducer from './Reducers';
-import { getNavigation } from './Actions';
+import { initializeApp } from './Actions';
 
 import FirebaseUtil from './Utils/InitializeFirebase';
 
@@ -36,7 +34,7 @@ if (process.env.NODE_ENV === 'production'){
 }
 
 FirebaseUtil.init();
-store.dispatch(getNavigation());
+store.dispatch(initializeApp());
 
 ReactDOM.render(
   <Root store={store} />,

@@ -8,6 +8,9 @@
 .LoginList{
   max-width: 18rem;
 }
+.LoginList__Item{
+  cursor: pointer;
+}
 @media(max-width: 767px) {
   /* phones */
 }

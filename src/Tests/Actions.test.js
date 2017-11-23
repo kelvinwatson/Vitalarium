@@ -40,15 +40,6 @@ afterAll(() => {
 /*
  * Test Redux actions
  */
-describe('Actions: GET_NAVIGATION', () => {
-  it('should create an action to get navigation', () => {
-    const expectedAction = {
-      type: Actions.NAVIGATION.GET,
-    }
-    expect(Actions.getNavigation()).toEqual(expectedAction)
-  })
-});
-
 describe('Actions: USER', () => {
 	describe('USER.LOGIN', () => {
 		it('USER.LOGIN should authenticate with Google & return success', (done) => {
@@ -77,6 +68,7 @@ describe('Actions: USER', () => {
 						break;
 				}
 			};
+      Actions.initializeApp()(dispatch); //required for getRedirectResult listener
 			Actions.login('Google')(dispatch);
 		});
 	});

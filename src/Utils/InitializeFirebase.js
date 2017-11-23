@@ -1,7 +1,5 @@
 import * as firebase from 'firebase';
-import DebugLog from '../Utils/DebugLog';
-
-var FirebaseServer;
+// import DebugLog from '../Utils/DebugLog';
 
 var FirebaseUtil = {
   init: function(){

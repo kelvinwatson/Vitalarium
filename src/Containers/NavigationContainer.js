@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import DebugLog from '../Utils/DebugLog';
+// import DebugLog from '../Utils/DebugLog';
 import Navigation from '../Components/Navigation/Navigation';
 // import { setNavigation, unsetNavigation } from '../Actions';
 
@@ -7,8 +7,8 @@ const mapStateToProps = (state) => {
 
   // DebugLog('state',state);
   return {
-    page: state.navigation.page,
-    list: state.navigation.list
+    // page: state.navigation.page,
+    // list: state.navigation.list
   }
 }
 
