@@ -121,7 +121,7 @@ describe('Actions: USER', () => {
 					case Actions.USER.LOGIN.FAILURE:
 						expect(object).toEqual({
 					    type: Actions.USER.LOGIN.FAILURE,
-					    status: {} //TODO: Add error object
+					    status: undefined //TODO: Add error object
 					  });
 						done();
 						break;
