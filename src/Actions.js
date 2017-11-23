@@ -97,10 +97,8 @@ export const TASKS = {
    return function (dispatch) {
 
      //NOTE Perform all app initialization
-		FirebaseUtil.getFirebase().auth().onAuthStateChanged((user, err) => {
-      if (err) {
-        dispatch(loginFailure(err.message));
-      } else if (user) { // User is signed in.
+		FirebaseUtil.getFirebase().auth().onAuthStateChanged(function(user) {
+			if (user) { // User is signed in.
 				dispatch(loginSuccess(user));
 			}
 		});
@@ -146,6 +144,18 @@ export function login(provider){
   }
 }
 
+export function logout(){
+  return function (dispatch) {
+    dispatch(logoutLoading());
+    let firebase = FirebaseUtil.getFirebase();
+    firebase.auth().signOut().then(function() {
+			dispatch(logoutSuccess());
+		}).catch((err) => {
+			dispatch(logoutFailure());
+		});
+  }
+}
+
 export function loginLoading(){
   return {
     type: USER.LOGIN.LOADING,
@@ -162,6 +172,27 @@ export function loginSuccess(user){
 }
 
 export function loginFailure(err){
+  return {
+    type: USER.LOGIN.FAILURE,
+    status: err
+  }
+}
+
+export function logoutLoading(){
+  return {
+    type: USER.LOGOUT.LOADING,
+    status: 'Logging you out...',
+  }
+}
+
+export function logoutSuccess(user){
+  return {
+    type: USER.LOGOUT.SUCCESS,
+    status: 'Successfully logged out',
+  }
+}
+
+export function logoutFailure(err){
   return {
     type: USER.LOGIN.FAILURE,
     status: err

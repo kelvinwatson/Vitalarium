@@ -39,8 +39,14 @@ var getRedirectResultFailure = function(){
 	});
 }
 
+var signOutFailure = function() {
+	return new Promise((resolve, reject) => {
+		reject();
+	});
+}
+
 var authStateFailure = function(callback){
-  callback(null, {message: {}}); 
+  callback(null, {message: {}});
 }
 
 beforeAll(() => {
@@ -102,7 +108,8 @@ describe('Actions: USER', () => {
 					    type: Actions.USER.LOGIN.LOADING,
 					    status: 'Logging you in...',
 					  });
-						return;
+						done();
+						break;
 					case Actions.USER.LOGIN.SUCCESS:
 						expect(object).toEqual({
 					    type: Actions.USER.LOGIN.SUCCESS,
@@ -123,6 +130,26 @@ describe('Actions: USER', () => {
 			FirebaseUtil.changeAuthStateFunction(authStateFailure);
       Actions.initializeApp()(dispatch); //required for getRedirectResult listener
 			Actions.login('Google')(dispatch);
+		});
+	});
+	describe('USER.LOGOUT', () => {
+		it('USER.LOGOUT should return sign out success', (done) => {
+			const dispatch = function(object) {
+				switch(object.type){
+					case Actions.USER.LOGOUT.LOADING:
+						expect(object).toEqual(Actions.logoutLoading());
+						return;
+					case Actions.USER.LOGOUT.SUCCESS:
+						expect(object).toEqual(Actions.logoutSuccess());
+						done();
+						break;
+					case Actions.USER.LOGOUT.FAILURE:
+						expect(object).toEqual(Actions.logoutFailure());
+						done('Should be success.');
+						break;
+				}
+			};
+			Actions.logout()(dispatch);
 		});
 	});
 });
