@@ -33,7 +33,7 @@ export default class Login extends React.Component {
       ren =
         <div>
           <h2 className="center ph3 ph5-ns tc br2 mt5">Logging you in...</h2>
-          <p className="tc mb5 LoginCaption--Hidden">Text that should not appear</p>
+          <p className="tc mb5">One moment please.</p>
           <div className="center measure tc LoginLoading">
             <Loading isLoading={this.props.isLoginInProgress}/>
           </div>
