@@ -20,6 +20,25 @@ const task = {
 
 const err = { errMsg: 'mock err' };
 
+var getRedirectResult = function(){
+	return new Promise((resolve, reject) => {
+		resolve({
+			credential: {
+				accessToken: 'mockToken',
+			},
+			user: {
+				name: 'Mock name'
+			}
+		})
+	});
+};
+
+var getRedirectResultFailure = function(){
+	return new Promise((resolve, reject) => {
+		throw { message: {} };
+	});
+}
+
 beforeAll(() => {
   const store = createStore(
     RootReducer,
@@ -64,10 +83,40 @@ describe('Actions: USER', () => {
 					    type: Actions.USER.LOGIN.FAILURE,
 					    status: {} //TODO: Add error object
 					  });
+						done('Should be success.');
+						break;
+				}
+			};
+      Actions.initializeApp()(dispatch); //required for getRedirectResult listener
+			Actions.login('Google')(dispatch);
+		});
+		it('USER.LOGIN should authenticate with Google & return failure', (done) => {
+			const dispatch = function(object) {
+				switch(object.type){
+					case Actions.USER.LOGIN.LOADING:
+						expect(object).toEqual({
+					    type: Actions.USER.LOGIN.LOADING,
+					    status: 'Logging you in...',
+					  });
+						return;
+					case Actions.USER.LOGIN.SUCCESS:
+						expect(object).toEqual({
+					    type: Actions.USER.LOGIN.SUCCESS,
+					    status: 'Successfully logged in',
+					    user: { name: 'Mock name' },
+					  });
+						done('Should be failure.');
+						break;
+					case Actions.USER.LOGIN.FAILURE:
+						expect(object).toEqual({
+					    type: Actions.USER.LOGIN.FAILURE,
+					    status: {} //TODO: Add error object
+					  });
 						done();
 						break;
 				}
 			};
+			FirebaseUtil.changeRedirectFunction(getRedirectResultFailure);
       Actions.initializeApp()(dispatch); //required for getRedirectResult listener
 			Actions.login('Google')(dispatch);
 		});
