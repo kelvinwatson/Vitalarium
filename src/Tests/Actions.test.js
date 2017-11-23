@@ -39,6 +39,10 @@ var getRedirectResultFailure = function(){
 	});
 }
 
+var authStateFailure = function(callback){
+  callback(null, {message: {}}); 
+}
+
 beforeAll(() => {
   const store = createStore(
     RootReducer,
@@ -116,7 +120,7 @@ describe('Actions: USER', () => {
 						break;
 				}
 			};
-			FirebaseUtil.changeRedirectFunction(getRedirectResultFailure);
+			FirebaseUtil.changeAuthStateFunction(authStateFailure);
       Actions.initializeApp()(dispatch); //required for getRedirectResult listener
 			Actions.login('Google')(dispatch);
 		});

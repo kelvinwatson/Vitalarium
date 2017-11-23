@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
     isLoginInProgress: state.login.isLoading,
     isLoginSuccess: state.login.isSuccess,
     isLoginFailure: state.login.isFailure,
+    user: state.login.user,
     status: state.login.status,
   }
 }

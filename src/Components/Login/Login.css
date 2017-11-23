@@ -15,6 +15,12 @@
   cursor: pointer;
 }
 
+.LoginLoading{
+  min-height: 323px;
+}
+.LoginCaption--Hidden{
+  visibility:hidden;
+}
 @media(max-width: 767px) {
   /* phones */
 }

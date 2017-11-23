@@ -27,6 +27,9 @@ let FirebaseMock = {
 	changeRedirectFunction: function(newRedirectFunction) {
 		firebase.redirectFunction = newRedirectFunction;
 	},
+	changeAuthStateFunction: function(newAuthStateFunction){
+		firebase.authStateFunction = newAuthStateFunction;
+	},
 	init: function(){
     let config;
     FirebaseServer = require('firebase-server');
@@ -43,6 +46,7 @@ let FirebaseMock = {
 		let auth = function() {
 			return {
 				signInWithRedirect: function(provider){ return {}; },
+				onAuthStateChanged: firebase.authStateFunction || function(callback){ callback({name: 'Mock name'}) },
 				getRedirectResult: firebase.redirectFunction || getRedirectResult
 			}
 		};

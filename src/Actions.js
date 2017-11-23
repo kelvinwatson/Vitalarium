@@ -97,27 +97,13 @@ export const TASKS = {
    return function (dispatch) {
 
      //NOTE Perform all app initialization
-		FirebaseUtil.getFirebase().auth().onAuthStateChanged(function(user) {
-			if (user) { // User is signed in.
+		FirebaseUtil.getFirebase().auth().onAuthStateChanged((user, err) => {
+      if (err) {
+        dispatch(loginFailure(err.message));
+      } else if (user) { // User is signed in.
 				dispatch(loginSuccess(user));
 			}
 		});
-		// FirebaseUtil.getFirebase().auth().getRedirectResult().then(function(result) {
-		// //  DebugLog('result', result);
-		// //  console.log()
-		//  if (result.credential) {
-		//     // This gives you a Google Access Token. You can use it to access the Google API.
-		//     // let token = result.credential.accessToken;
-		// 	  let user = result.user; //the signed-in user info
-		//   if (user) {
-		//     dispatch(loginSuccess(user));
-		//   }
-		// } else {
-		//   dispatch(loginFailure('Authentication failed: missing credential.'));
-		// }
-		// }).catch(function(err) {
-		//  dispatch(loginFailure(err.message))
-		// });
    }
  }
 

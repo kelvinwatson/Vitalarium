@@ -23,7 +23,7 @@ import {
 // }
 
 export function login(state = {
-  isLoading: false,
+  isLoading: true,
   isSuccess: false,
   isFailure: false,
   status: undefined,
