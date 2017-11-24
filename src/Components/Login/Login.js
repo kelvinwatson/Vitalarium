@@ -9,6 +9,8 @@ export default class Login extends React.Component {
   constructor(props){
     super(props);
     this.onClickSignIn = this.onClickSignIn.bind(this);
+		//Check for credential in local storage
+		//Call action to link account with credential
   }
 
   onClickSignIn(provider){
@@ -17,9 +19,9 @@ export default class Login extends React.Component {
 
   render(){
 
-    if (this.props.user){
-      this.props.history.push("/dashboard");
-    }
+    // if (this.props.user){
+    //   this.props.history.push("/dashboard");
+    // }
 
     let ren;
 

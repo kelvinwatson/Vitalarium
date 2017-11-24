@@ -6,9 +6,9 @@ import './Dashboard.css'
 
 export default class Dashboard extends React.Component {
   render(){
-    if (!this.props.isLoggedIn){
-      this.props.history.push("/");
-    }
+    // if (!this.props.isLoggedIn){
+    //   this.props.history.push("/");
+    // }
     return (
     <div>
       This is the Dashboard

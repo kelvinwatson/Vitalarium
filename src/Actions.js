@@ -1,5 +1,6 @@
 import FirebaseUtil from './Utils/InitializeFirebase';
 import DebugLog from './Utils/DebugLog';
+import User from './Models/User';
 
 /**
  * action types
@@ -20,6 +21,9 @@ export const USER = {
     LOADING: 'LOADING_LOGIN_USER',
     SUCCESS: 'SUCCESS_LOGIN_USER',
     FAILURE: 'FAILURE_LOGIN_USER',
+		LINK: {
+			SHOW: 'SHOW_LINK_ACCOUNT',
+		}
   },
   UPDATE: {
 
@@ -95,16 +99,64 @@ export const TASKS = {
  export function initializeApp(filter){
    return function (dispatch) {
 
-     //NOTE Perform all app initialization
 		FirebaseUtil.getFirebase().auth().onAuthStateChanged(function(user) {
 			if (user) { // User is signed in.
-				dispatch(loginSuccess(user));
+				// Get user from DB.
+				FirebaseUtil.getFirebase().database().ref('users/' + user.uid).once('value').then((snap)=>{
+					dispatch(loginSuccess(snap.val()));
+				}).catch((err) => {
+					dispatch(loginFailure(err));
+				});
 			} else {
         dispatch(loginFailure()); //not really a failure, it's just to stop the loading
       }
 		});
+
+		FirebaseUtil.getFirebase().auth().getRedirectResult().then(function(result) {
+			if(result && result.user) {
+				let localUser = new User(result.user.uid,
+					result.user.displayName,
+					result.user.email,
+					result.user.photoURL,
+					result.additionalUserInfo && result.additionalUserInfo.providerId);
+				//update user in db
+				FirebaseUtil.getFirebase().database().ref('users/' + localUser.id).set(localUser).then(()=>{
+
+				}).catch((err) => {
+
+				});
+			}
+		}).catch((err) => {
+			switch(err.code) {
+				case 'auth/account-exists-with-different-credential':
+					dispatch(loginLinkAccount(err.email));
+			}
+		});
    }
  }
+
+export function loginLinkWithRedirect(previousProvider) {
+	return function(dispatch) {
+		FirebaseUtil.getFirebase().auth.currentUser.linkWithRedirect(previousProvider);
+	}
+}
+
+export function loginLinkAccount(email) {
+	return function(dispatch) {
+		FirebaseUtil.getFirebase().auth().fetchProvidersForEmail(email).then((providers) => {
+			dispatch(loginShowLinkAccount(providers[0]));
+		})
+	}
+}
+
+export function loginShowLinkAccount(previousProvider) {
+	//Reducer must display login option for previous provider & store current credential in local storage.
+	return {
+    type: USER.LOGIN.LINK.SHOW,
+    status: 'Please link your account',
+    previousProvider,
+  }
+}
 
 /*
  * User
