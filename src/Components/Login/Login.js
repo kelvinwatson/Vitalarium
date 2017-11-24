@@ -8,17 +8,10 @@ import './Login.css'
 export default class Login extends React.Component {
   constructor(props){
     super(props);
-    // this.state = {
-    //   user: this.props.user,
-    // };
     this.onClickSignIn = this.onClickSignIn.bind(this);
-		//TODO Check for credential in local storage
-		//TODO Call action to link account with credential
   }
 
   componentDidUpdate(){
-    DebugLog('props.user',this.props.user);
-
     if (this.props.user){
       this.props.history.push('/dashboard');
     }
@@ -29,13 +22,7 @@ export default class Login extends React.Component {
   }
 
   render(){
-
-    // if (this.props.user){
-    //   this.props.history.push("/dashboard");
-    // }
-
     let ren;
-
     if (this.props.isLoginInProgress && !this.props.user){
       ren =
         <div>
@@ -45,6 +32,41 @@ export default class Login extends React.Component {
             <Loading isLoading={this.props.isLoginInProgress}/>
           </div>
         </div>;
+    } else if (this.props.previousProvider){
+
+      let providerCapitalized, providerLowerCase;
+      switch(this.props.previousProvider){
+        case 'facebook.com':
+          providerCapitalized = 'Facebook';
+          providerLowerCase = 'facebook';
+          break;
+        case 'github.com':
+          providerCapitalized = 'Github';
+          providerLowerCase = 'github';
+          break;
+        case 'google.com':
+          providerCapitalized = 'Google';
+          providerLowerCase = 'google';
+          break;
+        case 'twitter.com':
+          providerCapitalized = 'Twitter';
+          providerLowerCase = 'twitter';
+          break;
+      }
+      ren =
+        <div>
+          <h2 className="center ph3 ph5-ns tc br2 mt5">Account already exists</h2>
+          <p className="tc mb5">Looks like you already have an account with us</p>
+          <ul className="tl list pl0 mt0 measure center LoginList mb5">
+            <li onClick={(e)=>{ e.preventDefault(); this.onClickSignIn(providerCapitalized);}}
+              className="flex items-center lh-copy pa3 ph0-l bb b--black-10 dim LoginList__Item">
+              <i className={`tc fa fa-${providerLowerCase} fa-3x w2 h2 w3-ns br-100 LoginIconHeight`} aria-hidden="true"></i>
+              <div className="tr pl3 flex-auto">
+                <span className="f6 db black-70">Sign in with {providerCapitalized}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
     } else {
       ren =
         <div>
