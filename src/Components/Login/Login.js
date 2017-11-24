@@ -23,7 +23,7 @@ export default class Login extends React.Component {
 
     let ren;
 
-    if (this.props.isLoginInProgress){
+    if (this.props.isLoginInProgress && !this.props.user){
       ren =
         <div>
           <h2 className="center ph3 ph5-ns tc br2 mt5">Logging you in...</h2>

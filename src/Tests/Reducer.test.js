@@ -14,6 +14,7 @@ describe('Reducer: login (initial state)', () => {
       isLoading: true,
       isSuccess: false,
       isFailure: false,
+      isLoggedIn: false,
       status: undefined,
       user: undefined,
       redirectUrl: undefined,
@@ -29,6 +30,7 @@ describe('Reducer: login (initial state)', () => {
       isLoading: true,
       isSuccess: false,
       isFailure: false,
+      isLoggedIn: false,
       status: action.status,
       user: undefined,
       redirectUrl: undefined,
@@ -47,6 +49,7 @@ describe('Reducer: login (initial state)', () => {
       isLoading: false,
       isSuccess: true,
       isFailure: false,
+      isLoggedIn: true,
       status: 'Successfully logged in',
       user: action.user,
       redirectUrl: '/dashboard',
@@ -64,6 +67,74 @@ describe('Reducer: login (initial state)', () => {
       isLoading: false,
       isSuccess: false,
       isFailure: true,
+      isLoggedIn: false,
+      status: action.status,
+      user: undefined,
+      redirectUrl: undefined,
+    });
+  });
+});
+
+describe('Reducer: logout (initial state)', () => {
+  it('should return the initial state', () => {
+    expect(Reducer.login(undefined, Actions.USER.LOGOUT)).toEqual({
+      isLoading: true,
+      isSuccess: false,
+      isFailure: false,
+      isLoggedIn: false,
+      status: undefined,
+      user: undefined,
+      redirectUrl: undefined,
+    });
+  });
+
+  it('should return the loading state', () => {
+    const action = {
+      type: Actions.USER.LOGOUT.LOADING,
+      status: 'Logging you out...',
+    };
+    expect(Reducer.login(undefined, action)).toEqual({
+      isLoading: true,
+      isSuccess: false,
+      isFailure: false,
+      isLoggedIn: true,
+      status: action.status,
+      user: undefined,
+      redirectUrl: undefined,
+    });
+  });
+
+  it('should return the success state', () => {
+    const action = {
+      type: Actions.USER.LOGOUT.SUCCESS,
+      status: 'Successfully logged out',
+      user: {
+        userId: 'mockUserId',
+      },
+    };
+    expect(Reducer.login(undefined, action)).toEqual({
+      isLoading: false,
+      isSuccess: true,
+      isFailure: false,
+      isLoggedIn: false,
+      status: action.status,
+      user: undefined,
+      redirectUrl: '/',
+    });
+  });
+
+  it('should return the failure state', () => {
+    const action = {
+      type: Actions.USER.LOGOUT.FAILURE,
+      status: {
+        message: 'mock error msg'
+      }
+    };
+    expect(Reducer.login(undefined, action)).toEqual({
+      isLoading: false,
+      isSuccess: false,
+      isFailure: true,
+      isLoggedIn: true,
       status: action.status,
       user: undefined,
       redirectUrl: undefined,

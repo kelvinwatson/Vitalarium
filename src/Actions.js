@@ -24,7 +24,6 @@ export const USER = {
   UPDATE: {
 
   },
-  //TODO: assign to, assigned tasks?
   LOGOUT: {
     LOADING: 'LOADING_LOGOUT_USER',
     SUCCESS: 'SUCCESS_LOGOUT_USER',
@@ -100,7 +99,9 @@ export const TASKS = {
 		FirebaseUtil.getFirebase().auth().onAuthStateChanged(function(user) {
 			if (user) { // User is signed in.
 				dispatch(loginSuccess(user));
-			}
+			} else {
+        dispatch(loginFailure()); //not really a failure, it's just to stop the loading
+      }
 		});
    }
  }

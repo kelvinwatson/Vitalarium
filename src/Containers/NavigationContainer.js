@@ -19,12 +19,11 @@ const mapDispatchToProps = (dispatch) => {
       // dispatch(setNavigation(target));
       // DebugLog('nav clicked', target);
     },
-    onLoginLogoutClicked: (isLoggedIn)=>{
+    onLoginLogoutClicked: (e, isLoggedIn)=>{
       DebugLog('isLoggedIn',isLoggedIn);
       if (isLoggedIn){
+        // e.preventDefault();
         dispatch(logout());
-      } else {
-        dispatch(login());
       }
     },
   }

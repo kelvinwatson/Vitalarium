@@ -5,6 +5,7 @@ import Dashboard from '../Components/Dashboard/Dashboard';
 
 const mapStateToProps = (state) => {
   return {
+    isLoggedIn: Boolean(state.login.user),
   }
 }
 
