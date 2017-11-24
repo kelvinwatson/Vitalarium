@@ -146,7 +146,7 @@ export function userUpdatedSuccess(user) {
 	}
 }
 
-export function userUpdatedFaiure(err) {
+export function userUpdatedFailure(err) {
 	return {
 		type: USER.UPDATE.FAILURE,
 		status: 'Failed to update user',

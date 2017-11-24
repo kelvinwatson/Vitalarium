@@ -1,11 +1,11 @@
 {
   "rules": {
     "users": {
-      ".read": true,
+      ".read": "auth != null",
       ".write": "auth != null"
     },
-		"tasks": {
-      ".read": true,
+    "tasks": {
+      ".read": "auth != null",
       ".write": "auth != null"
     }
   }
