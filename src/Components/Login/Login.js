@@ -8,9 +8,20 @@ import './Login.css'
 export default class Login extends React.Component {
   constructor(props){
     super(props);
+    // this.state = {
+    //   user: this.props.user,
+    // };
     this.onClickSignIn = this.onClickSignIn.bind(this);
-		//Check for credential in local storage
-		//Call action to link account with credential
+		//TODO Check for credential in local storage
+		//TODO Call action to link account with credential
+  }
+
+  componentDidUpdate(){
+    DebugLog('props.user',this.props.user);
+
+    if (this.props.user){
+      this.props.history.push('/dashboard');
+    }
   }
 
   onClickSignIn(provider){
