@@ -26,7 +26,8 @@ export const USER = {
 		}
   },
   UPDATE: {
-
+		SUCCESS: 'SUCCESS_UPDATE_USER',
+		FAILURE: 'FAILURE_UPDATE_USER'
   },
   LOGOUT: {
     LOADING: 'LOADING_LOGOUT_USER',
@@ -67,32 +68,6 @@ export const TASKS = {
   },
 };
 
-/**
- * action creators
- */
-
-// export function fetchMusic() {
-//   return function (dispatch) {
-//     // First dispatch: the app state is updated to inform
-//     // that the API call is starting.
-//
-//     dispatch(getMusicLoading());
-//
-//     let arr = [];
-//
-//     let firebase = FirebaseUtil.getFirebase();
-//     let storage = firebase.storage();
-//     let ref = storage.ref();
-//
-//     return FirebaseUtil.getFirebase().storage().ref().child('Music/MindlessGraffiti.mp3').getDownloadURL().then(function(url){
-//       arr.push(url);
-//       dispatch(getMusicSuccess(arr));
-//     }).catch(function(err) {
-//       dispatch(getMusicFailure(err));
-//     });
-//   }
-// }
-
 /*
  * App
  */
@@ -121,9 +96,9 @@ export const TASKS = {
 					result.additionalUserInfo && result.additionalUserInfo.providerId);
 				//update user in db
 				FirebaseUtil.getFirebase().database().ref('users/' + localUser.id).set(localUser).then(()=>{
-
+					dispatch(userUpdatedSuccess(localUser));
 				}).catch((err) => {
-
+					dispatch(userUpdatedFailure(err));
 				});
 			}
 		}).catch((err) => {
@@ -161,6 +136,22 @@ export function loginShowLinkAccount(previousProvider) {
 /*
  * User
  */
+export function userUpdatedSuccess(user) {
+	return {
+		type: USER.UPDATE.SUCCESS,
+		status: 'User updated successfully',
+		user
+	}
+}
+
+export function userUpdatedFaiure(err) {
+	return {
+		type: USER.UPDATE.FAILURE,
+		status: 'Failed to update user',
+		err
+	}
+}
+
 export function login(provider){
   return function (dispatch) {
     dispatch(loginLoading());
@@ -185,15 +176,6 @@ export function login(provider){
 				break;
     }
     firebase.auth().signInWithRedirect(authProvider);
-
-    //TODO record user in database if not already exists
-
-    // return FirebaseUtil.getFirebase().database().ref('tasks').once('value').then((snap)=>{
-    //   // DebugLog('snap',snap.val());
-    //   dispatch(getTasksSuccess(snap && snap.val()));
-    // }).catch(err=>{
-    //   dispatch(getTasksFailure(err.message));
-    // });
   }
 }
 

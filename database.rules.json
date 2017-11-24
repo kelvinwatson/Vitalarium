@@ -1,6 +1,10 @@
 {
   "rules": {
-    "songs": {
+    "users": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+		"tasks": {
       ".read": true,
       ".write": "auth != null"
     }

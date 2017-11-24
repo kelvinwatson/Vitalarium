@@ -4,4 +4,7 @@ export default {
       title: 'mock task title 1',
     }
   },
+	users: {
+		uid: '1234'
+	}
 };

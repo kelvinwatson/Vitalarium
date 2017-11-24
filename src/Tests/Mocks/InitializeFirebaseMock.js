@@ -10,7 +10,13 @@ var getRedirectResult = function(){
 				accessToken: 'mockToken',
 			},
 			user: {
-				name: 'Mock name'
+				uid: '12345abc',
+				displayName: 'Mock name',
+				email: 'abc@abc.com',
+				photoURL: 'www.thisisaphoto.com',
+			},
+			additionalUserInfo: {
+				providerId: 'www.google.com'
 			}
 		})
 	});
@@ -34,6 +40,19 @@ let FirebaseMock = {
     let config;
     FirebaseServer = require('firebase-server');
     FirebaseServer = new FirebaseServer(5000, 'localhost.firebaseio.test', mockData);
+		FirebaseServer.setRules({
+		  "rules": {
+		    "users": {
+		      ".read": true,
+		      ".write": true
+		    },
+				"tasks": {
+		      ".read": true,
+		      ".write": true
+		    }
+		  }
+		});
+
     config = {
       apiKey: 'fake-api-key-for-testing-purposes-only',
       databaseURL: 'ws://localhost.firebaseio.test:5000',

@@ -78,16 +78,17 @@ describe('Actions: USER', () => {
 						expect(object).toEqual(Actions.loginLoading());
 						return;
 					case Actions.USER.LOGIN.SUCCESS:
-						expect(object).toEqual({
-					    type: Actions.USER.LOGIN.SUCCESS,
-					    status: 'Successfully logged in',
-					    user: { name: 'Mock name' },
-					  });
-						done();
+						if(object.user) {
+							done();
+						}
 						break;
 					case Actions.USER.LOGIN.FAILURE:
 						expect(object).toEqual(Actions.loginFailure());
 						done('Should be success.');
+						break;
+					case Actions.USER.UPDATE.SUCCESS:
+						done();
+					default:
 						break;
 				}
 			};
@@ -222,7 +223,6 @@ describe('Actions: TASKS', () => {
               status: 'Fetching tasks...',
               filter,
             });
-            done();
             break;
           case Actions.TASKS.GET.SUCCESS:
             expect(object).toEqual({
@@ -237,8 +237,7 @@ describe('Actions: TASKS', () => {
               type: Actions.TASKS.GET.FAILURE,
               status: err
             });
-          default:
-            done();
+						done(err);
         }
         if(object && object.tasks) {
           expect(object.tasks['12345']).toEqual({
