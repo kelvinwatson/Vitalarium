@@ -75,10 +75,7 @@ describe('Actions: USER', () => {
 			const dispatch = function(object) {
 				switch(object.type){
 					case Actions.USER.LOGIN.LOADING:
-						expect(object).toEqual({
-					    type: Actions.USER.LOGIN.LOADING,
-					    status: 'Logging you in...',
-					  });
+						expect(object).toEqual(Actions.loginLoading());
 						return;
 					case Actions.USER.LOGIN.SUCCESS:
 						expect(object).toEqual({
@@ -89,10 +86,7 @@ describe('Actions: USER', () => {
 						done();
 						break;
 					case Actions.USER.LOGIN.FAILURE:
-						expect(object).toEqual({
-					    type: Actions.USER.LOGIN.FAILURE,
-					    status: {} //TODO: Add error object
-					  });
+						expect(object).toEqual(Actions.loginFailure());
 						done('Should be success.');
 						break;
 				}
