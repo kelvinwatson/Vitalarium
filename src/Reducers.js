@@ -108,6 +108,35 @@ export function login(state = {
         redirectUrl: undefined,
         previousProvider: action.previousProvider,
       });
+    case USER.LOGOUT.LOADING:
+      return Object.assign({}, state, {
+        isLoading: true,
+        isSuccess: false,
+        isFailure: false,
+        isLoggedIn: true,
+        status: action.status,
+        user: undefined,
+        redirectUrl: undefined,
+      });
+    case USER.LOGOUT.SUCCESS:
+      return Object.assign({}, state, {
+        isLoading: false,
+        isSuccess: true,
+        isFailure: false,
+        isLoggedIn: false,
+        status: action.status,
+        user: undefined,
+        redirectUrl: '/',
+      });
+    case USER.LOGOUT.FAILURE:
+      return Object.assign({}, state, {
+        isLoading: false,
+        isSuccess: false,
+        isFailure: true,
+        isLoggedIn: true,
+        status: action.status,
+        redirectUrl: undefined,
+      });
     default:
       return state;
   }
