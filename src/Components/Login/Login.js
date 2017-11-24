@@ -59,7 +59,7 @@ export default class Login extends React.Component {
           <p className="tc mb5">Looks like you already have an account with us</p>
           <ul className="tl list pl0 mt0 measure center LoginList mb5">
             <li onClick={(e)=>{ e.preventDefault(); this.onClickSignIn(providerCapitalized);}}
-              className="flex items-center lh-copy pa3 ph0-l bb b--black-10 dim LoginList__Item">
+              className="flex items-center lh-copy pa3 ph0-l b--black-10 dim LoginList__Item">
               <i className={`tc fa fa-${providerLowerCase} fa-3x w2 h2 w3-ns br-100 LoginIconHeight`} aria-hidden="true"></i>
               <div className="tr pl3 flex-auto">
                 <span className="f6 db black-70">Sign in with {providerCapitalized}</span>
