@@ -83,7 +83,9 @@ export const TASKS = {
 					dispatch(loginFailure(err));
 				});
 			} else {
-        dispatch(loginFailure()); //not really a failure, it's just to stop the loading
+        dispatch(loginFailure({
+          message: 'DISREGARD: This is not a real failure. The user is not logged in.',
+        })); //not really a failure, it's just to stop the loading
       }
 		});
 
