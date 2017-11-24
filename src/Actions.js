@@ -84,7 +84,7 @@ export const TASKS = {
 				});
 			} else {
         dispatch(loginFailure({
-          message: 'DISREGARD: This is not a real failure. The user is not logged in.',
+          message: 'User not found.',
         })); //not really a failure, it's just to stop the loading
       }
 		});

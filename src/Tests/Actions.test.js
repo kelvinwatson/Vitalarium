@@ -115,9 +115,11 @@ describe('Actions: USER', () => {
 						break;
 					case Actions.USER.LOGIN.FAILURE:
 						expect(object).toEqual({
-					    type: Actions.USER.LOGIN.FAILURE,
-					    status: undefined //TODO: Add error object
-					  });
+							type: Actions.USER.LOGIN.FAILURE,
+							status: {
+								message: 'User not found.'
+							}
+						});
 						done();
 						break;
 				}
