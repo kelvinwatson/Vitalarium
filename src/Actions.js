@@ -185,7 +185,7 @@ export function logoutLoading(){
   }
 }
 
-export function logoutSuccess(user){
+export function logoutSuccess(){
   return {
     type: USER.LOGOUT.SUCCESS,
     status: 'Successfully logged out',
