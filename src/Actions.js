@@ -126,9 +126,15 @@ export const TASKS = {
 						if(projectResult) {
 							//Nothing to do
 							//TODO: In the future we may want to update user details here..
+							dispatch(loginSuccess(userResult));
 						} else {
 							//Somehow the project went missing (deleted?), lets replace it
 							let newProject = new Project(userResult.id + '_0', null, Intl.DateTimeFormat().resolvedOptions().timeZone);//TODO: Get timezone for native
+							FirebaseUtil.getFirebase().database().ref('projects/' + result.user.uid + '_0').once('value').then((result) => {
+								dispatch(loginSuccess(userResult));
+							}).catch((err) => {
+								dispatch(userUpdatedFailure(err));
+							});
 						}
 					}
 				}).catch((err) => {
@@ -328,11 +334,9 @@ export function getTasksFailure(err){
  * Create task
  */
 export function createTask(task) {
-  const t = Date.now();
-  task.created = t;
   return function (dispatch) {
     dispatch(createTaskLoading());
-    return FirebaseUtil.getFirebase().database().ref('tasks/'+t).set(task).then(()=>{
+    return FirebaseUtil.getFirebase().database().ref('tasks/' + task.id).set(task).then(()=>{
       dispatch(createTaskSuccess(task));
     }).catch((err)=>{
       dispatch(createTaskFailure(task, err.message))
