@@ -46,6 +46,10 @@ let FirebaseMock = {
 		      ".read": true,
 		      ".write": true
 		    },
+				"projects": {
+					".read": true,
+					".write": true,
+				},
 				"tasks": {
 		      ".read": true,
 		      ".write": true

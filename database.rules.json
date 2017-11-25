@@ -4,6 +4,10 @@
       ".read": "auth != null",
       ".write": "auth != null"
     },
+		"projects": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
     "tasks": {
       ".read": "auth != null",
       ".write": "auth != null"

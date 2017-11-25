@@ -1,6 +1,7 @@
 import FirebaseUtil from './Utils/InitializeFirebase';
 import DebugLog from './Utils/DebugLog';
 import User from './Models/User';
+import Project from './Models/Project';
 
 /**
  * action types
@@ -91,14 +92,40 @@ export const TASKS = {
 
 		FirebaseUtil.getFirebase().auth().getRedirectResult().then(function(result) {
 			if(result && result.user) {
-				let localUser = new User(result.user.uid,
-					result.user.displayName,
-					result.user.email,
-					result.user.photoURL,
-					result.additionalUserInfo && result.additionalUserInfo.providerId);
-				//update user in db
-				FirebaseUtil.getFirebase().database().ref('users/' + localUser.id).set(localUser).then(()=>{
-					dispatch(userUpdatedSuccess(localUser));
+				let calls = [];
+				//check for existing user entry
+				calls.push(FirebaseUtil.getFirebase().database().ref('users/' + result.user.uid).once('value'));
+				//check for existing project entry
+				calls.push(FirebaseUtil.getFirebase().database().ref('projects/' + result.user.uid + '_0').once('value'));
+				Promise.all(calls).then((results) => {
+					let userResult = results[0].val();
+					let projectResult = results[1].val();
+					if(!userResult) {
+						//no user in db, first time registration
+						let localUser = new User(result.user.uid,
+							result.user.displayName,
+							result.user.email,
+							result.user.photoURL,
+							result.additionalUserInfo && result.additionalUserInfo.providerId,
+							[result.user.uid + '_0']);
+						let newProject = new Project(result.user.uid + '_0', null, Intl.DateTimeFormat().resolvedOptions().timeZone);//TODO: Get timezone for native
+						let calls = [];
+						calls.push(FirebaseUtil.getFirebase().database().ref('users/' + localUser.id).set(localUser));
+						calls.push(FirebaseUtil.getFirebase().database().ref('projects/' + newProject.id).set(newProject));
+						Promise.all(calls).then((results) => {
+							dispatch(userUpdatedSuccess(localUser, newProject));
+						}).catch((err) => {
+							dispatch(userUpdatedFailure(err));
+						});
+					} else {
+						if(projectResult) {
+							//Nothing to do
+							//TODO: In the future we may want to update user details here..
+						} else {
+							//Somehow the project went missing (deleted?), lets replace it
+							let newProject = new Project(userResult.id + '_0', null, Intl.DateTimeFormat().resolvedOptions().timeZone);//TODO: Get timezone for native
+						}
+					}
 				}).catch((err) => {
 					dispatch(userUpdatedFailure(err));
 				});
