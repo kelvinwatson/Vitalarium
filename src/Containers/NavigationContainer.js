@@ -5,9 +5,9 @@ import { login, logout } from '../Actions';
 
 const mapStateToProps = (state) => {
 
-  // DebugLog('state',state);
+  DebugLog('state',state);
   return {
-    isLoggedIn: Boolean(state.login.user),
+    isLoggedIn: state.login.isLoggedIn,
     // page: state.navigation.page,
     // list: state.navigation.list
   }

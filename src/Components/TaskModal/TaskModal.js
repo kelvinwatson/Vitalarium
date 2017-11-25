@@ -1,4 +1,5 @@
 import React from 'react';
+import Calendar from 'react-calendar';
 import DebugLog from '../../Utils/DebugLog';
 import './TaskModal.css'
 
@@ -38,7 +39,55 @@ export default class TaskModal extends React.Component {
     return (
       <div className={`TaskModal ${this.props.isOpen ? 'db' : 'dn'}`}>
         <div ref={this.setModalContentRef} className="TaskModalContent">
-          <p>Some text in the Modal..</p>
+
+          <header className="TaskModalHeader">
+
+            <i onClick={this.props.onOutsideModalContentClicked} className="fa fa-times" aria-hidden="true"></i>
+          </header>
+
+          {/* START TASK FORM */}
+          <form>
+            <fieldset>
+              <label htmlFor="titleField">Title</label>
+              <input type="text" placeholder="Give your task a name (e.g. organize workroom, finalize blueprints)" id="titleField"/>
+
+              <label htmlFor="descriptionField">Description</label>
+              <textarea placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"></textarea>
+
+              <div className="TaskModalSizeFlexWrapper">
+                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
+                  <label htmlFor="sizeField">Task size</label>
+                  <select id="sizeField">
+                    <option value="SMALL" selected>Small</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="LARGE">Large</option>
+                  </select>
+                </div>
+
+                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Right">
+                  <label htmlFor="sprintField">Sprint</label>
+                  <select id="sprintField">
+                    <option value="currentSprint" selected>Current sprint</option>
+                    <option value="nextSprint">Next sprint</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="TaskModalSizeFlexWrapper">
+                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
+                  <label htmlFor="dueDateField">Due date</label>
+                  <input type="date"/>
+                </div>
+
+              </div>
+              {/*<input className="button-primary" type="submit" value="Send"/>*/}
+
+              <div className="TaskModalButtons">
+                <a className="f6 link dim br1 ba ph3 pv2 mb2 dib black" href="#0">Create Task</a>
+              </div>
+            </fieldset>
+          </form>
+          {/* END TASK FORM */}
         </div>
       </div>
     )
