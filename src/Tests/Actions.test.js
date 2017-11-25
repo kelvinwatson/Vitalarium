@@ -185,6 +185,22 @@ describe('Actions: TASK', () => {
       Actions.createTask(task)(dispatch);
     });
 
+    it('TASK.CREATE.MODAL should create an open modal action', () => {
+      const expectedAction = {
+        type: Actions.TASK.CREATE.MODAL.OPEN,
+        status: 'Opening create task modal...',
+      }
+      expect(Actions.createTaskOpenModal()).toEqual(expectedAction);
+    });
+
+    it('TASK.CREATE.MODAL should create a close modal action', () => {
+      const expectedAction = {
+        type: Actions.TASK.CREATE.MODAL.CLOSE,
+        status: 'Closing create task modal...',
+      }
+      expect(Actions.createTaskCloseModal()).toEqual(expectedAction);
+    });
+
     it('TASK.CREATE.LOADING should create a loading action', () => {
       const expectedAction = {
         type: Actions.TASK.CREATE.LOADING,

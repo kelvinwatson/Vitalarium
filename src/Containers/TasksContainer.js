@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 // import DebugLog from '../Utils/DebugLog';
 import Tasks from '../Components/Tasks/Tasks';
-// import { scrollDown, scrollUp } from '../Actions';
+import { createTaskOpenModal } from '../Actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -10,6 +10,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onClickAddTask: ()=>{
+      dispatch(createTaskOpenModal());
+    },
   }
 }
 

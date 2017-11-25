@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
-// import DebugLog from './Utils/DebugLog';
+import DebugLog from './Utils/DebugLog';
 
 import {
   USER,
+  TASK,
   // NAVIGATION,
 } from './Actions';
 
@@ -137,16 +138,34 @@ export function login(state = {
         status: action.status,
         redirectUrl: undefined,
       });
-    default:
-      return state;
+    default: return state;
   }
 }
 
+export function task(state = {
+  isOpenModal: false,
+  isSaving: false,
+  isCreateSuccess: false,
+  isCreateFailure: false,
+}, action){
+  switch(action.type){
+    case TASK.CREATE.MODAL.OPEN:
+      return Object.assign({}, state, {
+        isOpenModal: true,
+      });
+    case TASK.CREATE.MODAL.CLOSE:
+      return Object.assign({}, state, {
+        isOpenModal: false,
+      });
+    default: return state;
+  }
+}
 /*
  * root reducer
  */
 const RootReducer = combineReducers({
   login,
+  task,
   // navigation,
 
 });
