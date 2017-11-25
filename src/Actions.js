@@ -44,6 +44,10 @@ export const TASK = {
     FAILURE: 'FAILURE_GET_TASK',
   },
   CREATE: {
+    MODAL: {
+      OPEN: 'OPEN_MODAL_CREATE_TASK',
+      CLOSE: 'CLOSE_MODAL_CREATE_TASK',
+    },
     LOADING: 'LOADING_CREATE_TASK',
     SUCCESS: 'SUCCESS_CREATE_TASK',
     FAILURE: 'FAILURE_CREATE_TASK',
@@ -333,6 +337,20 @@ export function createTask(task) {
     }).catch((err)=>{
       dispatch(createTaskFailure(task, err.message))
     });
+  }
+}
+
+export function createTaskOpenModal(){
+  return {
+    type: TASK.CREATE.MODAL.OPEN,
+    status: 'Opening create task modal...',
+  }
+}
+
+export function createTaskCloseModal(){
+  return {
+    type: TASK.CREATE.MODAL.CLOSE,
+    status: 'Closing create task modal...',
   }
 }
 

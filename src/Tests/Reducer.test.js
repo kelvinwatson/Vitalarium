@@ -141,3 +141,38 @@ describe('Reducer: logout (initial state)', () => {
     });
   });
 });
+
+describe('Reducer: task (initial state)', () => {
+  it('should return the initial state', () => {
+    expect(Reducer.task(undefined, Actions.TASK.CREATE)).toEqual({
+      isOpenModal: false,
+      isSaving: false,
+      isCreateSuccess: false,
+      isCreateFailure: false,
+    });
+  });
+
+  it('should return the open modal state', () => {
+    const action = {
+      type: Actions.TASK.CREATE.MODAL.OPEN,
+    };
+    expect(Reducer.task(undefined, action)).toEqual({
+      isOpenModal: true,
+      isSaving: false,
+      isCreateSuccess: false,
+      isCreateFailure: false,
+    });
+  });
+
+  it('should return the close modal state', () => {
+    const action = {
+      type: Actions.TASK.CREATE.MODAL.CLOSE,
+    };
+    expect(Reducer.task(undefined, action)).toEqual({
+      isOpenModal: false,
+      isSaving: false,
+      isCreateSuccess: false,
+      isCreateFailure: false,
+    });
+  });
+});
