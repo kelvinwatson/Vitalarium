@@ -1,39 +1,45 @@
 import React from 'react';
-import Calendar from 'react-calendar';
 import DebugLog from '../../Utils/DebugLog';
+import 'date-input-polyfill';
 import './TaskModal.css'
 
 export default class TaskModal extends React.Component {
   constructor(props){
     super(props);
     this.setModalContentRef = this.setModalContentRef.bind(this);
-    this.handleClickOutsideModalContent = this.handleClickOutsideModalContent.bind(this);
+    this.onCloseClicked = this.onCloseClicked.bind(this);
+    // this.handleClickOutsideModalContent = this.handleClickOutsideModalContent.bind(this);
   }
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutsideModalContent);
+  onCloseClicked(){
+    //TODO: show warning
+    this.props.onOutsideModalContentClicked();
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutsideModalContent);
-  }
+  // componentDidMount() {
+  //   document.addEventListener('mousedown', this.handleClickOutsideModalContent);
+  // }
 
+  // componentWillUnmount() {
+  //   document.removeEventListener('mousedown', this.handleClickOutsideModalContent);
+  // }
+  //
   /*
    * Set the wrapper reference for outside click detection
    */
   setModalContentRef(node) {
     this.modalContent = node;
   }
-
-  /*
-   * Handle click outside of modalContent
-   */
-  handleClickOutsideModalContent(e) {
-    if (this.modalContent && !this.modalContent.contains(e.target)) {
-      DebugLog('CLOSING');
-      this.props.onOutsideModalContentClicked(true);
-    }
-  }
+  //
+  // /*
+  //  * Handle click outside of modalContent
+  //  */
+  // handleClickOutsideModalContent(e) {
+  //   if (this.modalContent && !this.modalContent.contains(e.target)) {
+  //     DebugLog('CLOSING');
+  //     this.props.onOutsideModalContentClicked(true);
+  //   }
+  // }
 
   render(){
     return (
@@ -42,7 +48,7 @@ export default class TaskModal extends React.Component {
 
           <header className="TaskModalHeader">
 
-            <i onClick={this.props.onOutsideModalContentClicked} className="fa fa-times" aria-hidden="true"></i>
+            <i onClick={this.onCloseClicked} className="fa fa-times" aria-hidden="true"></i>
           </header>
 
           {/* START TASK FORM */}

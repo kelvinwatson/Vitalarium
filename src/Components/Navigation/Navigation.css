@@ -8,11 +8,11 @@
 }
 
 .NavigationItem--Display{
-  display:block;
+  display:inline-block;
 }
 
 .NavigationItem--Hide{
-  display:none;
+  display:none !important;
 }
 
 .Navigation__Logo--Border{
