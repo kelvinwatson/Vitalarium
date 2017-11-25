@@ -113,7 +113,8 @@ export const TASKS = {
 						calls.push(FirebaseUtil.getFirebase().database().ref('users/' + localUser.id).set(localUser));
 						calls.push(FirebaseUtil.getFirebase().database().ref('projects/' + newProject.id).set(newProject));
 						Promise.all(calls).then((results) => {
-							dispatch(userUpdatedSuccess(localUser, newProject));
+							dispatch(loginSuccess(localUser));
+							//dispatch(userUpdatedSuccess(localUser, newProject));
 						}).catch((err) => {
 							dispatch(userUpdatedFailure(err));
 						});
