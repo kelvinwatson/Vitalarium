@@ -10,13 +10,19 @@ import FirebaseUtil from '../Utils/InitializeFirebase';
 import RootReducer from '../Reducers';
 import Root from '../Components/Root/Root';
 import DebugLog from '../Utils/DebugLog';
+import Task from '../Models/Task';
 
 /*
  * Mocks
  */
-const task = {
-  title: 'mock task',
-};
+const task = new Task('12345abc_' + Date.now(), //id
+	'Test Task Title inserted from a test', //title
+	'This is a test task description (inserted from a task)', //description
+	'LARGE', //size
+	null, //sprint (null == backlog)
+	new Date().setDate(new Date().getDate() + 7), //dueDate
+	null, //comments
+	Date.now()); //createdOn
 
 const err = { errMsg: 'mock err' };
 
@@ -155,7 +161,7 @@ describe('Actions: TASK', () => {
   describe('TASK.CREATE', ()=>{
     it('TASK.CREATE should write task to database', (done)=>{
       const dispatch = function(object) {
-        switch(object){
+        switch(object.type){
           case Actions.TASK.CREATE.LOADING:
             expect(object).toEqual({
               type: Actions.TASK.CREATE.LOADING,
@@ -178,8 +184,9 @@ describe('Actions: TASK', () => {
               status: expect.anything(),
               task,
             });
+						done('Should be success.');
           default:
-            done();
+            done('Unexpected dispatch called');
         }
       };
       Actions.createTask(task)(dispatch);
@@ -232,22 +239,17 @@ describe('Actions: TASK', () => {
 
 describe('Actions: TASKS', () => {
   describe('TASKS.GET', ()=>{
-    it('TASKS.GET should retrieve tasks from database', (done)=>{
+    it('TASKS.GET should retrieve all tasks from database without a filter', (done)=>{
       const dispatch = function(object) {
-        switch(object){
+        switch(object.type){
           case Actions.TASKS.GET.LOADING:
             expect(object).toEqual({
               type: Actions.TASKS.GET.LOADING,
               status: 'Fetching tasks...',
-              filter,
             });
             break;
           case Actions.TASKS.GET.SUCCESS:
-            expect(object).toEqual({
-              type: Actions.TASKS.GET.SUCCESS,
-              status: 'Successfully retrieved tasks.',
-              tasks,
-            });
+            expect(object.tasks && Object.keys(object.tasks).length > 1).toEqual(true);
             done();
             break;
           case Actions.TASKS.GET.FAILURE:
@@ -256,14 +258,6 @@ describe('Actions: TASKS', () => {
               status: err
             });
 						done(err);
-        }
-        if(object && object.tasks) {
-          expect(object.tasks['12345']).toEqual({
-            title: 'mock task title 1',
-          });
-          done();
-        } else {
-          return;
         }
       };
       Actions.getTasks()(dispatch);
