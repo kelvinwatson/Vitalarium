@@ -1,5 +1,33 @@
+.Dashboard{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.Dashboard__TasksWrapper{
+  flex-basis: 50%;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.Dashboard__SprintsWrapper{
+  flex-basis: 50%;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+@media(max-width: 480px) {
+  /* phones */
+}
+
 @media(max-width: 767px) {
   /* phones */
+  .Dashboard__TasksWrapper, .Dashboard__SprintsWrapper{
+    flex-basis: 100%;
+  }
 }
 
 @media(max-width: 767px) and (orientation: portrait) {

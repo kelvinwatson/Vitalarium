@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
 // import DebugLog from '../Utils/DebugLog';
-import Dashboard from '../Components/Dashboard/Dashboard';
+import Sprints from '../Components/Sprints/Sprints';
 // import { scrollDown, scrollUp } from '../Actions';
 
 const mapStateToProps = (state) => {
   return {
-    isLoginFailure: Boolean(state.login.isFailure),
   }
 }
 
@@ -14,9 +13,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const DashboardContainer = connect(
+const SprintsContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Dashboard)
+)(Sprints)
 
-export default DashboardContainer;
+export default SprintsContainer;
