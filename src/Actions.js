@@ -330,11 +330,9 @@ export function getTasksFailure(err){
  * Create task
  */
 export function createTask(task) {
-  const t = Date.now();
-  task.created = t;
   return function (dispatch) {
     dispatch(createTaskLoading());
-    return FirebaseUtil.getFirebase().database().ref('tasks/'+t).set(task).then(()=>{
+    return FirebaseUtil.getFirebase().database().ref('tasks/' + task.id).set(task).then(()=>{
       dispatch(createTaskSuccess(task));
     }).catch((err)=>{
       dispatch(createTaskFailure(task, err.message))
