@@ -60,6 +60,7 @@
 }
 .TaskModalButtons{
   margin: 0.8rem 0 0 0;
+  padding-right: 1px;
   width: 100%;
   text-align: right;
 }

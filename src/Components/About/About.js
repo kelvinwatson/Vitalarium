@@ -11,41 +11,48 @@ export default class About extends React.Component {
       <article className="cf mw9 center">
         <header className={`fl w-100 pv5 ph3 ph5-l ph4-m AboutHeaderBackground ${switchTheme()}`}>
           <div className="w-50-l">
-            <h2 className="lh-title f4 b mt0">
-              What is Vitalarium?
+            <h2 className="lh-title f3 b mt0">
+              [ Organize your life ]
             </h2>
-            <div className="f3 lh-title fw3">
-              It&apos;s a <strong className="fw5">Scrum project management tool</strong> for scheduling and organizing tasks in your <strong className="fw5">projects</strong> and <strong className="fw5">daily life</strong>.
+            <div className="f4 lh-title fw3">
+              Vitalarium is a <strong className="fw5">Scrum project management tool</strong> for scheduling and organizing tasks in your <strong className="fw5">projects</strong> and <strong className="fw5">daily life</strong>.
             </div>
           </div>
         </header>
         <section className="fl w-100 ph3 ph4-l ph3-m">
-          <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
+          <div className="fl w-100 w-50-m w-33-l pa3-m pa4-l">
             <h3 className="f4 fw4 lh-copy">What&apos;s Scrum?</h3>
             <p className="f6 lh-copy measure">
-              Scrum is an agile methodology for scheduling your tasks. It is used by many professionals in a variety of fields.
+              Scrum is an agile methodology for scheduling your tasks.
             </p>
+
           </div>
-          <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
-            <h3 className="f4 fw4 lh-copy">Why use Vitalarium?</h3>
+          <div className="fl w-100 w-50-m w-33-l pa3-m pa4-l">
+            <h3 className="f4 fw4 lh-copy">Not familiar with Scrum?</h3>
             <p className="f6 lh-copy measure">
-              Vitalarium helps manage your tasks, in your projects or daily life!
+              You don&apos;t need to know anything about Scrum to use Vitalarium.
+            </p>
+
+            <p className="f6 lh-copy measure">
+              Vitalarium helps manage your professional and daiy life tasks!
             </p>
           </div>
-          <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
+          <div className="fl w-100 w-50-m w-33-l pa3-m pa4-l">
             <h3 className="f4 fw4 lh-copy">How are we different from other agile project management tools?</h3>
             <p className="f6 lh-copy measure">
               Vitalarium is completely <strong>free</strong> to use!
             </p>
           </div>
-          <div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
+          {/*}<div className="fl w-100 w-50-m w-25-l pa3-m pa4-l">
             <h3 className="f4 fw4 lh-copy">Ready to organize your projects and your life?</h3>
             <p className="f6 lh-copy measure">
               Start <Link to="/login" className="link dim dark-gray f6 f5-l dib mr3 mr4-l">here!</Link>
             </p>
-          </div>
+          </div>*/}
         </section>
       </article>
+
+      <article className="pa3 pa5-ns">SCREENSHOTS HERE</article>
 
       <article className="pa3 pa5-ns">
         <h3 className="f6 ttu tracked">Today</h3>
@@ -89,7 +96,7 @@ export default class About extends React.Component {
         </p>
         <div>
           <a className="fw6 f6 br-pill no-underline b--near-black bg-near-black yellow ba grow pv2 ph3 dib mr3">
-            Sign Up
+            Start Here
           </a>
           <a className="f6 br-pill near-black b--near-black no-underline ba grow pv2 ph3 dib">
             Learn More

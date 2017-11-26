@@ -80,6 +80,9 @@ describe('Actions: USER', () => {
 		it('USER.LOGIN should authenticate with Google & return success', (done) => {
 			const dispatch = function(object) {
 				switch(object.type){
+					case Actions.USER.LOGIN.FIRST_TIME:
+						expect(object).toEqual(Actions.loginFirstTime());
+						return;
 					case Actions.USER.LOGIN.LOADING:
 						expect(object).toEqual(Actions.loginLoading());
 						return;
@@ -234,6 +237,46 @@ describe('Actions: TASK', () => {
       }
       expect(Actions.createTaskFailure(task, err)).toEqual(expectedAction);
     });
+
+		it('TASK.CREATE.MODAL.OPEN should create an open modal action', () => {
+			const expectedAction = {
+				type: Actions.TASK.CREATE.MODAL.OPEN,
+		    status: 'Opening create task modal...',
+			}
+			expect(Actions.createTaskOpenModal()).toEqual(expectedAction);
+		});
+
+		it('TASK.CREATE.MODAL.CLOSE should create an close modal action', () => {
+			const expectedAction = {
+				type: Actions.TASK.CREATE.MODAL.CLOSE,
+				status: 'Closing create task modal...',
+			}
+			expect(Actions.createTaskCloseModal()).toEqual(expectedAction);
+		});
+
+		it('TASK.CREATE.MODAL.CLOSE.WARNING should create a open warning modal action', () => {
+			const expectedAction = {
+				type: Actions.TASK.CREATE.MODAL.CLOSE.WARNING,
+		    status: 'Are you sure you want to delete this task?',
+			}
+			expect(Actions.createTaskCloseWarningModal()).toEqual(expectedAction);
+		});
+
+		it('TASK.CREATE.MODAL.CLOSE.WARNING should create a open warning modal action', () => {
+			const expectedAction = {
+				type: Actions.TASK.CREATE.MODAL.CLOSE.CANCEL,
+				status: 'Returning to task...',
+			}
+			expect(Actions.createTaskCancelCloseWarningModal()).toEqual(expectedAction);
+		});
+
+		it('TASK.CREATE.MODAL.CLOSE.WARNING should create a open warning modal action', () => {
+			const expectedAction = {
+				type: Actions.TASK.CREATE.MODAL.CLOSE.DELETE,
+				status: 'Closing create task modal, all changes lost.',
+			}
+			expect(Actions.createTaskDeleteCloseWarningModal()).toEqual(expectedAction);
+		});
   });
 });
 
