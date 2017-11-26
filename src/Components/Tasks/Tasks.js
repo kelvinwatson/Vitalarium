@@ -37,8 +37,7 @@ export default class Tasks extends React.Component {
           </li>
         </ul>
 
-        <h2 className="f3 mid-gray lh-title">Tasks not yet assigned to a sprint
-        </h2>
+        <h2 className="f3 mid-gray lh-title">Tasks not yet assigned to a sprint</h2>
         {/*<time className="f6 ttu tracked gray">Tasks not assigned to a sprint</time>*/}
 
         <ul className="list pl0 mt0 measure">
