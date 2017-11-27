@@ -405,16 +405,13 @@ describe('Misc Action Utils', ()=>{
 			endDate: 1514230073000
 		}]
 		expect(Actions.preprocessSprintDates(mockProject)).toEqual({
-			sprints: [
-				{
-					startDate: '27-Nov-2017',
-					endDate: '11-Dec-2017',
-				},
-				{
-					startDate: '11-Dec-2017',
-					endDate: '25-Dec-2017',
-				}
-			]
+			sprints: [{
+				startDate: '27-Nov-2017',
+				endDate: '11-Dec-2017',
+			}, {
+				startDate: '11-Dec-2017',
+				endDate: '25-Dec-2017',
+			}]
 		});
 	});
 });
