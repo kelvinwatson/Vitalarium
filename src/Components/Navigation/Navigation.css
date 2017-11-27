@@ -7,6 +7,14 @@
   font-family: 'Julius Sans One', sans-serif;
 }
 
+.NavigationItem--Display{
+  display:inline-block;
+}
+
+.NavigationItem--Hide{
+  display:none !important;
+}
+
 .Navigation__Logo--Border{
   /*letter-spacing: -0.8rem;
   padding-top:-1rem;*/

@@ -11,6 +11,7 @@ import thunkMiddleware from 'redux-thunk';
 describe('Reducer: login (initial state)', () => {
   it('should return the initial state', () => {
     expect(Reducer.login(undefined, Actions.USER.LOGIN)).toEqual({
+      isFirstTime: false,
       isLoading: true,
       isSuccess: false,
       isFailure: false,
@@ -27,6 +28,7 @@ describe('Reducer: login (initial state)', () => {
       status: 'Logging you in...',
     };
     expect(Reducer.login(undefined, action)).toEqual({
+      isFirstTime: false,
       isLoading: true,
       isSuccess: false,
       isFailure: false,
@@ -46,6 +48,7 @@ describe('Reducer: login (initial state)', () => {
       },
     };
     expect(Reducer.login(undefined, action)).toEqual({
+      isFirstTime: false,
       isLoading: false,
       isSuccess: true,
       isFailure: false,
@@ -64,6 +67,7 @@ describe('Reducer: login (initial state)', () => {
       }
     };
     expect(Reducer.login(undefined, action)).toEqual({
+      isFirstTime: false,
       isLoading: false,
       isSuccess: false,
       isFailure: true,
@@ -78,6 +82,7 @@ describe('Reducer: login (initial state)', () => {
 describe('Reducer: logout (initial state)', () => {
   it('should return the initial state', () => {
     expect(Reducer.login(undefined, Actions.USER.LOGOUT)).toEqual({
+      isFirstTime: false,
       isLoading: true,
       isSuccess: false,
       isFailure: false,
@@ -94,6 +99,7 @@ describe('Reducer: logout (initial state)', () => {
       status: 'Logging you out...',
     };
     expect(Reducer.login(undefined, action)).toEqual({
+      isFirstTime: false,
       isLoading: true,
       isSuccess: false,
       isFailure: false,
@@ -113,6 +119,7 @@ describe('Reducer: logout (initial state)', () => {
       },
     };
     expect(Reducer.login(undefined, action)).toEqual({
+      isFirstTime: false,
       isLoading: false,
       isSuccess: true,
       isFailure: false,
@@ -131,6 +138,7 @@ describe('Reducer: logout (initial state)', () => {
       }
     };
     expect(Reducer.login(undefined, action)).toEqual({
+      isFirstTime: false,
       isLoading: false,
       isSuccess: false,
       isFailure: true,
@@ -145,10 +153,11 @@ describe('Reducer: logout (initial state)', () => {
 describe('Reducer: task (initial state)', () => {
   it('should return the initial state', () => {
     expect(Reducer.task(undefined, Actions.TASK.CREATE)).toEqual({
-      isOpenModal: false,
+      isOpenCreateTaskModal: false,
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
+      isShowCloseWarningModal: false,
     });
   });
 
@@ -157,10 +166,11 @@ describe('Reducer: task (initial state)', () => {
       type: Actions.TASK.CREATE.MODAL.OPEN,
     };
     expect(Reducer.task(undefined, action)).toEqual({
-      isOpenModal: true,
+      isOpenCreateTaskModal: true,
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
+      isShowCloseWarningModal: false,
     });
   });
 
@@ -169,10 +179,50 @@ describe('Reducer: task (initial state)', () => {
       type: Actions.TASK.CREATE.MODAL.CLOSE,
     };
     expect(Reducer.task(undefined, action)).toEqual({
-      isOpenModal: false,
+      isOpenCreateTaskModal: false,
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
+      isShowCloseWarningModal: false,
+    });
+  });
+
+  it('should return the open warning modal state', () => {
+    const action = {
+      type: Actions.TASK.CREATE.MODAL.CLOSE.WARNING,
+    };
+    expect(Reducer.task(undefined, action)).toEqual({
+      isOpenCreateTaskModal: true,
+      isSaving: false,
+      isCreateSuccess: false,
+      isCreateFailure: false,
+      isShowCloseWarningModal: true,
+    });
+  });
+
+  it('should return the close warning modal state', () => {
+    const action = {
+      type: Actions.TASK.CREATE.MODAL.CLOSE.CANCEL,
+    };
+    expect(Reducer.task(undefined, action)).toEqual({
+      isOpenCreateTaskModal: true,
+      isSaving: false,
+      isCreateSuccess: false,
+      isCreateFailure: false,
+      isShowCloseWarningModal: false,
+    });
+  });
+
+  it('should return the close warning modal state', () => {
+    const action = {
+      type: Actions.TASK.CREATE.MODAL.CLOSE.DELETE,
+    };
+    expect(Reducer.task(undefined, action)).toEqual({
+      isOpenCreateTaskModal: false,
+      isSaving: false,
+      isCreateSuccess: false,
+      isCreateFailure: true,
+      isShowCloseWarningModal: false,
     });
   });
 });

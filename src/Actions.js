@@ -21,12 +21,13 @@ export const NAVIGATION = {
 
 export const USER = {
   LOGIN: {
+    FIRST_TIME: 'FIRST_TIME_LOGIN_USER', //first time login
     LOADING: 'LOADING_LOGIN_USER',
     SUCCESS: 'SUCCESS_LOGIN_USER',
     FAILURE: 'FAILURE_LOGIN_USER',
 		LINK: {
 			SHOW: 'SHOW_LINK_ACCOUNT',
-		}
+		},
   },
   UPDATE: {
 		SUCCESS: 'SUCCESS_UPDATE_USER',
@@ -48,7 +49,11 @@ export const TASK = {
   CREATE: {
     MODAL: {
       OPEN: 'OPEN_MODAL_CREATE_TASK',
-      CLOSE: 'CLOSE_MODAL_CREATE_TASK',
+      CLOSE: {
+        WARNING: 'WARNING_CLOSE_MODAL_CREATE_TASK',
+        CANCEL: 'CANCEL_CLOSE_MODAL_CREATE_TASK',
+        DELETE: 'DELETE_CLOSE_MODAL_CREATE_TASK',
+      },
     },
     LOADING: 'LOADING_CREATE_TASK',
     SUCCESS: 'SUCCESS_CREATE_TASK',
@@ -235,6 +240,10 @@ export function getProjectFromDB(projectId, dispatch) {
    }
  }
 
+
+/*
+ * User
+ */
 export function loginLinkWithRedirect(previousProvider) {
 	return function(dispatch) {
 		FirebaseUtil.getFirebase().auth.currentUser.linkWithRedirect(previousProvider);
@@ -258,9 +267,13 @@ export function loginShowLinkAccount(previousProvider) {
   }
 }
 
-/*
- * User
- */
+export function loginFirstTime(){
+  return {
+    type: USER.LOGIN.FIRST_TIME,
+    status: 'First time login (new user)',
+  }
+}
+
 export function userUpdatedSuccess(user) {
 	return {
 		type: USER.UPDATE.SUCCESS,
@@ -455,6 +468,27 @@ export function createTaskCloseModal(){
   return {
     type: TASK.CREATE.MODAL.CLOSE,
     status: 'Closing create task modal...',
+  }
+}
+
+export function createTaskCloseWarningModal(){
+  return {
+    type: TASK.CREATE.MODAL.CLOSE.WARNING,
+    status: 'Are you sure you want to delete this task?',
+  }
+}
+
+export function createTaskCancelCloseWarningModal(){
+  return {
+    type: TASK.CREATE.MODAL.CLOSE.CANCEL,
+    status: 'Returning to task...',
+  }
+}
+
+export function createTaskDeleteCloseWarningModal(){
+  return {
+    type: TASK.CREATE.MODAL.CLOSE.DELETE,
+    status: 'Closing create task modal, all changes lost.',
   }
 }
 

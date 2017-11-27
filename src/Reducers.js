@@ -4,26 +4,11 @@ import DebugLog from './Utils/DebugLog';
 import {
   USER,
   TASK,
-  // NAVIGATION,
+  //NAVIGATION,
 } from './Actions';
 
-// export function navigation(state = {
-//   page: undefined,
-//   underlinedItem: undefined,
-//   list: []
-// }, action){
-//   switch(action.type){
-//     case NAVIGATION.GET:
-//       return Object.assign({}, state, {
-//         page: undefined,
-//         list: ['Me', 'Music', 'Reach', 'Collaborate']
-//       });
-//     default:
-//       return state;
-//   }
-// }
-
 export function login(state = {
+  isFirstTime: false,
   isLoading: true,
   isSuccess: false,
   isFailure: false,
@@ -34,6 +19,10 @@ export function login(state = {
   previousProvider: undefined,
 }, action){
   switch(action.type){
+    case USER.LOGIN.FIRST_TIME:
+      return Object.assign({}, state, {
+        isFirstTime: true,
+      });
     case USER.LOGIN.LOADING:
       return Object.assign({}, state, {
         isLoading: true,
@@ -143,19 +132,36 @@ export function login(state = {
 }
 
 export function task(state = {
-  isOpenModal: false,
+  isOpenCreateTaskModal: false,
   isSaving: false,
   isCreateSuccess: false,
   isCreateFailure: false,
+  isShowCloseWarningModal: false,
 }, action){
   switch(action.type){
     case TASK.CREATE.MODAL.OPEN:
       return Object.assign({}, state, {
-        isOpenModal: true,
+        isOpenCreateTaskModal: true,
       });
     case TASK.CREATE.MODAL.CLOSE:
       return Object.assign({}, state, {
-        isOpenModal: false,
+        isOpenCreateTaskModal: false,
+      });
+    case TASK.CREATE.MODAL.CLOSE.WARNING:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: true,
+        isShowCloseWarningModal: true,
+      });
+    case TASK.CREATE.MODAL.CLOSE.CANCEL:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: true,
+        isShowCloseWarningModal: false,
+      });
+    case TASK.CREATE.MODAL.CLOSE.DELETE:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: false,
+        isCreateFailure: true,
+        isShowCloseWarningModal: false,
       });
     default: return state;
   }

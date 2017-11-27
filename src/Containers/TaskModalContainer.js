@@ -1,22 +1,26 @@
 import { connect } from 'react-redux';
 // import DebugLog from '../Utils/DebugLog';
 import TaskModal from '../Components/TaskModal/TaskModal';
-import { createTask, createTaskCloseModal } from '../Actions';
+import { createTask, createTaskCloseModal, createTaskCloseWarningModal } from '../Actions';
 import Task from '../Models/Task';
 
 const mapStateToProps = (state) => {
   return {
-    isOpen: state.task.isOpenModal,
+    isOpen: state.task.isOpenCreateTaskModal,
+    isShowCloseWarning: state.task.isShowCloseWarningModal,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveTask: (id, title, description, size, sprint, dueDate, comments)=>{
+    createTask: (id, title, description, size, sprint, dueDate, comments)=>{
       dispatch(createTask(new Task(id, title, description, size, sprint, dueDate, comments)));
     },
-    onOutsideModalContentClicked: ()=>{      
+    close: ()=>{
       dispatch(createTaskCloseModal());
+    },
+    showCloseCreateTaskWarningModal: () => {
+      dispatch(createTaskCloseWarningModal());
     }
   }
 }
