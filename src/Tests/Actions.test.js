@@ -22,7 +22,8 @@ const task = new Task('12345abc_' + Date.now(), //id
 	null, //sprint (null == backlog)
 	new Date().setDate(new Date().getDate() + 7), //dueDate
 	null, //comments
-	Date.now()); //createdOn
+	Date.now(),
+	'12345abc'); //createdOn
 
 const err = { errMsg: 'mock err' };
 
@@ -239,8 +240,8 @@ describe('Actions: TASK', () => {
 
 describe('Actions: TASKS', () => {
   describe('TASKS.GET', ()=>{
-    it('TASKS.GET should retrieve all tasks from database without a filter', (done)=>{
-      const dispatch = function(object) {
+		it('TASKS.GET.SUCCESS should retrieve a sorted list of tasks', (done) => {
+			const dispatch = function(object) {
         switch(object.type){
           case Actions.TASKS.GET.LOADING:
             expect(object).toEqual({
@@ -260,8 +261,8 @@ describe('Actions: TASKS', () => {
 						done(err);
         }
       };
-      Actions.getTasks()(dispatch);
-    });
+			Actions.getTasks(['12345_1511635143977', '12345_1511635143980'])(dispatch);
+		});
 
     it('TASKS.GET.LOADING should create a loading action', () => {
       const expectedAction = {

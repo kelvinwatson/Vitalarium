@@ -2,6 +2,8 @@ import FirebaseUtil from './Utils/InitializeFirebase';
 import DebugLog from './Utils/DebugLog';
 import User from './Models/User';
 import Project from './Models/Project';
+import Sprint from './Models/Sprint';
+import Task from './Models/Task';
 
 /**
  * action types
@@ -73,6 +75,116 @@ export const TASKS = {
   },
 };
 
+export const PROJECT = {
+	GET: {
+		LOADING: 'LOADING_GET_PROJECT',
+		SUCCESS: 'SUCCESS_GET_PROJECT',
+		FAILURE: 'FAILURE_GET_PROJECT'
+	},
+};
+
+export function initializeUserObjectsInDB(redirectResult, dispatch) {
+	//1. Create initial sprint objects
+	const db = FirebaseUtil.getFirebase().database();
+	let firstSprintRef = db.ref('sprints/').push();
+	let secondSprintRef = db.ref('sprints/').push();
+	let projectRef = db.ref('projects/').push();
+	let firstSprint = new Sprint(firstSprintRef.key,
+		[], Date.now(), new Date().setDate(new Date().getDate() + 14));
+	let secondSprint = new Sprint(secondSprintRef.key,
+		[], new Date().setDate(new Date().getDate() + 14), new Date().setDate(new Date().getDate() + 28));
+	let project = new Project(projectRef.key, [firstSprintRef.key, secondSprintRef.key], [], Intl.DateTimeFormat().resolvedOptions().timeZone);
+	let user = new User(redirectResult.user.uid,
+		redirectResult.user.displayName,
+		redirectResult.user.email,
+		redirectResult.user.photoURL,
+		redirectResult.additionalUserInfo && redirectResult.additionalUserInfo.providerId,
+		[projectRef.key]);
+	//push all to DB
+	let calls = [
+		firstSprintRef.push(firstSprint),
+		secondSprintRef.push(secondSprint),
+		projectRef.push(project),
+		db.ref('/users/' + user.id).set(user)
+	];
+	Promise.all(calls).then((results) => {
+		dispatch(loginSuccess(user));
+		project.sprints = [firstSprint, secondSprint];
+		dispatch(getProjectSuccess(project));
+	}).catch((err) => {
+		dispatch(userUpdatedFailure(err));
+	});
+};
+
+export function getSprintsFromDB(sprintIds) {
+	return new Promise((resolve, reject) => {
+		const db = FirebaseUtil.getFirebase().database();
+		let sprintCalls = [];
+		for(let i = 0; i < sprintIds.length; i += 1) {
+			sprintCalls.push(db.ref('sprints/' + sprintIds[i]).once('value'));
+		}
+		Promise.all(sprintCalls).then((sprintResponses) => {
+			let sprints = [];
+			for(let i = 0; i < sprintResponses.length; i += 1) {
+				let sprint = sprintResponses.val();
+				if(Array.isArray(sprint.tasks)) {
+					let taskCalls = [];
+					for(let j = 0; j < sprint.tasks.length; j += 1) {
+						taskCalls.push(db.ref('tasks/' + sprint.tasks[i]).once('value'));
+					}
+					Promise.all(taskCalls).then((taskResults) => {
+						let tasks = [];
+						for(let j = 0; j < taskResults.length; j += 1) {
+							tasks.push(taskResults.val());
+						}
+						tasks.sort(taskComparatorDesc);
+						sprint.tasks = tasks;
+						sprints.push(sprint);
+						if(sprints.length === sprintIds.length) {
+							resolve(sprints);
+						}
+					});
+				}
+			}
+		});
+	});
+}
+
+export function getTasksFromDB(taskList) {
+	return new Promise((resolve, reject) => {
+		getTasks(taskList)((dispatchResult) => {
+			if(dispatchResult.type === TASKS.GET.SUCCESS) {
+				resolve(dispatchResult.tasks);
+			} else {
+				reject(dispatchResult);
+			}
+		});
+	});
+}
+
+export function getProjectFromDB(projectId, dispatch) {
+	const db = FirebaseUtil.getFirebase().database();
+	db.ref('projects/' + projectId).once('value').then((projectSnap) => {
+		let project = projectSnap.val();
+		let projectCalls = [];
+		if(project && Array.isArray(project.sprints)) {
+			projectCalls.push(getSprintsFromDB(project.sprints));
+		}
+		if(project && Array.isArray(project.backlog)) {
+			projectCalls.push(getTasksFromDB(project.backlog));
+		}
+		Promise.all(projectCalls).then((projectResults) => {
+			let sprints = projectResults[0];
+			let backlog = projectResults[1];
+			project.sprints = sprints;
+			project.backlog = backlog;
+			dispatch(getProjectSuccess(project));
+		});
+	}).catch((err) => {
+		dispatch(getProjectFailure(err));
+	});
+}
+
 /*
  * App
  */
@@ -83,7 +195,11 @@ export const TASKS = {
 			if (user) { // User is signed in.
 				// Get user from DB.
 				FirebaseUtil.getFirebase().database().ref('users/' + user.uid).once('value').then((snap)=>{
-					dispatch(loginSuccess(snap.val()));
+					let dbUser = snap.val();
+					dispatch(loginSuccess(dbUser));
+					if(dbUser && Array.isArray(dbUser.projects)) {
+						getProjectFromDB(dbUser.projects[0]);
+					}
 				}).catch((err) => {
 					dispatch(loginFailure(err));
 				});
@@ -98,44 +214,13 @@ export const TASKS = {
 			if(result && result.user) {
 				let calls = [];
 				//check for existing user entry
-				calls.push(FirebaseUtil.getFirebase().database().ref('users/' + result.user.uid).once('value'));
-				//check for existing project entry
-				calls.push(FirebaseUtil.getFirebase().database().ref('projects/' + result.user.uid + '_0').once('value'));
-				Promise.all(calls).then((results) => {
-					let userResult = results[0].val();
-					let projectResult = results[1].val();
+				FirebaseUtil.getFirebase().database().ref('users/' + result.user.uid).once('value').then((userSnap) => {
+					let userResult = userSnap.val();
 					if(!userResult) {
-						//no user in db, first time registration
-						let localUser = new User(result.user.uid,
-							result.user.displayName,
-							result.user.email,
-							result.user.photoURL,
-							result.additionalUserInfo && result.additionalUserInfo.providerId,
-							[result.user.uid + '_0']);
-						let newProject = new Project(result.user.uid + '_0', null, Intl.DateTimeFormat().resolvedOptions().timeZone);//TODO: Get timezone for native
-						let calls = [];
-						calls.push(FirebaseUtil.getFirebase().database().ref('users/' + localUser.id).set(localUser));
-						calls.push(FirebaseUtil.getFirebase().database().ref('projects/' + newProject.id).set(newProject));
-						Promise.all(calls).then((results) => {
-							dispatch(loginSuccess(localUser));
-							//dispatch(userUpdatedSuccess(localUser, newProject));
-						}).catch((err) => {
-							dispatch(userUpdatedFailure(err));
-						});
+						//no user exists, initialize user data for the first time.
+						initializeUserObjectsInDB(result, dispatch);
 					} else {
-						if(projectResult) {
-							//Nothing to do
-							//TODO: In the future we may want to update user details here..
-							dispatch(loginSuccess(userResult));
-						} else {
-							//Somehow the project went missing (deleted?), lets replace it
-							let newProject = new Project(userResult.id + '_0', null, Intl.DateTimeFormat().resolvedOptions().timeZone);//TODO: Get timezone for native
-							FirebaseUtil.getFirebase().database().ref('projects/' + result.user.uid + '_0').once('value').then((result) => {
-								dispatch(loginSuccess(userResult));
-							}).catch((err) => {
-								dispatch(userUpdatedFailure(err));
-							});
-						}
+						dispatch(loginSuccess(userResult));
 					}
 				}).catch((err) => {
 					dispatch(userUpdatedFailure(err));
@@ -293,20 +378,6 @@ export function unsetNavigation() {
   }
 }
 
-/*
- * Get tasks
- */
-export function getTasks(filter){
-  //TODO: use filter
-  return function (dispatch) {
-    dispatch(getTasksLoading(filter));
-    return FirebaseUtil.getFirebase().database().ref('tasks').once('value').then((snap)=>{
-      // DebugLog('snap',snap.val());
-      dispatch(getTasksSuccess(snap && snap.val()));
-    });
-  }
-}
-
 export function getTasksLoading(filter){
   return {
     type: TASKS.GET.LOADING,
@@ -328,6 +399,35 @@ export function getTasksFailure(err){
     type: TASKS.GET.FAILURE,
     status: err
   }
+}
+
+export function taskComparatorDesc(a, b) {
+  if (a.createdOn < b.createdOn)
+     return 1;
+  if (a.createdOn > b.createdOn)
+    return -1;
+  return 0;
+}
+
+export function getTasks(taskList) {
+	return function (dispatch) {
+		let calls = [];
+		let db = FirebaseUtil.getFirebase().database();
+		for(let i = 0; i < taskList.length; i += 1) {
+			calls.push(db.ref('tasks/' + taskList[i]).once('value'));
+		}
+		Promise.all(calls).then((results) => {
+			let tasks = [];
+			for(let i = 0; i < results.length; i += 1) {
+				let task = results[i].val();
+				tasks.push(task);
+			}
+			tasks.sort(taskComparatorDesc);
+			dispatch(getTasksSuccess(tasks));
+		}).catch((err) => {
+			dispatch(getTasksFailure(err));
+		});
+	}
 }
 
 /*
@@ -380,4 +480,22 @@ export function createTaskFailure(task, err){
     status: err,
     task,
   }
+}
+
+/**
+ * Project
+ */
+export function getProjectSuccess(project) {
+	return {
+		type: PROJECT.GET.SUCCESS,
+		status: 'Successfully got project',
+		project
+	}
+}
+export function getProjectFailure(err) {
+	return {
+		type: PROJECT.GET.FAILURE,
+		status: 'Failed to get project',
+		err
+	}
 }
