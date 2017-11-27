@@ -4,6 +4,7 @@ import DebugLog from './Utils/DebugLog';
 import {
   USER,
   TASK,
+  PROJECT,
   //NAVIGATION,
 } from './Actions';
 
@@ -166,12 +167,48 @@ export function task(state = {
     default: return state;
   }
 }
+
+export function project(state = {
+  isLoading: false,
+  isSuccess: false,
+  isFailure: false,
+  status: undefined,
+  project: undefined,
+}, action){
+  switch(action.type){
+    case PROJECT.GET.LOADING:
+      return Object.assign({}, state, {
+        isLoading: false,
+        isSuccess: false,
+        isFailure: false,
+        status: action.status,
+        project: undefined,
+      });
+    case PROJECT.GET.SUCCESS:
+      return Object.assign({}, state, {
+        isLoading: false,
+        isSuccess: true,
+        isFailure: false,
+        status: action.status,
+        project: action.project,
+      });
+    case PROJECT.GET.FAILURE:
+      return Object.assign({}, state, {
+        isLoading: false,
+        isSuccess: false,
+        isFailure: true,
+        status: action.status,
+      });
+    default: return state;
+  }
+}
 /*
  * root reducer
  */
 const RootReducer = combineReducers({
   login,
   task,
+  project,
   // navigation,
 
 });
