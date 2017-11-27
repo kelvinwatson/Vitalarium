@@ -8,7 +8,15 @@
   width: 100%;
 }
 
-.Dashboard__TasksWrapper{
+.Dashboard__Loading{
+  min-height: 323px;
+}
+
+.Dashboard__FailureWrapper{
+
+}
+
+.Dashboard__BacklogWrapper{
   flex-basis: 50%;
   flex-grow: 1;
   flex-shrink: 1;

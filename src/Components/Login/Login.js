@@ -27,13 +27,13 @@ export default class Login extends React.Component {
     let ren;
     if (this.props.isLoginInProgress && !this.props.user){
       ren =
-        <div>
+        <aside>
           <h2 className="center ph3 ph5-ns tc br2 mt5">Logging you in...</h2>
           <p className="tc mb5">One moment please.</p>
           <div className="center measure tc LoginLoading">
             <Loading isLoading={this.props.isLoginInProgress}/>
           </div>
-        </div>;
+        </aside>;
     } else if (this.props.previousProvider){
 
       let providerCapitalized, providerLowerCase;

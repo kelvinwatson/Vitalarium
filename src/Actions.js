@@ -1,5 +1,6 @@
 import FirebaseUtil from './Utils/InitializeFirebase';
 import DebugLog from './Utils/DebugLog';
+import {convertTimeStampToDate} from './Utils/DateUtils';
 import User from './Models/User';
 import Project from './Models/Project';
 import Sprint from './Models/Sprint';
@@ -112,6 +113,8 @@ export function initializeUserObjectsInDB(redirectResult, dispatch) {
   Promise.all(calls).then((results) => {
     dispatch(loginSuccess(user));
     project.sprints = [firstSprint, secondSprint];
+
+    project = preprocessSprintDates(project);
     dispatch(getProjectSuccess(project));
   }).catch((err) => {
     dispatch(userUpdatedFailure(err));
@@ -187,6 +190,8 @@ export function getProjectFromDb(projectId, dispatch) {
         let backlog = projectResults[1] || [];
         project.sprints = sprints;
         project.backlog = backlog;
+
+        project = preprocessSprintDates(project);
         dispatch(getProjectSuccess(project));
       });
     }).catch((err) => {
@@ -532,14 +537,29 @@ export function getProjectLoading() {
 export function getProjectSuccess(project) {
   return {
     type: PROJECT.GET.SUCCESS,
-    status: 'Successfully got project',
+    status: 'Successfully retrieved project.',
     project
   }
 }
 export function getProjectFailure(err) {
   return {
     type: PROJECT.GET.FAILURE,
-    status: 'Failed to get project',
+    status: 'Failed to get project.',
     err
   }
 }
+
+/*
+ * Misc Utils
+ */
+ export function preprocessSprintDates(project){
+   if (!project.sprints) //no sprints
+     return project;
+
+   for(let i = 0; i < project.sprints.length; i+=1){
+     project.sprints[i].startDate = convertTimeStampToDate(project.sprints[i].startDate)
+     project.sprints[i].endDate = convertTimeStampToDate(project.sprints[i].endDate)
+   }
+
+   return project;
+ }

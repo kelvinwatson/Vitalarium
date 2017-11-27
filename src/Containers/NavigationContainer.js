@@ -4,8 +4,6 @@ import Navigation from '../Components/Navigation/Navigation';
 import { login, logout } from '../Actions';
 
 const mapStateToProps = (state) => {
-
-  DebugLog('state',state);
   return {
     isLoggedIn: state.login.isLoggedIn,
     // page: state.navigation.page,
@@ -20,7 +18,6 @@ const mapDispatchToProps = (dispatch) => {
       // DebugLog('nav clicked', target);
     },
     onLoginLogoutClicked: (e, isLoggedIn)=>{
-      DebugLog('isLoggedIn',isLoggedIn);
       if (isLoggedIn){
         // e.preventDefault();
         dispatch(logout());

@@ -349,3 +349,72 @@ describe('Actions: TASKS', () => {
     });
   });
 });
+
+describe('Actions: PROJECT', () => {
+  describe('PROJECT.GET', ()=>{
+
+    it('PROJECT.GET.LOADING should create a loading action', () => {
+      const expectedAction = {
+        type: Actions.PROJECT.GET.LOADING,
+        status: 'Fetching project...',
+      }
+      expect(Actions.getProjectLoading()).toEqual(expectedAction);
+    });
+
+    it('PROJECT.GET.SUCCESS should create a success action', () => {
+      const project = {
+				id: '123',
+				sprints: [],
+				backlog: [],
+				timezone: '123',
+			};
+      const expectedAction = {
+        type: Actions.PROJECT.GET.SUCCESS,
+        status: 'Successfully retrieved project.',
+				project,
+      }
+      expect(Actions.getProjectSuccess(project)).toEqual(expectedAction)
+    });
+
+    it('PROJECT.GET.FAILURE should create a failure action', () => {
+			const err = {
+				msg: 'mock err',
+			};
+			const expectedAction = {
+        type: Actions.PROJECT.GET.FAILURE,
+        status: 'Failed to get project.',
+				err,
+      }
+      expect(Actions.getProjectFailure(err)).toEqual(expectedAction)
+    });
+  });
+});
+
+/*
+ * Misc action utils
+ */
+describe('Misc Action Utils', ()=>{
+
+	it('preprocessSprintDates should return a sprint with dates processed', () => {
+		let mockProject = {};
+		mockProject.sprints = [{
+			startDate: 1511810873000,
+			endDate: 1513020473000
+		}, {
+			startDate: 1513020474000,
+			endDate: 1514230073000
+		}]
+		expect(Actions.preprocessSprintDates(mockProject)).toEqual({
+			sprints: [
+				{
+					startDate: '27-Nov-2017',
+					endDate: '11-Dec-2017',
+				},
+				{
+					startDate: '11-Dec-2017',
+					endDate: '25-Dec-2017',
+				}
+			]
+		});
+	});
+});

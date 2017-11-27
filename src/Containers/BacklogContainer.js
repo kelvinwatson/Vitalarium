@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
-// import DebugLog from '../Utils/DebugLog';
-import Tasks from '../Components/Tasks/Tasks';
+import DebugLog from '../Utils/DebugLog';
+import Backlog from '../Components/Backlog/Backlog';
 import { createTaskOpenModal } from '../Actions';
 
 const mapStateToProps = (state) => {
   return {
+    tasks: state.project.project.backlog,
   }
 }
 
@@ -16,9 +17,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const TasksContainer = connect(
+const BacklogContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Tasks)
+)(Backlog)
 
-export default TasksContainer;
+export default BacklogContainer;

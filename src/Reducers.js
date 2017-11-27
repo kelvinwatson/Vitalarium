@@ -173,16 +173,22 @@ export function project(state = {
   isSuccess: false,
   isFailure: false,
   status: undefined,
-  project: undefined,
+  project: {
+    backlog: [],
+    sprints: [],
+  },
 }, action){
   switch(action.type){
     case PROJECT.GET.LOADING:
       return Object.assign({}, state, {
-        isLoading: false,
+        isLoading: true,
         isSuccess: false,
         isFailure: false,
         status: action.status,
-        project: undefined,
+        project: {
+          backlog: [],
+          sprints: [],
+        },
       });
     case PROJECT.GET.SUCCESS:
       return Object.assign({}, state, {
@@ -198,6 +204,10 @@ export function project(state = {
         isSuccess: false,
         isFailure: true,
         status: action.status,
+        project: {
+          backlog: [],
+          sprints: [],
+        },
       });
     default: return state;
   }

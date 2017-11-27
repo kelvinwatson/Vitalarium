@@ -1,10 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import DebugLog from '../../Utils/DebugLog';
+import DebugLog from '../../Utils/DebugLog';
 import './Sprints.css'
 
 export default class Sprints extends React.Component {
   render(){
+
+    if (! this.props.currSprint){
+      return <div></div>;
+    }
+    const currSprint = this.props.currSprint;
+    const nextSprint = this.props.nextSprint;
+
+    DebugLog('currSprint', currSprint);
+    DebugLog('nextSprint', nextSprint);
+
     return (
       <div className="mh4-ns Sprints">
         <header className="fn">
@@ -17,7 +27,7 @@ export default class Sprints extends React.Component {
           <h2 className="f3 mid-gray lh-title">
             Current Sprint
           </h2>
-          <time className="f6 ttu tracked gray">XX-XXX-XXXX to XX-XXX-XXXX</time>
+          <time className="f6 ttu tracked gray">{currSprint.startDate} to {currSprint.endDate}</time>
 
           <div className="Sprint mt3">
             <ul className="list pl0 mt0 measure">

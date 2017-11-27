@@ -5,6 +5,9 @@ import Dashboard from '../Components/Dashboard/Dashboard';
 
 const mapStateToProps = (state) => {
   return {
+    isLoading: state.project.isLoading,
+    isSuccess: state.project.isSuccess,
+    isFailure: state.project.isFailure,
     isLoginFailure: Boolean(state.login.isFailure),
   }
 }
