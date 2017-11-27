@@ -3,7 +3,7 @@ import DebugLog from '../../Utils/DebugLog';
 import { Link } from 'react-router-dom';
 import './Navigation.css'
 
-export default const Navigation = ({ isLoggedIn, onLoginLogoutClicked, onNavigationClicked }) => {
+const Navigation = ({ isLoggedIn, onLoginLogoutClicked, onNavigationClicked }) => {
   return (
     <nav className="db dt-l w-100 border-box bb b--black-10 ph5-ns pv3">
       <Link to="/" className="db dtc-l v-mid mid-gray link dim w-100 w-25-l tc tl-l mb2 mb0-l">
@@ -20,3 +20,5 @@ export default const Navigation = ({ isLoggedIn, onLoginLogoutClicked, onNavigat
     </nav>
   )
 }
+
+export default Navigation;

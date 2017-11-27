@@ -27,14 +27,14 @@ export default class Task extends React.Component {
         </li>
     } else { //empty state
       ren =
-        <li onClick={this.props.onClick} className="flex items-center ph0-l b--black-10 dim Task bg-washed-green">
+        <li onClick={this.props.onClick} className="flex items-center ph0-l b--black-10 dim Task Task__AnimatedBackground--EmptyState bg-washed-green">
           <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
-            <span className="f6 db black-70">No tasks yet</span>
+            <span className="f6 db black-70">{this.props.caption}</span>
             <span className="f6 db black-70"></span>
           </div>
           <div>
-            <a className="f6 link blue hover-dark-gray">Add a new task</a>
+            <a className="f6 link blue hover-dark-gray">{this.props.cta}</a>
           </div>
         </li>
     }

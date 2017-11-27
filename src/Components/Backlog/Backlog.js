@@ -23,7 +23,7 @@ export default class Backlog extends React.Component {
         <Task task={task}/>
       )
     } else {
-      ren = <Task task={null} onClick={this.onClickAddTask}/>
+      ren = <Task task={null} caption={'No tasks yet'} cta={'Add a new task'} onClick={this.onClickAddTask}/>
     }
     return (
       <div className="mh4-ns Tasks">

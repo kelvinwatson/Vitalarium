@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Task from '../Task/Task';
 import DebugLog from '../../Utils/DebugLog';
 import './Sprints.css'
 
@@ -15,6 +16,22 @@ export default class Sprints extends React.Component {
     DebugLog('currSprint', currSprint);
     DebugLog('nextSprint', nextSprint);
 
+    let renCurrSprintTasks, renNextSprintTasks;
+    if (currSprint.tasks && currSprint.tasks.length >= 0){
+      renCurrSprintTasks = <Task task={null} caption={'No tasks in this sprint yet'} cta={'Drop a task here'}/>
+    } else {
+      renCurrSprintTasks = currSprint.tasks.map((task) =>
+        <Task task={task}/>
+      );
+    }
+    if (nextSprint.tasks && nextSprint.tasks.length >= 0){
+      renNextSprintTasks = <Task task={null} caption={'No tasks in this sprint yet'} cta={'Drop a task here'}/>;
+    }else{
+      renNextSprintTasks = nextSprint.tasks.map((task) =>
+        <Task task={task}/>
+      );
+    }
+
     return (
       <div className="mh4-ns Sprints">
         <header className="fn">
@@ -27,11 +44,13 @@ export default class Sprints extends React.Component {
           <h2 className="f3 mid-gray lh-title">
             Current Sprint
           </h2>
-          <time className="f6 ttu tracked gray">{currSprint.startDate} to {currSprint.endDate}</time>
+          <time>{currSprint.startDate} to {currSprint.endDate}</time>
+          <p className="f6 ttu tracked gray">-- Your tasks for this sprint --</p>
 
           <div className="Sprint mt3">
             <ul className="list pl0 mt0 measure">
-              <li className="flex items-center  ph0-l bb b--black-10 dim Task">
+              {renCurrSprintTasks}
+              {/*<li className="flex items-center   ph0-l bb b--black-10 dim Task">
                 <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
                 <div className="pl3 flex-auto">
                   <span className="f6 db black-70">Do laundry</span>
@@ -40,89 +59,21 @@ export default class Sprints extends React.Component {
                 <div>
                   <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
                 </div>
-              </li>
-              <li className="flex items-center  ph0-l bb b--black-10 dim Task">
-                <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
-                <div className="pl3 flex-auto">
-                  <span className="f6 db black-70">Do laundry</span>
-                  <span className="f6 db black-70">Small</span>
-                </div>
-                <div>
-                  <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
-                </div>
-              </li>
-              <li className="flex items-center   ph0-l bb b--black-10 dim Task">
-                <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
-                <div className="pl3 flex-auto">
-                  <span className="f6 db black-70">Do laundry</span>
-                  <span className="f6 db black-70">Small</span>
-                </div>
-                <div>
-                  <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
-                </div>
-              </li>
-              <li className="flex items-center   ph0-l bb b--black-10 dim Task">
-                <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
-                <div className="pl3 flex-auto">
-                  <span className="f6 db black-70">Do laundry</span>
-                  <span className="f6 db black-70">Small</span>
-                </div>
-                <div>
-                  <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
-                </div>
-              </li>
+              </li>*/}
             </ul>
           </div>
         </div>
 
-        <div className="fn">
+        <div className="fn mt5">
           <h2 className="f3 mid-gray lh-title">
             Next Sprint
           </h2>
-          <time className="f6 ttu tracked gray">XX-XXX-XXXX to XX-XXX-XXXX</time>
+          <time>{nextSprint.startDate} to {nextSprint.endDate}</time>
+          <p className="f6 ttu tracked gray">-- Looking ahead --</p>
 
           <div className="Sprint mt3">
             <ul className="list pl0 mt0 measure">
-              <li className="flex items-center  ph0-l bb b--black-10 dim Task">
-                <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
-                <div className="pl3 flex-auto">
-                  <span className="f6 db black-70">Do laundry</span>
-                  <span className="f6 db black-70">Small</span>
-                </div>
-                <div>
-                  <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
-                </div>
-              </li>
-              <li className="flex items-center  ph0-l bb b--black-10 dim Task">
-                <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
-                <div className="pl3 flex-auto">
-                  <span className="f6 db black-70">Do laundry</span>
-                  <span className="f6 db black-70">Small</span>
-                </div>
-                <div>
-                  <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
-                </div>
-              </li>
-              <li className="flex items-center   ph0-l bb b--black-10 dim Task">
-                <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
-                <div className="pl3 flex-auto">
-                  <span className="f6 db black-70">Do laundry</span>
-                  <span className="f6 db black-70">Small</span>
-                </div>
-                <div>
-                  <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
-                </div>
-              </li>
-              <li className="flex items-center   ph0-l bb b--black-10 dim Task">
-                <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
-                <div className="pl3 flex-auto">
-                  <span className="f6 db black-70">Do laundry</span>
-                  <span className="f6 db black-70">Small</span>
-                </div>
-                <div>
-                  <a href="tel:" className="f6 link blue hover-dark-gray">Due 15-Dec-2017</a>
-                </div>
-              </li>
+              {renNextSprintTasks}
             </ul>
           </div>
 

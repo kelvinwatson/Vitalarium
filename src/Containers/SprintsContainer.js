@@ -7,8 +7,6 @@ const mapStateToProps = (state) => {
   DebugLog('SprintsContainer',state.project.project.sprints[0]);
   DebugLog('SprintsContainer',state.project.project.sprints[1]);
 
-  
-
   return {
     currSprint: state.project.project.sprints[0],
     nextSprint: state.project.project.sprints[1],
@@ -17,6 +15,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onClickTask: ()=> {
+      DebugLog('task clicked');
+    }
   }
 }
 
