@@ -11,6 +11,10 @@
     "tasks": {
       ".read": "auth != null",
       ".write": "auth != null"
+    },
+		"sprints": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

@@ -53,7 +53,11 @@ let FirebaseMock = {
 				"tasks": {
 		      ".read": true,
 		      ".write": true
-		    }
+		    },
+				"sprints": {
+					".read": true,
+					".write": true
+				}
 		  }
 		});
 

@@ -6,7 +6,8 @@ export default {
       dueDate: 1512239943975,
       id: '12345_1511635143977',
       size: 'MEDIUM',
-      title: 'Test Task Title'
+      title: 'Test Task Title',
+			createdBy: '12345'
 		},
 		'12345_1511635143980': {
 			createdOn: 1511635143980,
@@ -14,7 +15,8 @@ export default {
       dueDate: 1512239943975,
       id: '12345_15116351439780',
       size: 'SMALL',
-      title: 'Test Task Title 2'
+      title: 'Test Task Title 2',
+			createdBy: '12345'
 		}
   },
 	users: {
