@@ -107,9 +107,9 @@ export function initializeUserObjectsInDB(redirectResult, dispatch) {
 		[projectRef.key]);
 	//push all to DB
 	let calls = [
-		firstSprintRef.push(firstSprint),
-		secondSprintRef.push(secondSprint),
-		projectRef.push(project),
+		db.ref('sprints/' + firstSprintRef.key).set(firstSprint),
+		db.ref('sprints/' + secondSprintRef.key).set(secondSprint),
+		db.ref('projects/' + projectRef.key).set(project),
 		db.ref('/users/' + user.id).set(user)
 	];
 	Promise.all(calls).then((results) => {
@@ -131,7 +131,7 @@ export function getSprintsFromDB(sprintIds) {
 		Promise.all(sprintCalls).then((sprintResponses) => {
 			let sprints = [];
 			for(let i = 0; i < sprintResponses.length; i += 1) {
-				let sprint = sprintResponses.val();
+				let sprint = sprintResponses[i].val();
 				if(Array.isArray(sprint.tasks)) {
 					let taskCalls = [];
 					for(let j = 0; j < sprint.tasks.length; j += 1) {
@@ -149,6 +149,12 @@ export function getSprintsFromDB(sprintIds) {
 							resolve(sprints);
 						}
 					});
+				} else {
+					sprint.tasks = [];
+					sprints.push(sprint);
+					if(sprints.length === sprintIds.length) {
+						resolve(sprints);
+					}
 				}
 			}
 		});
@@ -180,7 +186,7 @@ export function getProjectFromDB(projectId, dispatch) {
 		}
 		Promise.all(projectCalls).then((projectResults) => {
 			let sprints = projectResults[0];
-			let backlog = projectResults[1];
+			let backlog = projectResults[1] || [];
 			project.sprints = sprints;
 			project.backlog = backlog;
 			dispatch(getProjectSuccess(project));
@@ -203,7 +209,7 @@ export function getProjectFromDB(projectId, dispatch) {
 					let dbUser = snap.val();
 					dispatch(loginSuccess(dbUser));
 					if(dbUser && Array.isArray(dbUser.projects)) {
-						getProjectFromDB(dbUser.projects[0]);
+						getProjectFromDB(dbUser.projects[0], dispatch);
 					}
 				}).catch((err) => {
 					dispatch(loginFailure(err));
