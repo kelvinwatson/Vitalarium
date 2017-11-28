@@ -6,16 +6,8 @@ import './Sprints.css'
 
 export default class Sprints extends React.Component {
   render(){
-
-    if (! this.props.currSprint){
-      return <div></div>;
-    }
     const currSprint = this.props.currSprint;
     const nextSprint = this.props.nextSprint;
-
-    DebugLog('currSprint', currSprint);
-    DebugLog('nextSprint', nextSprint);
-
     let renCurrSprintTasks, renNextSprintTasks;
     if (currSprint.tasks && currSprint.tasks.length >= 0){
       renCurrSprintTasks = <Task task={null} caption={'No tasks in this sprint yet'} cta={'Drop a task here'}/>
@@ -76,9 +68,7 @@ export default class Sprints extends React.Component {
               {renNextSprintTasks}
             </ul>
           </div>
-
         </div>
-
 
         {/*<div className="fn fl-ns">
           <p className="lh-copy measure mt4 mt0-ns">

@@ -163,7 +163,7 @@ describe('Actions: USER', () => {
 
 describe('Actions: TASK', () => {
   describe('TASK.CREATE', ()=>{
-    it('TASK.CREATE should write task to database', (done)=>{
+    it('TASK.CREATE should add a task to a project backlog in the db', (done)=>{
       const dispatch = function(object) {
         switch(object.type){
           case Actions.TASK.CREATE.LOADING:
@@ -175,12 +175,16 @@ describe('Actions: TASK', () => {
             done();
             break;
           case Actions.TASK.CREATE.SUCCESS:
-            expect(object).toEqual({
-              type: Actions.TASK.CREATE.SUCCESS,
-              status: 'Successfully created task.',
-              task,
-            });
-            done();
+						expect(object).toHaveProperty('task.id');
+						let db = FirebaseUtil.getFirebase().database();
+						db.ref('projects/-Kzxhkha5X75WV4aDRCy').once('value').then((projectSnap) => {
+							let project = projectSnap.val();
+							expect(project).toHaveProperty('backlog');
+							expect(project.backlog.includes(object.task.id)).toEqual(true);
+							done();
+						}).catch((err) => {
+							done(err);
+						});
             break;
           case Actions.TASK.CREATE.FAILURE:
             expect(object).toEqual({
@@ -193,7 +197,65 @@ describe('Actions: TASK', () => {
             done('Unexpected dispatch called');
         }
       };
-      Actions.createTask(task)(dispatch);
+			const destination = { projectId: '-Kzxhkha5X75WV4aDRCy' };
+			let task = new Task(null,
+				'Test Title',
+				'Test Description',
+				'M',
+				null,//sprint
+				null,//dueDate
+				null,//comments
+				Date.now(),//createdOn
+				'MUcd9AkztsMOnrvlXS6gR661AFm2');//createdBy
+
+      Actions.createTask(task, destination)(dispatch);
+    });
+
+		it('TASK.CREATE should add a task to a sprint in the db', (done)=>{
+      const dispatch = function(object) {
+        switch(object.type){
+          case Actions.TASK.CREATE.LOADING:
+            expect(object).toEqual({
+              type: Actions.TASK.CREATE.LOADING,
+              status: 'Creating task...',
+              task: undefined
+            });
+            done();
+            break;
+          case Actions.TASK.CREATE.SUCCESS:
+						expect(object).toHaveProperty('task.id');
+						let db = FirebaseUtil.getFirebase().database();
+						db.ref('sprints/-Kzxhkha5X75WV4aDRCw').once('value').then((sprintSnap) => {
+							let sprint = sprintSnap.val();
+							expect(sprint).toHaveProperty('tasks');
+							expect(sprint.tasks.includes(object.task.id)).toEqual(true);
+							done();
+						}).catch((err) => {
+							done(err);
+						});
+            break;
+          case Actions.TASK.CREATE.FAILURE:
+            expect(object).toEqual({
+              type: TASK.CREATE.FAILURE,
+              status: expect.anything(),
+              task,
+            });
+						done('Should be success.');
+          default:
+            done('Unexpected dispatch called');
+        }
+      };
+			const destination = { sprintId: '-Kzxhkha5X75WV4aDRCw'};
+			let task = new Task(null,
+				'Test Title 2',
+				'Test Description 2',
+				'M',
+				null,//sprint
+				null,//dueDate
+				null,//comments
+				Date.now(),//createdOn
+				'MUcd9AkztsMOnrvlXS6gR661AFm2');//createdBy
+      Actions.createTask(task, destination)(dispatch);
     });
 
     it('TASK.CREATE.MODAL should create an open modal action', () => {
@@ -293,7 +355,7 @@ describe('Actions: TASKS', () => {
             });
             break;
           case Actions.TASKS.GET.SUCCESS:
-            expect(object.tasks && Object.keys(object.tasks).length > 1).toEqual(true);
+            expect(Array.isArray(object.tasks) && object.tasks.length > 1).toEqual(true);
             done();
             break;
           case Actions.TASKS.GET.FAILURE:
@@ -304,6 +366,7 @@ describe('Actions: TASKS', () => {
 						done(err);
         }
       };
+			//FIXME: Add real task data & update IDs
 			Actions.getTasks(['12345_1511635143977', '12345_1511635143980'])(dispatch);
 		});
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import CloseCreateTaskWarningModalContainer from '../../Containers/CloseCreateTaskWarningModalContainer';
 import DebugLog from '../../Utils/DebugLog';
+import { formatDateHyphen } from '../../Utils/DateUtils';
 import 'date-input-polyfill';
 import './TaskModal.css'
 
@@ -8,11 +9,24 @@ export default class TaskModal extends React.Component {
   constructor(props){
     super(props);
 
+    let now = Date.now();
     this.state = {
       title: '',
       description: '',
-      size: 'SMALL',
-      sprint: 'backlog',
+      size: 'S',
+      sprintId: null,
+      dueDate: now,
+      comments: null,
+      createdOn: null,
+      createdBy: this.props.userId,
+
+      destination: {
+        sprintId: null,
+        projectId: this.props.projectId,
+      },
+
+      projectId: this.props.projectId,
+      today: formatDateHyphen(now),
     };
 
     this.setModalContentRef = this.setModalContentRef.bind(this);
@@ -23,6 +37,7 @@ export default class TaskModal extends React.Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeSize = this.onChangeSize.bind(this);
     this.onChangeSprint = this.onChangeSprint.bind(this);
+    this.onChangeDueDate = this.onChangeDueDate.bind(this);
     // this.handleClickOutsideModalContent = this.handleClickOutsideModalContent.bind(this);
   }
 
@@ -31,7 +46,19 @@ export default class TaskModal extends React.Component {
    */
   onFormSubmit(e){
     e.preventDefault();
-    // this.props.createTask(Date.now(), this.state.title, this.state.description, this.state.size, this.state.sprint);
+    this.props.createTask(
+      this.state.title,
+      this.state.description,
+      this.state.size,
+      this.state.sprintId,
+      this.state.dueDate,
+      this.state.comments,
+      Date.now(),
+      this.state.createdBy,
+
+      //destination
+      this.state.destination,
+    );
   }
 
   /*
@@ -50,15 +77,23 @@ export default class TaskModal extends React.Component {
   }
 
   onChangeSize(e) {
-    DebugLog('e.target.value',e.target.value);
     this.setState({size: e.target.value});
   }
 
   onChangeSprint(e){
-    DebugLog('e.target.value',e.target.value);
-    this.setState({sprint: e.target.value})
+    const projectId = this.state.destination.projectId;
+    this.setState({
+      sprintId: e.target.value,
+      destination: {
+        sprintId: e.target.value,
+        projectId,
+      }
+    });
   }
 
+  onChangeDueDate(e){
+    this.setState({dueDate: e.target.value});
+  }
 
   onCloseClicked(){
     //TODO: show warning
@@ -114,19 +149,19 @@ export default class TaskModal extends React.Component {
               <div className="TaskModalSizeFlexWrapper">
                 <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
                   <label htmlFor="sizeField">Task size</label>
-                  <select onChange={this.onChangeSize} defaultValue="SMALL" id="sizeField">
-                    <option value="SMALL">Small</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="LARGE">Large</option>
+                  <select onChange={this.onChangeSize} defaultValue="S" id="sizeField">
+                    <option value="S">Small</option>
+                    <option value="M">Medium</option>
+                    <option value="L">Large</option>
                   </select>
                 </div>
 
                 <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Right">
                   <label htmlFor="sprintField">Sprint</label>
-                  <select onChange={this.onChangeSprint} defaultValue="backlog" id="sprintField">
-                    <option value="backlog">Backlog</option>
-                    <option value="currentSprint">Current sprint</option>
-                    <option value="nextSprint">Next sprint</option>
+                  <select onChange={this.onChangeSprint} defaultValue={null} id="sprintField">
+                    <option value={null}>Backlog</option>
+                    <option value={this.props.currentSprintId}>Current sprint</option>
+                    <option value={this.props.nextSprintId}>Next sprint</option>
                   </select>
                 </div>
               </div>
@@ -134,13 +169,14 @@ export default class TaskModal extends React.Component {
               <div className="TaskModalSizeFlexWrapper">
                 <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
                   <label htmlFor="dueDateField">Due date</label>
-                  <input type="date"/>
+                  <input type="date" onChange={this.onChangeDueDate} defaultValue={this.state.today} min={this.state.today}/>
                 </div>
 
               </div>
               {/*<input className="button-primary" type="submit" value="Send"/>*/}
 
               <div className="TaskModalButtons">
+                <div className={`TaskModal_ErrorMessage ${this.props.isCreateFailure? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
                 <input type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0" value="Create Task"/>
               </div>
             </fieldset>

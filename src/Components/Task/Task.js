@@ -5,12 +5,7 @@ import { switchTheme } from '../../Utils/Themes';
 import './Task.css'
 
 export default class Task extends React.Component {
-  // constructor(props){
-  //   super(props);
-  // }
-
   render(){
-    DebugLog('Task', this.props);
     let task = this.props.task;
     let ren;
     if (task){

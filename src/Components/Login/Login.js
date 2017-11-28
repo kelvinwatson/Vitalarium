@@ -12,8 +12,6 @@ export default class Login extends React.Component {
   }
 
   componentDidUpdate(){
-    DebugLog('props.user',this.props.user);
-
     if (this.props.user){
       this.props.history.push('/dashboard');
     }

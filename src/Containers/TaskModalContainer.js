@@ -1,20 +1,27 @@
 import { connect } from 'react-redux';
-// import DebugLog from '../Utils/DebugLog';
+import DebugLog from '../Utils/DebugLog';
 import TaskModal from '../Components/TaskModal/TaskModal';
 import { createTask, createTaskCloseModal, createTaskCloseWarningModal } from '../Actions';
 import Task from '../Models/Task';
 
 const mapStateToProps = (state) => {
   return {
+    userId: state.login.user.id,
+    projectId: state.project.project.id,
+    currentSprintId: state.project.project.sprints[0].id,
+    nextSprintId: state.project.project.sprints[1].id,
+    projectId: state.project.project.id,
     isOpen: state.task.isOpenCreateTaskModal,
     isShowCloseWarning: state.task.isShowCloseWarningModal,
+    isCreateFailure: state.task.isCreateFailure,
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, own) => {
   return {
-    createTask: (id, title, description, size, sprint, dueDate, comments)=>{
-      dispatch(createTask(new Task(id, title, description, size, sprint, dueDate, comments)));
+    createTask: (title, description, size, sprint, dueDate, comments, createdOn, createdBy, destination)=>{
+      const task = new Task(null, title, description, size, sprint, dueDate, comments, createdOn, createdBy)
+      dispatch(createTask(task, destination));
     },
     close: ()=>{
       dispatch(createTaskCloseModal());

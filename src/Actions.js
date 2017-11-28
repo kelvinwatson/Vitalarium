@@ -51,6 +51,7 @@ export const TASK = {
     MODAL: {
       OPEN: 'OPEN_MODAL_CREATE_TASK',
       CLOSE: {
+        SUCCESS: 'SUCCESS_CLOSE_MODAL_CREATE_TASK',
         WARNING: 'WARNING_CLOSE_MODAL_CREATE_TASK',
         CANCEL: 'CANCEL_CLOSE_MODAL_CREATE_TASK',
         DELETE: 'DELETE_CLOSE_MODAL_CREATE_TASK',
@@ -81,6 +82,22 @@ export const TASKS = {
   },
 };
 
+export const SPRINTS = {
+  GET: {
+    LOADING: 'LOADING_GET_SPRINTS',
+    SUCCESS: 'SUCCESS_GET_SPRINTS',
+    FAILURE: 'FAILURE_GET_SPRINTS',
+  },
+};
+
+export const BACKLOG = {
+  GET: {
+    LOADING: 'LOADING_GET_BACKLOG',
+    SUCCESS: 'SUCCESS_GET_BACKLOG',
+    FAILURE: 'FAILURE_GET_BACKLOG',
+  },
+};
+
 export const PROJECT = {
   GET: {
     LOADING: 'LOADING_GET_PROJECT',
@@ -89,7 +106,16 @@ export const PROJECT = {
   },
 };
 
-export function initializeUserObjectsInDB(redirectResult, dispatch) {
+/*
+ * @param areSprintsLoading true if sprint is loading, false if backlog is loading
+ */
+export function getProject(projectId, isPostTaskCreation){
+  return function(dispatch){
+    getProjectFromDb(projectId, dispatch, isPostTaskCreation);
+  }
+}
+
+export function initializeUserObjectsInDb(redirectResult, dispatch) {
   //1. Create initial sprint objects
   const db = FirebaseUtil.getFirebase().database();
   let firstSprintRef = db.ref('sprints/').push();
@@ -173,8 +199,10 @@ export function getTasksFromDb(taskList) {
   });
 }
 
-export function getProjectFromDb(projectId, dispatch) {
-  dispatch(getProjectLoading());
+export function getProjectFromDb(projectId, dispatch, isPostTaskCreation) {
+  if (isPostTaskCreation === undefined)
+    dispatch(getProjectLoading());
+
   const db = FirebaseUtil.getFirebase().database();
     db.ref('projects/' + projectId).once('value').then((projectSnap) => {
       let project = projectSnap.val();
@@ -190,7 +218,6 @@ export function getProjectFromDb(projectId, dispatch) {
         let backlog = projectResults[1] || [];
         project.sprints = sprints;
         project.backlog = backlog;
-
         project = preprocessSprintDates(project);
         dispatch(getProjectSuccess(project));
       });
@@ -231,7 +258,7 @@ export function initializeApp(filter) {
           let userResult = userSnap.val();
           if (!userResult) {
             //no user exists, initialize user data for the first time.
-            initializeUserObjectsInDB(result, dispatch);
+            initializeUserObjectsInDb(result, dispatch);
           } else {
             dispatch(loginSuccess(userResult));
           }
@@ -317,7 +344,6 @@ export function login(provider) {
         authProvider = new firebase.auth.GithubAuthProvider();
         break;
       default:
-        // DebugLog('Provider not supported', provider);
         dispatch(loginFailure('Provider not supported'));
         break;
     }
@@ -453,14 +479,69 @@ export function getTasks(taskList) {
 
 /*
  * Create task
+ * task : ./Models/Task.js
+ * destination : { //At least one of projectId or sprintId is required.
+ * 	projectId,
+ * 	sprintId
+ * }
  */
-export function createTask(task) {
+export function createTask(task, destination) {
   return function(dispatch) {
     dispatch(createTaskLoading());
+		let db = FirebaseUtil.getFirebase().database();
+		const taskRef = db.ref('tasks/').push();
+		task.id = taskRef.key;
+		if(destination.sprintId) { //save to sprint
+			db.ref('sprints/' + destination.sprintId).once('value').then((sprintSnap) => {
+				let destSprint = sprintSnap.val();
+				if(destSprint) {
+					destSprint.tasks = Array.isArray(destSprint.tasks) || [];
+					destSprint.tasks.push(taskRef.key);
+					let sprintCalls = [];
+					sprintCalls.push(db.ref('tasks/' + taskRef.key).set(task));
+					sprintCalls.push(db.ref('sprints/' + destination.sprintId).set(destSprint));
+					Promise.all(sprintCalls).then((responses) => {
+						dispatch(createTaskSuccess(task));
+            dispatch(createTaskCloseModal());
+            dispatch(getProject(destination.projectId, true));
+					}).catch((err) => {
+						dispatch(createTaskFailure(task, err));
+					});
+				} else {
+					dispatch(createTaskFailure(task, 'Destination sprint does not exist.'));
+				}
+			}).catch((err) => {
+				dispatch(createTaskFailure(task, err));
+			});
+		} else if(destination.projectId) { //save to backlog since no sprint specified
+			db.ref('projects/' + destination.projectId).once('value').then((projectSnap) => {
+				let destProject = projectSnap.val();
+				if(destProject) {
+					destProject.backlog = Array.isArray(destProject.backlog) ? destProject.backlog : [];
+					destProject.backlog.push(taskRef.key);
+					let projectCalls = [];
+					projectCalls.push(db.ref('tasks/' + taskRef.key).set(task));
+					projectCalls.push(db.ref('projects/' + destination.projectId).set(destProject));
+					Promise.all(projectCalls).then((responses) => {
+						dispatch(createTaskSuccess(task));
+            dispatch(createTaskCloseModal());
+            dispatch(getProject(destination.projectId, true));
+					}).catch((err) => {
+            dispatch(createTaskFailure(task, err));
+					});
+				} else {
+					dispatch(createTaskFailure(task, 'Destination project does not exist.'));
+				}
+			}).catch((err) => {
+				dispatch(createTaskFailure(task, err));
+			});
+		}
     return FirebaseUtil.getFirebase().database().ref('tasks/' + task.id).set(task).then(() => {
       dispatch(createTaskSuccess(task));
+      dispatch(createTaskCloseModal());
+      dispatch(getProject(destination.projectId, true));
     }).catch((err) => {
-      dispatch(createTaskFailure(task, err.message))
+      dispatch(createTaskFailure(task, err.message));
     });
   }
 }
@@ -474,7 +555,7 @@ export function createTaskOpenModal() {
 
 export function createTaskCloseModal() {
   return {
-    type: TASK.CREATE.MODAL.CLOSE,
+    type: TASK.CREATE.MODAL.CLOSE.SUCCESS,
     status: 'Closing create task modal...',
   }
 }

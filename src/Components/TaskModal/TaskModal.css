@@ -1,11 +1,23 @@
 @-webkit-keyframes TaskModalAnimateAppearance {
-    from {top: 100px; opacity: 0}
-    to {top: 0; opacity: 1}
+  from {
+    top: 100px;
+    opacity: 0
+  }
+  to {
+    top: 0;
+    opacity: 1
+  }
 }
 
 @keyframes TaskModalAnimateAppearance {
-    from {top: 100px; opacity: 0}
-    to {top: 0; opacity: 1}
+  from {
+    top: 100px;
+    opacity: 0
+  }
+  to {
+    top: 0;
+    opacity: 1
+  }
 }
 
 .TaskModal {
@@ -23,7 +35,8 @@
 .TaskModalContent {
   position: relative;
   background-color: #fefefe;
-  margin: 10% auto; /*position of modal 10% from top*/
+  margin: 10% auto;
+  /*position of modal 10% from top*/
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
@@ -34,50 +47,49 @@
   animation-duration: 0.3s
 }
 
-.TaskModalHeader{
+.TaskModalHeader {
   width: 100%;
   text-align: right;
 }
 
-.TaskModalSizeFlexWrapper{
+.TaskModalSizeFlexWrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.TaskModalSizeFlexItem{
+.TaskModalSizeFlexItem {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 50%;
 }
 
-.TaskModalSizeFlexItem--Left{
+.TaskModalSizeFlexItem--Left {
   padding-right: 0.3rem;
 }
 
-.TaskModalSizeFlexItem--Right{
+.TaskModalSizeFlexItem--Right {
   padding-left: 0.3rem;
 }
-.TaskModalButtons{
+
+.TaskModalButtons {
   margin: 0.8rem 0 0 0;
   padding-right: 1px;
   width: 100%;
   text-align: right;
 }
+
+.TaskModal_ErrorMessage {
+  margin-right: 1rem;
+}
+
+
 /* Milligram styles */
-input[type='date'],
-input[type='email'],
-input[type='number'],
-input[type='password'],
-input[type='search'],
-input[type='tel'],
-input[type='text'],
-input[type='url'],
-textarea,
-select {
+
+input[type='date'], input[type='email'], input[type='number'], input[type='password'], input[type='search'], input[type='tel'], input[type='text'], input[type='url'], textarea, select {
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   background-color: transparent;
   border: 1px solid #d1d1d1;
   border-radius: 0;
@@ -90,19 +102,11 @@ select {
   width: 100%;
 }
 
-textarea{
+textarea {
   padding: 0.5rem 0.8rem;
 }
 
-input[type='email']:focus,
-input[type='number']:focus,
-input[type='password']:focus,
-input[type='search']:focus,
-input[type='tel']:focus,
-input[type='text']:focus,
-input[type='url']:focus,
-textarea:focus,
-select:focus {
+input[type='email']:focus, input[type='number']:focus, input[type='password']:focus, input[type='search']:focus, input[type='tel']:focus, input[type='text']:focus, input[type='url']:focus, textarea:focus, select:focus {
   border-color: #9b4dca;
   outline: 0;
 }
@@ -120,8 +124,7 @@ textarea {
   min-height: 6.5rem;
 }
 
-label,
-legend {
+label, legend {
   display: block;
   font-weight: 500;
   margin-bottom: .5rem;
@@ -132,8 +135,7 @@ fieldset {
   padding: 0;
 }
 
-input[type='checkbox'],
-input[type='radio'] {
+input[type='checkbox'], input[type='radio'] {
   display: inline;
 }
 
@@ -143,18 +145,18 @@ input[type='radio'] {
   margin-left: .5rem;
 }
 
-
 @media(max-width: 767px) {
   /* phones */
-  .TaskModalContent{
+  .TaskModalContent {
     height: 100%;
     width: 100%;
-    margin: auto; /*position of modal 10% from top*/
+    margin: auto;
+    /*position of modal 10% from top*/
   }
-  .TaskModalSizeFlexItem{
+  .TaskModalSizeFlexItem {
     flex-basis: 100%;
   }
-  .TaskModalSizeFlexItem--Left, .TaskModalSizeFlexItem--Right{
+  .TaskModalSizeFlexItem--Left, .TaskModalSizeFlexItem--Right {
     padding: 0rem;
   }
 }

@@ -140,29 +140,58 @@ export function task(state = {
   isShowCloseWarningModal: false,
 }, action){
   switch(action.type){
+    case TASK.CREATE.LOADING:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: true,
+        isSaving: true,
+        isCreateSuccess: false,
+        isCreateFailure: false,
+        isShowCloseWarningModal: false,
+      });
+    case TASK.CREATE.SUCCESS:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: false,
+        isSaving: false,
+        isCreateSuccess: true,
+        isCreateFailure: false,
+        isShowCloseWarningModal: false,
+      });
+    case TASK.CREATE.FAILURE:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: true,
+        isSaving: false,
+        isCreateSuccess: false,
+        isCreateFailure: true,
+        isShowCloseWarningModal: false,
+      });
     case TASK.CREATE.MODAL.OPEN:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
+        isCreateSuccess: false,
       });
-    case TASK.CREATE.MODAL.CLOSE:
+    case TASK.CREATE.MODAL.CLOSE.SUCCESS:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: false,
+        isCreateSuccess: false,
       });
     case TASK.CREATE.MODAL.CLOSE.WARNING:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
         isShowCloseWarningModal: true,
+        isCreateSuccess: false,
       });
     case TASK.CREATE.MODAL.CLOSE.CANCEL:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
         isShowCloseWarningModal: false,
+        isCreateSuccess: false,
       });
     case TASK.CREATE.MODAL.CLOSE.DELETE:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: false,
         isCreateFailure: true,
         isShowCloseWarningModal: false,
+        isCreateSuccess: false,
       });
     default: return state;
   }
@@ -179,6 +208,7 @@ export function project(state = {
   },
 }, action){
   switch(action.type){
+    case PROJECT.GET:
     case PROJECT.GET.LOADING:
       return Object.assign({}, state, {
         isLoading: true,
