@@ -1,9 +1,9 @@
-@keyframes Blink {
+@keyframes BlinkGreen {
   0% {
     background-color:rgba(232, 253, 245, 0);
   }
   50%{
-    background-color:rgba(232, 253, 245, 1);    
+    background-color:rgba(232, 253, 245, 1);
   }
   60%{
     background-color:rgba(232, 253, 245, 1);
@@ -13,8 +13,33 @@
   }
 }
 
+@keyframes BlinkYellow {
+  0% {
+    background-color:rgba(255, 252, 235, 0);
+  }
+  50%{
+    background-color:rgba(255, 252, 235, 1);
+  }
+  60%{
+    background-color:rgba(255, 252, 235, 1);
+  }
+  100%{
+    background-color:rgba(255, 252, 235, 0);
+  }
+}
+
+.Task--Empty{
+  border-radius: 0.5rem;
+  border: 0.3rem dashed gray;
+}
+
+.Task--Highlight{
+  animation: BlinkYellow 1s ease-out;
+  animation-iteration-count: 5;
+}
+
 .Task__AnimatedBackground--EmptyState{
-  animation: Blink 1s ease-out;
+  animation: BlinkGreen 1s ease-out;
   animation-iteration-count: 2;
 }
 

@@ -16,11 +16,12 @@ export default class Backlog extends React.Component {
 
   render(){
     const tasks = this.props.tasks;
-
+    const taskJustCreated = this.props.taskJustCreated;
+    DebugLog('taskJustCreated', taskJustCreated);
     let ren;
     if (tasks && tasks.length > 0){
-      ren = tasks.map((task) =>
-        <Task task={task}/>
+      ren = tasks.map((task, index) =>
+        <Task key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
       )
     } else {
       ren = <Task task={null} caption={'No tasks yet'} cta={'Add a new task'} onClick={this.onClickAddTask}/>

@@ -10,17 +10,17 @@ export default class Sprints extends React.Component {
     const nextSprint = this.props.nextSprint;
     let renCurrSprintTasks, renNextSprintTasks;
     if (currSprint.tasks && currSprint.tasks.length >= 0){
-      renCurrSprintTasks = <Task task={null} caption={'No tasks in this sprint yet'} cta={'Drop a task here'}/>
+      renCurrSprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>
     } else {
-      renCurrSprintTasks = currSprint.tasks.map((task) =>
-        <Task task={task}/>
+      renCurrSprintTasks = currSprint.tasks.map((task, index) =>
+        <Task key={task.id} task={task} isLast={index===(currSprint.tasks.length-1)}/>
       );
     }
     if (nextSprint.tasks && nextSprint.tasks.length >= 0){
-      renNextSprintTasks = <Task task={null} caption={'No tasks in this sprint yet'} cta={'Drop a task here'}/>;
+      renNextSprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>;
     }else{
-      renNextSprintTasks = nextSprint.tasks.map((task) =>
-        <Task task={task}/>
+      renNextSprintTasks = nextSprint.tasks.map((task, index) =>
+        <Task key={task.id} task={task} isLast={index===(nextSprint.tasks.length-1)}/>
       );
     }
 
@@ -36,7 +36,7 @@ export default class Sprints extends React.Component {
           <h2 className="f3 mid-gray lh-title">
             Current Sprint
           </h2>
-          <time>{currSprint.startDate} to {currSprint.endDate}</time>
+          <time className="Sprints__Time">{currSprint.startDate} to {currSprint.endDate}</time>
           <p className="f6 ttu tracked gray">-- Your tasks for this sprint --</p>
 
           <div className="Sprint mt3">
@@ -60,7 +60,7 @@ export default class Sprints extends React.Component {
           <h2 className="f3 mid-gray lh-title">
             Next Sprint
           </h2>
-          <time>{nextSprint.startDate} to {nextSprint.endDate}</time>
+          <time className="Sprints__Time">{nextSprint.startDate} to {nextSprint.endDate}</time>
           <p className="f6 ttu tracked gray">-- Looking ahead --</p>
 
           <div className="Sprint mt3">

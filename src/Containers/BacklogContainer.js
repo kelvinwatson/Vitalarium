@@ -5,6 +5,7 @@ import { createTaskOpenModal } from '../Actions';
 
 const mapStateToProps = (state) => {
   return {
+    taskJustCreated: state.task.task,
     tasks: state.project.project.backlog,
   }
 }

@@ -138,6 +138,7 @@ export function task(state = {
   isCreateSuccess: false,
   isCreateFailure: false,
   isShowCloseWarningModal: false,
+  task: undefined
 }, action){
   switch(action.type){
     case TASK.CREATE.LOADING:
@@ -155,6 +156,7 @@ export function task(state = {
         isCreateSuccess: true,
         isCreateFailure: false,
         isShowCloseWarningModal: false,
+        task: action.task,
       });
     case TASK.CREATE.FAILURE:
       return Object.assign({}, state, {
@@ -163,6 +165,7 @@ export function task(state = {
         isCreateSuccess: false,
         isCreateFailure: true,
         isShowCloseWarningModal: false,
+        task: action.task,
       });
     case TASK.CREATE.MODAL.OPEN:
       return Object.assign({}, state, {
