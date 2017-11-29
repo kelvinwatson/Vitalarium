@@ -1,61 +1,6 @@
-@-webkit-keyframes TaskModalAnimateAppearance {
-  from {
-    top: 100px;
-    opacity: 0
-  }
-  to {
-    top: 0;
-    opacity: 1
-  }
-}
-
-@keyframes TaskModalAnimateAppearance {
-  from {
-    top: 100px;
-    opacity: 0
-  }
-  to {
-    top: 0;
-    opacity: 1
-  }
-}
 .TaskDetail{
 }
 
-.TaskModal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
-  display:none;
-}
-.TaskModal--Open{
-  display:block !important;
-}
-
-.TaskPanel {
-  height: 100%; /* 100% Full-height */
-  width: 0%; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 10; /* Stay on top */
-  top: 0; /* Stay at the top */
-  left: 0;
-  background-color: white; /* Black*/
-  overflow-x: hidden; /* Disable horizontal scroll */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-  -webkit-transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-}
-
-.TaskPanel--Open{
-  display:block;
-  width: 100%;
-  padding: 1.5rem;
-}
 
 .TaskDetailContent {
   position: relative;
@@ -171,18 +116,7 @@ input[type='checkbox'], input[type='radio'] {
 
 @media(max-width: 767px) {
   /* phones */
-  .TaskDetailContent {
-    height: 100%;
-    width: 100%;
-    margin: auto;
-    /*position of modal 10% from top*/
-  }
-  .TaskDetailSizeFlexItem {
-    flex-basis: 100%;
-  }
-  .TaskDetailSizeFlexItem--Left, .TaskDetailSizeFlexItem--Right {
-    padding: 0rem;
-  }
+  
 }
 
 @media(max-width: 767px) and (orientation: portrait) {
