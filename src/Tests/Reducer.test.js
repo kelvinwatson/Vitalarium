@@ -157,7 +157,7 @@ describe('Reducer: task (initial state)', () => {
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
-      isShowCloseWarningModal: false,
+      isShowCreateCloseWarningModal: false,
     });
   });
 
@@ -170,7 +170,7 @@ describe('Reducer: task (initial state)', () => {
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
-      isShowCloseWarningModal: false,
+      isShowCreateCloseWarningModal: false,
     });
   });
 
@@ -183,7 +183,7 @@ describe('Reducer: task (initial state)', () => {
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
-      isShowCloseWarningModal: false,
+      isShowCreateCloseWarningModal: false,
     });
   });
 
@@ -196,7 +196,7 @@ describe('Reducer: task (initial state)', () => {
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
-      isShowCloseWarningModal: true,
+      isShowCreateCloseWarningModal: true,
     });
   });
 
@@ -209,7 +209,7 @@ describe('Reducer: task (initial state)', () => {
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: false,
-      isShowCloseWarningModal: false,
+      isShowCreateCloseWarningModal: false,
     });
   });
 
@@ -222,7 +222,7 @@ describe('Reducer: task (initial state)', () => {
       isSaving: false,
       isCreateSuccess: false,
       isCreateFailure: true,
-      isShowCloseWarningModal: false,
+      isShowCreateCloseWarningModal: false,
     });
   });
 });

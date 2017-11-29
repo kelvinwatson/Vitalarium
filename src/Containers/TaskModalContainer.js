@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
     nextSprintId: state.project.project.sprints[1].id,
     projectId: state.project.project.id,
     isOpen: state.task.isOpenCreateTaskModal,
-    isShowCloseWarning: state.task.isShowCloseWarningModal,
+    isShowCloseWarning: state.task.isShowCreateCloseWarningModal,
     isCreateFailure: state.task.isCreateFailure,
   }
 }

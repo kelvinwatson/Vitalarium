@@ -133,38 +133,47 @@ export function login(state = {
 }
 
 export function task(state = {
+  //create task
   isOpenCreateTaskModal: false,
-  isSaving: false,
+  isCreating: false,
   isCreateSuccess: false,
   isCreateFailure: false,
-  isShowCloseWarningModal: false,
+  isShowCreateCloseWarningModal: false,
+
+  //update task
+  isOpenUpdateTaskPanel: false,
+  isUpdating: false,
+  isUpdateSuccess: false,
+  isUpdateFailure: false,
+  isShowUpdateCloseWarningModal: false,
+
   task: undefined
 }, action){
   switch(action.type){
     case TASK.CREATE.LOADING:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
-        isSaving: true,
+        isCreating: true,
         isCreateSuccess: false,
         isCreateFailure: false,
-        isShowCloseWarningModal: false,
+        isShowCreateCloseWarningModal: false,
       });
     case TASK.CREATE.SUCCESS:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: false,
-        isSaving: false,
+        isCreating: false,
         isCreateSuccess: true,
         isCreateFailure: false,
-        isShowCloseWarningModal: false,
+        isShowCreateCloseWarningModal: false,
         task: action.task,
       });
     case TASK.CREATE.FAILURE:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
-        isSaving: false,
+        isCreating: false,
         isCreateSuccess: false,
         isCreateFailure: true,
-        isShowCloseWarningModal: false,
+        isShowCreateCloseWarningModal: false,
         task: action.task,
       });
     case TASK.CREATE.MODAL.OPEN:
@@ -180,21 +189,32 @@ export function task(state = {
     case TASK.CREATE.MODAL.CLOSE.WARNING:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
-        isShowCloseWarningModal: true,
+        isShowCreateCloseWarningModal: true,
         isCreateSuccess: false,
       });
     case TASK.CREATE.MODAL.CLOSE.CANCEL:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
-        isShowCloseWarningModal: false,
+        isShowCreateCloseWarningModal: false,
         isCreateSuccess: false,
       });
     case TASK.CREATE.MODAL.CLOSE.DELETE:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: false,
         isCreateFailure: true,
-        isShowCloseWarningModal: false,
+        isShowCreateCloseWarningModal: false,
         isCreateSuccess: false,
+      });
+    //UPDATE
+    case TASK.UPDATE.PANEL.OPEN:
+      return Object.assign({}, state, {
+        isOpenUpdateTaskPanel: true,
+        task: action.task,
+      });
+    case TASK.UPDATE.PANEL.CLOSE.SUCCESS:
+      return Object.assign({}, state, {
+        isOpenUpdateTaskPanel: false,
+        task: action.task,
       });
     default: return state;
   }

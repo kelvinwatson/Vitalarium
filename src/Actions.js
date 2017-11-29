@@ -62,6 +62,15 @@ export const TASK = {
     FAILURE: 'FAILURE_CREATE_TASK',
   },
   UPDATE: {
+    PANEL: {
+      OPEN: 'OPEN_PANEL_UPDATE_TASK',
+      CLOSE: {
+        SUCCESS: 'SUCCESS_CLOSE_PANEL_UPDATE_TASK',
+        WARNING: 'WARNING_CLOSE_PANEL_UPDATE_TASK',
+        CANCEL: 'CANCEL_CLOSE_PANEL_UPDATE_TASK',
+        DELETE: 'DELETE_CLOSE_PANEL_UPDATE_TASK',
+      },
+    },
     LOADING: 'LOADING_UPDATE_TASK',
     SUCCESS: 'SUCCESS_UPDATE_TASK',
     FAILURE: 'FAILURE_UPDATE_TASK',
@@ -600,6 +609,69 @@ export function createTaskSuccess(task) {
 export function createTaskFailure(task, err) {
   return {
     type: TASK.CREATE.FAILURE,
+    status: err,
+    task,
+  }
+}
+
+/*
+ * Update Task
+ */
+export function updateTaskOpenPanel(task) {
+  return {
+    type: TASK.UPDATE.PANEL.OPEN,
+    status: 'Opening update task panel...',
+    task,
+  }
+}
+
+export function updateTaskClosePanel() {
+  return {
+    type: TASK.UPDATE.PANEL.CLOSE.SUCCESS,
+    status: 'Closing create task modal...',
+  }
+}
+
+export function updateTaskCloseWarningModal() {
+  return {
+    type: TASK.UPDATE.PANEL.CLOSE.WARNING,
+    status: 'Are you sure you want to abandon changes?',
+  }
+}
+
+export function updateTaskCancelCloseWarningModal() {
+  return {
+    type: TASK.UPDATE.PANEL.CLOSE.CANCEL,
+    status: 'Returning to task...',
+  }
+}
+
+export function updateTaskDeleteCloseWarningModal() {
+  return {
+    type: TASK.UPDATE.PANEL.CLOSE.DELETE,
+    status: 'Closing update task panel, all changes lost.',
+  }
+}
+
+export function updateTaskLoading(task) {
+  return {
+    type: TASK.UPDATE.LOADING,
+    status: 'Updating task...',
+    task,
+  }
+}
+
+export function updateTaskSuccess(task) {
+  return {
+    type: TASK.UPDATE.SUCCESS,
+    status: 'Successfully updated task.',
+    task,
+  }
+}
+
+export function updateTaskFailure(task, err) {
+  return {
+    type: TASK.UPDATE.FAILURE,
     status: err,
     task,
   }

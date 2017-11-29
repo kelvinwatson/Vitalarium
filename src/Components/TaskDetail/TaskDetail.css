@@ -19,6 +19,8 @@
     opacity: 1
   }
 }
+.TaskDetail{
+}
 
 .TaskModal {
   position: fixed;
@@ -30,13 +32,35 @@
   overflow: auto;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
+  display:none;
+}
+.TaskModal--Open{
+  display:block !important;
 }
 
-.TaskModalContent {
+.TaskPanel {
+  height: 100%; /* 100% Full-height */
+  width: 0%; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 10; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: white; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  -webkit-transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.TaskPanel--Open{
+  display:block;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.TaskDetailContent {
   position: relative;
   background-color: #fefefe;
   margin: 10% auto;
-  /*position of modal 10% from top*/
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
@@ -47,39 +71,39 @@
   animation-duration: 0.3s
 }
 
-.TaskModalHeader {
+.TaskDetailHeader {
   width: 100%;
   text-align: right;
 }
 
-.TaskModalSizeFlexWrapper {
+.TaskDetailSizeFlexWrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.TaskModalSizeFlexItem {
+.TaskDetailSizeFlexItem {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 50%;
 }
 
-.TaskModalSizeFlexItem--Left {
+.TaskDetailSizeFlexItem--Left {
   padding-right: 0.3rem;
 }
 
-.TaskModalSizeFlexItem--Right {
+.TaskDetailSizeFlexItem--Right {
   padding-left: 0.3rem;
 }
 
-.TaskModalButtons {
+.TaskDetailButtons {
   margin: 0.8rem 0 0 0;
   padding-right: 1px;
   width: 100%;
   text-align: right;
 }
 
-.TaskModal_ErrorMessage {
+.TaskDetail_ErrorMessage {
   margin-right: 1rem;
 }
 
@@ -147,16 +171,16 @@ input[type='checkbox'], input[type='radio'] {
 
 @media(max-width: 767px) {
   /* phones */
-  .TaskModalContent {
+  .TaskDetailContent {
     height: 100%;
     width: 100%;
     margin: auto;
     /*position of modal 10% from top*/
   }
-  .TaskModalSizeFlexItem {
+  .TaskDetailSizeFlexItem {
     flex-basis: 100%;
   }
-  .TaskModalSizeFlexItem--Left, .TaskModalSizeFlexItem--Right {
+  .TaskDetailSizeFlexItem--Left, .TaskDetailSizeFlexItem--Right {
     padding: 0rem;
   }
 }

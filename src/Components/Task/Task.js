@@ -10,11 +10,10 @@ export default class Task extends React.Component {
     let task = this.props.task;
     let isLast = this.props.isLast;
     let isHighlight = this.props.isHighlight;
-    DebugLog('isHighlight', isHighlight);
     let ren;
     if (task){
       ren =
-        <li className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task`}>
+        <li onClick={this.props.onClick} className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task`}>
           <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{task.title}</span>

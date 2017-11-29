@@ -10,6 +10,7 @@ export default class TaskDetail extends React.Component {
     super(props);
 
     let now = Date.now();
+
     this.state = {
       title: '',
       description: '',
@@ -38,6 +39,33 @@ export default class TaskDetail extends React.Component {
     this.onChangeSize = this.onChangeSize.bind(this);
     this.onChangeSprint = this.onChangeSprint.bind(this);
     this.onChangeDueDate = this.onChangeDueDate.bind(this);
+  }
+
+  componentWillReceiveProps(newProps){
+    DebugLog('componentWillReceiveProps', newProps);
+
+    if (newProps.isPanel){ //update task
+      //prepopulate
+      const task = newProps.task.title;
+      this.setState({
+        title: task.title,
+        description: task.description,
+        size: task.size,
+        sprintId: task.sprintId,
+        dueDate: task.dueDate,
+        comments: task.comments,
+        createdOn: task.createdOn,
+        createdBy: task.createdBy,
+
+        destination: {
+          sprintId: task.sprintId,
+          projectId: newProps.projectId,
+        },
+
+        projectId: this.props.projectId,
+        today: formatDateHyphen(now),
+      })
+    }
   }
 
   /*
@@ -93,67 +121,78 @@ export default class TaskDetail extends React.Component {
   }
 
   onCloseClicked(){
-    if (this.state.title || this.state.description){
-      this.props.showCloseCreateTaskWarningModal();
-    } else if (this.props.isModal){
-      this.props.closeModal();
-    } // else TODO if not modal, close panel
+    if (this.props.isModal){
+      DebugLog('onCloseClicked');
+      if (this.state.title || this.state.description){
+        this.props.showCloseCreateTaskWarningModal();
+      } else {
+        this.props.close();
+      }
+    } else if (this.props.isPanel) {
+      DebugLog('onCloseClicked panel');
+      //check if updates were made, and show warning if needed
+      this.props.close();
+    }// else TODO if not modal, close panel
   }
 
   render(){
+
+    const body =
+      <section>
+        <header className="TaskModalHeader">
+          <i onClick={this.onCloseClicked} className="fa fa-times" aria-hidden="true"></i>
+          <CloseCreateTaskWarningModalContainer isOpen={this.props.isShowCloseWarning}/>
+        </header>
+
+        <form onSubmit={this.onFormSubmit}>
+          <fieldset>
+            <label htmlFor="titleField">Title</label>
+            <input type="text" placeholder="Give your task a name (e.g. organize workroom, finalize blueprints)" id="titleField"
+              value={this.state.title} onChange={this.onChangeTitle} required/>
+
+            <label htmlFor="descriptionField">Description</label>
+            <textarea placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"
+              value={this.state.description} onChange={this.onChangeDescription}></textarea>
+
+            <div className="TaskDetailSizeFlexWrapper">
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
+                <label htmlFor="sizeField">Task size</label>
+                <select onChange={this.onChangeSize} defaultValue="S" id="sizeField">
+                  <option value="S">Small</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Large</option>
+                </select>
+              </div>
+
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Right">
+                <label htmlFor="sprintField">Sprint</label>
+                <select onChange={this.onChangeSprint} defaultValue={null} id="sprintField">
+                  <option value={null}>Backlog</option>
+                  <option value={this.props.currentSprintId}>Current sprint</option>
+                  <option value={this.props.nextSprintId}>Next sprint</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="TaskDetailSizeFlexWrapper">
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
+                <label htmlFor="dueDateField">Due date</label>
+                <input type="date" onChange={this.onChangeDueDate} defaultValue={this.state.today} min={this.state.today}/>
+              </div>
+
+            </div>
+
+            <div className="TaskDetailButtons">
+              <div className={`TaskDetail_ErrorMessage ${this.props.isCreateFailure? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
+              <input type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0" value="Create Task"/>
+            </div>
+          </fieldset>
+        </form>
+      </section>;
+
     return (
-      <div className={`TaskModal ${this.props.isOpen ? 'db' : 'dn'}`}>
-        <div ref={this.setModalContentRef} className="TaskModalContent">
-          <header className="TaskModalHeader">
-            <i onClick={this.onCloseClicked} className="fa fa-times" aria-hidden="true"></i>
-            <CloseCreateTaskWarningModalContainer isOpen={this.props.isShowCloseWarning}/>
-          </header>
-
-          <form onSubmit={this.onFormSubmit}>
-            <fieldset>
-              <label htmlFor="titleField">Title</label>
-              <input type="text" placeholder="Give your task a name (e.g. organize workroom, finalize blueprints)" id="titleField"
-                value={this.state.title} onChange={this.onChangeTitle} required/>
-
-              <label htmlFor="descriptionField">Description</label>
-              <textarea placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"
-                value={this.state.description} onChange={this.onChangeDescription}></textarea>
-
-              <div className="TaskModalSizeFlexWrapper">
-                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
-                  <label htmlFor="sizeField">Task size</label>
-                  <select onChange={this.onChangeSize} defaultValue="S" id="sizeField">
-                    <option value="S">Small</option>
-                    <option value="M">Medium</option>
-                    <option value="L">Large</option>
-                  </select>
-                </div>
-
-                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Right">
-                  <label htmlFor="sprintField">Sprint</label>
-                  <select onChange={this.onChangeSprint} defaultValue={null} id="sprintField">
-                    <option value={null}>Backlog</option>
-                    <option value={this.props.currentSprintId}>Current sprint</option>
-                    <option value={this.props.nextSprintId}>Next sprint</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="TaskModalSizeFlexWrapper">
-                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
-                  <label htmlFor="dueDateField">Due date</label>
-                  <input type="date" onChange={this.onChangeDueDate} defaultValue={this.state.today} min={this.state.today}/>
-                </div>
-
-              </div>
-
-              <div className="TaskModalButtons">
-                <div className={`TaskModal_ErrorMessage ${this.props.isCreateFailure? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
-                <input type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0" value="Create Task"/>
-              </div>
-            </fieldset>
-          </form>
-        </div>
+      <div>
+        {body}
       </div>
     )
   }
