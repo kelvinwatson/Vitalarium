@@ -9,29 +9,10 @@ export default class TaskDetail extends React.Component {
   constructor(props){
     super(props);
 
-    let now = Date.now();
-    this.state = {
-      title: '',
-      description: '',
-      size: 'S',
-      sprintId: null,
-      dueDate: now,
-      comments: null,
-      createdOn: null,
-      createdBy: this.props.userId,
-
-      destination: {
-        sprintId: null,
-        projectId: this.props.projectId,
-      },
-
-      projectId: this.props.projectId,
-      today: formatDateHyphen(now),
-    };
+    this.state = this.getInitialState();
 
     this.setModalContentRef = this.setModalContentRef.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
-
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
@@ -40,21 +21,64 @@ export default class TaskDetail extends React.Component {
     this.onChangeDueDate = this.onChangeDueDate.bind(this);
   }
 
+  getInitialState(){
+    let now = Date.now();
+    return {
+      id: undefined,
+      title: '',
+      description: '',
+      size: 'S',
+      prevSprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
+      sprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
+      project: this.props.task && this.props.task.project || this.props.projectId,
+      dueDate: now,
+      comments: null,
+      createdOn: null,
+      createdBy: this.props.userId,
+      today: formatDateHyphen(now),
+    };
+  }
+
+  componentWillReceiveProps(newProps){
+    // DebugLog('componentWillReceiveProps', newProps);
+    if (newProps.isPanel && newProps.task){ //prepopulate fields for update task
+      const task = newProps.task;
+      this.setState({
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        size: task.size,
+        prevSprint: task.sprint,
+        sprint: task.sprint || null,
+        project: task.project,
+        dueDate: task.dueDate,
+        comments: task.comments || null,
+        createdOn: task.createdOn,
+        createdBy: task.createdBy,
+      });
+    }
+    if (newProps.isModal && newProps.isResetForm){ //only the create task modal should be able to reset form
+      this.setState(this.getInitialState());
+    }
+  }
+
   /*
    * Preconditions: Assumes inputs not empty since "required" is true in all input attributes
    */
   onFormSubmit(e){
     e.preventDefault();
     this.props.onFormSubmit(
+      this.state.id,
       this.state.title,
       this.state.description,
       this.state.size,
-      this.state.sprintId,
+      this.state.sprint,
+      this.state.project,
       this.state.dueDate,
       this.state.comments,
       Date.now(),
       this.state.createdBy,
-      this.state.destination,
+      this.state.prevSprint,
     );
   }
 
@@ -66,6 +90,7 @@ export default class TaskDetail extends React.Component {
   }
 
   onChangeTitle(e){
+    // DebugLog('changeTitle', this.state);
     this.setState({title: e.target.value});
   }
 
@@ -78,13 +103,12 @@ export default class TaskDetail extends React.Component {
   }
 
   onChangeSprint(e){
-    const projectId = this.state.destination.projectId;
+    const prevSprint = this.state.sprint;
+    DebugLog('prevSprint', prevSprint);
+    DebugLog('newSprint', e.target.value);
     this.setState({
-      sprintId: e.target.value,
-      destination: {
-        sprintId: e.target.value,
-        projectId,
-      }
+      prevSprint: prevSprint,
+      sprint: e.target.value
     });
   }
 
@@ -93,67 +117,78 @@ export default class TaskDetail extends React.Component {
   }
 
   onCloseClicked(){
-    if (this.state.title || this.state.description){
-      this.props.showCloseCreateTaskWarningModal();
-    } else if (this.props.isModal){
-      this.props.closeModal();
-    } // else TODO if not modal, close panel
+    if (this.props.isModal){
+      // DebugLog('onCloseClicked');
+      if (this.state.title || this.state.description){
+        this.props.showCloseCreateTaskWarningModal();
+      } else {
+        this.props.close();
+      }
+    } else if (this.props.isPanel) {
+      // DebugLog('onCloseClicked panel');
+      //check if updates were made, and show warning if needed
+      this.props.close();
+    }// else TODO if not modal, close panel
   }
 
   render(){
+    let body =
+      <section>
+        <header className="TaskModalHeader">
+          <i onClick={this.onCloseClicked} className="fa fa-times" aria-hidden="true"></i>
+          <CloseCreateTaskWarningModalContainer isOpen={this.props.isShowCloseWarning}/>
+        </header>
+
+        <form onSubmit={this.onFormSubmit}>
+          <fieldset>
+            <label htmlFor="titleField">Title</label>
+            <input type="text" placeholder="Give your task a name (e.g. organize workroom, finalize blueprints)" id="titleField"
+              value={this.state.title || ''} onChange={this.onChangeTitle} required/>
+
+            <label htmlFor="descriptionField">Description</label>
+            <textarea placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"
+              value={this.state.description || ''} onChange={this.onChangeDescription}></textarea>
+
+            <div className="TaskDetailSizeFlexWrapper">
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
+                <label htmlFor="sizeField">Task size</label>
+                <select onChange={this.onChangeSize} value={this.state.size} id="sizeField">
+                  <option value="S">Small</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Large</option>
+                </select>
+              </div>
+
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Right">
+                <label htmlFor="sprintField">Sprint</label>
+                <select onChange={this.onChangeSprint} value={this.state.sprint} id="sprintField">
+                  <option value={'backlog'}>Backlog</option>
+                  <option value={this.props.currentSprintId}>Current sprint</option>
+                  <option value={this.props.nextSprintId}>Next sprint</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="TaskDetailSizeFlexWrapper">
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
+                <label htmlFor="dueDateField">Due date</label>
+                <input type="date" onChange={this.onChangeDueDate} defaultValue={this.state.today} min={this.state.today}/>
+              </div>
+
+            </div>
+
+            <div className="TaskDetailButtons">
+              <div className={`TaskDetail_ErrorMessage ${this.props.isCreateFailure? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
+              <input type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0"
+                value={`${this.props.isModal? 'Create Task' :'Save Changes'}`}/>
+            </div>
+          </fieldset>
+        </form>
+      </section>;
+
     return (
-      <div className={`TaskModal ${this.props.isOpen ? 'db' : 'dn'}`}>
-        <div ref={this.setModalContentRef} className="TaskModalContent">
-          <header className="TaskModalHeader">
-            <i onClick={this.onCloseClicked} className="fa fa-times" aria-hidden="true"></i>
-            <CloseCreateTaskWarningModalContainer isOpen={this.props.isShowCloseWarning}/>
-          </header>
-
-          <form onSubmit={this.onFormSubmit}>
-            <fieldset>
-              <label htmlFor="titleField">Title</label>
-              <input type="text" placeholder="Give your task a name (e.g. organize workroom, finalize blueprints)" id="titleField"
-                value={this.state.title} onChange={this.onChangeTitle} required/>
-
-              <label htmlFor="descriptionField">Description</label>
-              <textarea placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"
-                value={this.state.description} onChange={this.onChangeDescription}></textarea>
-
-              <div className="TaskModalSizeFlexWrapper">
-                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
-                  <label htmlFor="sizeField">Task size</label>
-                  <select onChange={this.onChangeSize} defaultValue="S" id="sizeField">
-                    <option value="S">Small</option>
-                    <option value="M">Medium</option>
-                    <option value="L">Large</option>
-                  </select>
-                </div>
-
-                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Right">
-                  <label htmlFor="sprintField">Sprint</label>
-                  <select onChange={this.onChangeSprint} defaultValue={null} id="sprintField">
-                    <option value={null}>Backlog</option>
-                    <option value={this.props.currentSprintId}>Current sprint</option>
-                    <option value={this.props.nextSprintId}>Next sprint</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="TaskModalSizeFlexWrapper">
-                <div className="TaskModalSizeFlexItem TaskModalSizeFlexItem--Left">
-                  <label htmlFor="dueDateField">Due date</label>
-                  <input type="date" onChange={this.onChangeDueDate} defaultValue={this.state.today} min={this.state.today}/>
-                </div>
-
-              </div>
-
-              <div className="TaskModalButtons">
-                <div className={`TaskModal_ErrorMessage ${this.props.isCreateFailure? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
-                <input type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0" value="Create Task"/>
-              </div>
-            </fieldset>
-          </form>
-        </div>
+      <div>
+        {body}
       </div>
     )
   }

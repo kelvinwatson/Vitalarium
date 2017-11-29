@@ -5,7 +5,7 @@ import { createTaskCancelCloseWarningModal, createTaskDeleteCloseWarningModal } 
 
 const mapStateToProps = (state) => {
   return {
-    isOpen: state.task.isShowCloseWarningModal,
+    isOpen: state.task.isShowCreateCloseWarningModal,
   }
 }
 

@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import DebugLog from '../../Utils/DebugLog';
 import { switchTheme } from '../../Utils/Themes';
 import Loading from '../Loading/Loading';
+import BacklogContainer from '../../Containers/BacklogContainer';
 import SprintsContainer from '../../Containers/SprintsContainer';
 import TaskModalContainer from '../../Containers/TaskModalContainer';
-import BacklogContainer from '../../Containers/BacklogContainer';
+import TaskPanelContainer from '../../Containers/TaskPanelContainer';
 import TutorialOverlayContainer from '../../Containers/TutorialOverlayContainer';
 import './Dashboard.css'
 
@@ -32,6 +33,7 @@ export default class Dashboard extends React.Component {
         <div className="Dashboard">
           <TutorialOverlayContainer/>
           <TaskModalContainer/>
+          <TaskPanelContainer/>
           <div className="Dashboard__BacklogWrapper">
             <BacklogContainer/>
           </div>
