@@ -11,24 +11,25 @@ export default class TaskModal extends React.Component {
     super(props);
 
     this.showCloseCreateTaskWarningModal = this.showCloseCreateTaskWarningModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   /*
    * Preconditions: Assumes inputs not empty since "required" is true in all input attributes
    */
-  onFormSubmit(title, description, size, sprintId, dueDate, comments, createdOn, createdBy, destination){
+  onFormSubmit(id, title, description, size, sprint, project, dueDate, comments, createdOn, createdBy){
+    // DebugLog('onFormSubmit', project);
     this.props.createTask(
+      id,
       title,
       description,
       size,
-      sprintId,
+      sprint,
+      project,
       dueDate,
       comments,
       createdOn,
       createdBy,
-      destination,
     );
   }
 
@@ -36,25 +37,27 @@ export default class TaskModal extends React.Component {
     this.props.showCloseCreateTaskWarningModal();
   }
 
-  closeModal(){
-    this.props.close();
-  }
-
   render(){
     return (
-      <TaskDetail
-        userId={this.props.userId}
-        projectId={this.props.projectId}
-        isModal={true}
-        isOpen={this.props.isOpen}
-        closeModal={this.closeModal}
-        onFormSubmit={this.onFormSubmit}
-        isCreateFailure={this.props.isCreateFailure}
-        currentSprintId={this.props.currentSprintId}
-        nextSprintId={this.props.nextSprintId}
-        showCloseCreateTaskWarningModal={this.showCloseCreateTaskWarningModal}
-        isShowCloseWarning={this.props.isShowCloseWarning}
-        onCloseClicked={this.onCloseClicked}/>
+      <div className={`${this.props.isOpen? 'TaskModal TaskModal--Open':'dn'}`}>
+        <div ref={this.setModalContentRef}
+          className={`${this.props.isOpen? 'TaskModalContent':'TaskPanelContent'}`}>
+          <TaskDetail
+            isModal={true}
+            isPanel={false}
+            userId={this.props.userId}
+            projectId={this.props.projectId}
+            close={this.props.close}
+            onFormSubmit={this.onFormSubmit}
+            isResetForm={this.props.isCreateSuccess}
+            isCreateFailure={this.props.isCreateFailure}
+            currentSprintId={this.props.currentSprintId}
+            nextSprintId={this.props.nextSprintId}
+            showCloseCreateTaskWarningModal={this.showCloseCreateTaskWarningModal}
+            isShowCloseWarning={this.props.isShowCloseWarning}
+            onCloseClicked={this.onCloseClicked}/>
+        </div>
+      </div>
     )
   }
 }

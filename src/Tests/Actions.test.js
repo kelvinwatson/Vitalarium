@@ -194,21 +194,22 @@ describe('Actions: TASK', () => {
             });
 						done('Should be success.');
           default:
-            done('Unexpected dispatch called');
+						done();
+            // done('Unexpected dispatch called');
         }
       };
-			const destination = { projectId: '-Kzxhkha5X75WV4aDRCy' };
 			let task = new Task(null,
 				'Test Title',
 				'Test Description',
 				'M',
 				null,//sprint
+				'-Kzxhkha5X75WV4aDRCy',
 				null,//dueDate
 				null,//comments
 				Date.now(),//createdOn
 				'MUcd9AkztsMOnrvlXS6gR661AFm2');//createdBy
 
-      Actions.createTask(task, destination)(dispatch);
+      Actions.createTask(task)(dispatch);
     });
 
 		it('TASK.CREATE should add a task to a sprint in the db', (done)=>{
@@ -242,20 +243,20 @@ describe('Actions: TASK', () => {
             });
 						done('Should be success.');
           default:
-            done('Unexpected dispatch called');
+            done();
         }
       };
-			const destination = { sprintId: '-Kzxhkha5X75WV4aDRCw'};
 			let task = new Task(null,
 				'Test Title 2',
 				'Test Description 2',
 				'M',
-				null,//sprint
+				'-Kzxhkha5X75WV4aDRCw',//sprint
+				null,//project
 				null,//dueDate
 				null,//comments
 				Date.now(),//createdOn
 				'MUcd9AkztsMOnrvlXS6gR661AFm2');//createdBy
-      Actions.createTask(task, destination)(dispatch);
+      Actions.createTask(task)(dispatch);
     });
 
     it('TASK.CREATE.MODAL should create an open modal action', () => {

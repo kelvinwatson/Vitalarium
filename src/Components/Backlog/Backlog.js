@@ -8,23 +8,27 @@ export default class Backlog extends React.Component {
   constructor(props){
     super(props);
     this.onClickAddTask = this.onClickAddTask.bind(this);
+    this.onClickBacklogTask = this.onClickBacklogTask.bind(this);
   }
 
   onClickAddTask(){
     this.props.onClickAddTask();
   }
 
+  onClickBacklogTask(task){
+    this.props.onClickBacklogTask(task);
+  }
+
   render(){
     const tasks = this.props.tasks;
     const taskJustCreated = this.props.taskJustCreated;
-    DebugLog('taskJustCreated', taskJustCreated);
     let ren;
     if (tasks && tasks.length > 0){
       ren = tasks.map((task, index) =>
-        <Task key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
+        <Task onClick={(e)=>this.onClickBacklogTask(task)} key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
       )
-    } else {
-      ren = <Task task={null} caption={'No tasks yet'} cta={'Add a new task'} onClick={this.onClickAddTask}/>
+    } else { //empty
+      ren = <Task onClick={this.onClickAddTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
     }
     return (
       <div className="mh4-ns Tasks">

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import DebugLog from '../Utils/DebugLog';
 import Backlog from '../Components/Backlog/Backlog';
-import { createTaskOpenModal } from '../Actions';
+import { createTaskOpenModal, updateTaskOpenPanel } from '../Actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -15,6 +15,10 @@ const mapDispatchToProps = (dispatch) => {
     onClickAddTask: ()=>{
       dispatch(createTaskOpenModal());
     },
+    onClickBacklogTask: (task) => {
+      DebugLog('onClickBacklogTask task',task);
+      dispatch(updateTaskOpenPanel(task));
+    }
   }
 }
 

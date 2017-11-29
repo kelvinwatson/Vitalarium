@@ -12,16 +12,17 @@ const mapStateToProps = (state) => {
     nextSprintId: state.project.project.sprints[1].id,
     projectId: state.project.project.id,
     isOpen: state.task.isOpenCreateTaskModal,
-    isShowCloseWarning: state.task.isShowCloseWarningModal,
+    isShowCloseWarning: state.task.isShowCreateCloseWarningModal,
+    isCreateSuccess: state.task.isCreateSuccess,
     isCreateFailure: state.task.isCreateFailure,
   }
 }
 
 const mapDispatchToProps = (dispatch, own) => {
   return {
-    createTask: (title, description, size, sprint, dueDate, comments, createdOn, createdBy, destination)=>{
-      const task = new Task(null, title, description, size, sprint, dueDate, comments, createdOn, createdBy)
-      dispatch(createTask(task, destination));
+    createTask: (id, title, description, size, sprint, project, dueDate, comments, createdOn, createdBy)=>{
+      const task = new Task(id || null, title, description, size, sprint, project, dueDate, comments, createdOn, createdBy)
+      dispatch(createTask(task));
     },
     close: ()=>{
       dispatch(createTaskCloseModal());

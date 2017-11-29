@@ -1,0 +1,27 @@
+.Sprint{
+
+}
+
+.SprintTasksWrapper{
+
+}
+
+.Sprint__Time{
+  color: black;
+  font-weight: 500;
+  text-transform: uppercase;
+  /*font-family: monospace;*/
+  /*font-size: 1rem;*/
+}
+
+@media(max-width: 767px) {
+  /* phones */
+}
+
+@media(max-width: 767px) and (orientation: portrait) {
+  /* portrait phones */
+}
+
+@media(min-width: 768px) {
+  /* tablets and desktop */
+}
