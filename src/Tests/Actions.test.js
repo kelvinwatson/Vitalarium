@@ -268,7 +268,7 @@ describe('Actions: TASK', () => {
 
     it('TASK.CREATE.MODAL should create a close modal action', () => {
       const expectedAction = {
-        type: Actions.TASK.CREATE.MODAL.CLOSE,
+        type: Actions.TASK.CREATE.MODAL.CLOSE.SUCCESS,
         status: 'Closing create task modal...',
       }
       expect(Actions.createTaskCloseModal()).toEqual(expectedAction);
@@ -311,7 +311,7 @@ describe('Actions: TASK', () => {
 
 		it('TASK.CREATE.MODAL.CLOSE should create an close modal action', () => {
 			const expectedAction = {
-				type: Actions.TASK.CREATE.MODAL.CLOSE,
+				type: Actions.TASK.CREATE.MODAL.CLOSE.SUCCESS,
 				status: 'Closing create task modal...',
 			}
 			expect(Actions.createTaskCloseModal()).toEqual(expectedAction);
