@@ -167,6 +167,15 @@ export function task(state = {
         isShowCreateCloseWarningModal: false,
         task: action.task,
       });
+    case TASK.CREATE.CLEAR:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: false,
+        isCreating: false,
+        isCreateSuccess: true,
+        isCreateFailure: false,
+        isShowCreateCloseWarningModal: false,
+        isClear: true,
+      });
     case TASK.CREATE.FAILURE:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,

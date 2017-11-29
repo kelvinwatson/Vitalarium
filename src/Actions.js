@@ -120,6 +120,7 @@ export const PROJECT = {
  */
 export function getProject(projectId, isPostTaskCreation){
   return function(dispatch){
+    DebugLog('getProject projectId', projectId);
     getProjectFromDb(projectId, dispatch, isPostTaskCreation);
   }
 }
@@ -157,6 +158,7 @@ export function initializeUserObjectsInDb(redirectResult, dispatch) {
 };
 
 export function getSprintsFromDb(sprintIds) {
+  DebugLog('sprintIds',sprintIds);
   return new Promise((resolve, reject) => {
     const db = FirebaseUtil.getFirebase().database();
     let sprintCalls = [];
@@ -164,6 +166,7 @@ export function getSprintsFromDb(sprintIds) {
       sprintCalls.push(db.ref('sprints/' + sprintIds[i]).once('value'));
     }
     Promise.all(sprintCalls).then((sprintResponses) => {
+      DebugLog('sprintResponses', sprintResponses);
       let sprints = [];
       for (let i = 0; i < sprintResponses.length; i += 1) {
         let sprint = sprintResponses[i].val();
@@ -175,7 +178,7 @@ export function getSprintsFromDb(sprintIds) {
           Promise.all(taskCalls).then((taskResults) => {
             let tasks = [];
             for (let j = 0; j < taskResults.length; j += 1) {
-              tasks.push(taskResults.val());
+              tasks.push(taskResults[j].val());
             }
             tasks.sort(taskComparatorDesc);
             sprint.tasks = tasks;
@@ -214,6 +217,7 @@ export function getProjectFromDb(projectId, dispatch, isPostTaskCreation) {
 
   const db = FirebaseUtil.getFirebase().database();
     db.ref('projects/' + projectId).once('value').then((projectSnap) => {
+      DebugLog('projectSnap.val()', projectSnap.val());
       let project = projectSnap.val();
       let projectCalls = [];
       if (project && Array.isArray(project.sprints)) {
@@ -247,6 +251,7 @@ export function initializeApp(filter) {
           let dbUser = snap.val();
           dispatch(loginSuccess(dbUser));
           if (dbUser && Array.isArray(dbUser.projects)) {
+            DebugLog('dbUser.projects',dbUser.projects);
             getProjectFromDb(dbUser.projects[0], dispatch); // one project only
           }
         }).catch((err) => {
@@ -493,23 +498,24 @@ export function getTasks(taskList) {
  */
 export function createTask(task) {
   return function(dispatch) {
+    DebugLog('Action createTask',task);
     dispatch(createTaskLoading());
 		let db = FirebaseUtil.getFirebase().database();
 		const taskRef = db.ref('tasks/').push();
 		task.id = taskRef.key;
-		if(task.sprintId) { //save to sprint
-			db.ref('sprints/' + task.sprintId).once('value').then((sprintSnap) => {
+		if(task.sprint) { //save to sprint
+			db.ref('sprints/' + task.sprint).once('value').then((sprintSnap) => {
 				let destSprint = sprintSnap.val();
 				if(destSprint) {
 					destSprint.tasks = Array.isArray(destSprint.tasks) || [];
 					destSprint.tasks.push(taskRef.key);
 					let sprintCalls = [];
 					sprintCalls.push(db.ref('tasks/' + taskRef.key).set(task));
-					sprintCalls.push(db.ref('sprints/' + task.sprintId).set(destSprint));
+					sprintCalls.push(db.ref('sprints/' + task.sprint).set(destSprint));
 					Promise.all(sprintCalls).then((responses) => {
 						dispatch(createTaskSuccess(task));
             dispatch(createTaskCloseModal());
-            dispatch(getProject(task.projectId, true));
+            dispatch(getProject(task.project, true));
 					}).catch((err) => {
 						dispatch(createTaskFailure(task, err));
 					});
@@ -519,19 +525,19 @@ export function createTask(task) {
 			}).catch((err) => {
 				dispatch(createTaskFailure(task, err));
 			});
-		} else if(task.projectId) { //save to backlog since no sprint specified
-			db.ref('projects/' + task.projectId).once('value').then((projectSnap) => {
+		} else if(task.project) { //save to backlog since no sprint specified
+			db.ref('projects/' + task.project).once('value').then((projectSnap) => {
 				let destProject = projectSnap.val();
 				if(destProject) {
 					destProject.backlog = Array.isArray(destProject.backlog) ? destProject.backlog : [];
 					destProject.backlog.push(taskRef.key);
 					let projectCalls = [];
 					projectCalls.push(db.ref('tasks/' + taskRef.key).set(task));
-					projectCalls.push(db.ref('projects/' + task.projectId).set(destProject));
+					projectCalls.push(db.ref('projects/' + task.project).set(destProject));
 					Promise.all(projectCalls).then((responses) => {
 						dispatch(createTaskSuccess(task));
             dispatch(createTaskCloseModal());
-            dispatch(getProject(task.projectId, true));
+            dispatch(getProject(task.project, true));
 					}).catch((err) => {
             dispatch(createTaskFailure(task, err));
 					});
@@ -545,7 +551,7 @@ export function createTask(task) {
     return FirebaseUtil.getFirebase().database().ref('tasks/' + task.id).set(task).then(() => {
       dispatch(createTaskSuccess(task));
       dispatch(createTaskCloseModal());
-      dispatch(getProject(task.projectId, true));
+      dispatch(getProject(task.project, true));
     }).catch((err) => {
       dispatch(createTaskFailure(task, err.message));
     });

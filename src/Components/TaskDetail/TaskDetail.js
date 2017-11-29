@@ -9,20 +9,7 @@ export default class TaskDetail extends React.Component {
   constructor(props){
     super(props);
 
-    let now = Date.now();
-
-    this.state = {
-      title: '',
-      description: '',
-      size: 'S',
-      sprintId: null,
-      dueDate: now,
-      comments: null,
-      createdOn: null,
-      createdBy: this.props.userId,
-      projectId: this.props.projectId,
-      today: formatDateHyphen(now),
-    };
+    this.state = this.getInitialState();
 
     this.setModalContentRef = this.setModalContentRef.bind(this);
     this.onCloseClicked = this.onCloseClicked.bind(this);
@@ -35,23 +22,42 @@ export default class TaskDetail extends React.Component {
     this.onChangeDueDate = this.onChangeDueDate.bind(this);
   }
 
-  componentWillReceiveProps(newProps){
-    DebugLog('componentWillReceiveProps', newProps);
+  getInitialState(){
+    let now = Date.now();
+    return {
+      title: '',
+      description: '',
+      size: 'S',
+      sprint: null,
+      project: this.props.projectId,
+      dueDate: now,
+      comments: null,
+      createdOn: null,
+      createdBy: this.props.userId,
+      today: formatDateHyphen(now),
+    };
+  }
 
-    if (newProps.isPanel){ //update task
-      //prepopulate
-      const task = newProps.task.title;
+  componentWillReceiveProps(newProps){
+    if (newProps.isPanel && newProps.task){ //prepopulate fields for update task
+      const task = newProps.task;
       this.setState({
         title: task.title,
         description: task.description,
         size: task.size,
-        sprintId: task.sprintId,
+        sprint: task.sprint,
+        project: task.project,
         dueDate: task.dueDate,
         comments: task.comments,
         createdOn: task.createdOn,
         createdBy: task.createdBy,
-        projectId: task.projectId,
-      })
+      });
+    }
+
+    DebugLog('componentWillReceiveProps this.props', this.props);
+
+    if (newProps.isModal && newProps.isResetForm){ //only modal should be able to reset form
+      this.setState(this.getInitialState());
     }
   }
 
@@ -64,8 +70,8 @@ export default class TaskDetail extends React.Component {
       this.state.title,
       this.state.description,
       this.state.size,
-      this.state.sprintId,
-      this.state.projectId,
+      this.state.sprint,
+      this.state.project,
       this.state.dueDate,
       this.state.comments,
       Date.now(),
@@ -81,6 +87,7 @@ export default class TaskDetail extends React.Component {
   }
 
   onChangeTitle(e){
+    DebugLog('changeTitle', this.state);
     this.setState({title: e.target.value});
   }
 
@@ -93,14 +100,7 @@ export default class TaskDetail extends React.Component {
   }
 
   onChangeSprint(e){
-    const projectId = this.state.destination.projectId;
-    this.setState({
-      sprintId: e.target.value,
-      destination: {
-        sprintId: e.target.value,
-        projectId,
-      }
-    });
+    this.setState({sprint: e.target.value});
   }
 
   onChangeDueDate(e){
@@ -124,7 +124,9 @@ export default class TaskDetail extends React.Component {
 
   render(){
 
-    const body =
+    DebugLog('rerender', this.state);
+
+    let body =
       <section>
         <header className="TaskModalHeader">
           <i onClick={this.onCloseClicked} className="fa fa-times" aria-hidden="true"></i>
@@ -135,16 +137,16 @@ export default class TaskDetail extends React.Component {
           <fieldset>
             <label htmlFor="titleField">Title</label>
             <input type="text" placeholder="Give your task a name (e.g. organize workroom, finalize blueprints)" id="titleField"
-              value={this.state.title} onChange={this.onChangeTitle} required/>
+              value={this.state.title || ''} onChange={this.onChangeTitle} required/>
 
             <label htmlFor="descriptionField">Description</label>
             <textarea placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"
-              value={this.state.description} onChange={this.onChangeDescription}></textarea>
+              value={this.state.description || ''} onChange={this.onChangeDescription}></textarea>
 
             <div className="TaskDetailSizeFlexWrapper">
               <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
                 <label htmlFor="sizeField">Task size</label>
-                <select onChange={this.onChangeSize} defaultValue="S" id="sizeField">
+                <select onChange={this.onChangeSize} defaultValue="S" value={this.state.size} id="sizeField">
                   <option value="S">Small</option>
                   <option value="M">Medium</option>
                   <option value="L">Large</option>
@@ -153,7 +155,7 @@ export default class TaskDetail extends React.Component {
 
               <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Right">
                 <label htmlFor="sprintField">Sprint</label>
-                <select onChange={this.onChangeSprint} defaultValue={null} id="sprintField">
+                <select onChange={this.onChangeSprint} defaultValue={null} value={this.state.sprint} id="sprintField">
                   <option value={null}>Backlog</option>
                   <option value={this.props.currentSprintId}>Current sprint</option>
                   <option value={this.props.nextSprintId}>Next sprint</option>

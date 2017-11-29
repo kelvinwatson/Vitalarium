@@ -38,7 +38,7 @@ export default class TaskPanel extends React.Component {
   render(){
     DebugLog('isOpenPanel', this.props.isOpen);
     return (
-      <div className={`TaskPanel ${this.props.isOpen ? 'TaskPanel--Open' : ''}`}>
+      <div className={`TaskPanel ${this.props.isOpen ? 'TaskPanel--Open' : 'TaskPanel--Close'}`}>
         <TaskDetail
           isModal={false}
           isPanel={true}

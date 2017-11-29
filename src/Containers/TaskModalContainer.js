@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
     projectId: state.project.project.id,
     isOpen: state.task.isOpenCreateTaskModal,
     isShowCloseWarning: state.task.isShowCreateCloseWarningModal,
+    isCreateSuccess: state.task.isCreateSuccess,
     isCreateFailure: state.task.isCreateFailure,
   }
 }

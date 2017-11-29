@@ -17,13 +17,14 @@ export default class TaskModal extends React.Component {
   /*
    * Preconditions: Assumes inputs not empty since "required" is true in all input attributes
    */
-  onFormSubmit(title, description, size, sprintId, projectId, dueDate, comments, createdOn, createdBy, destination){
+  onFormSubmit(title, description, size, sprint, project, dueDate, comments, createdOn, createdBy){
+    DebugLog('onFormSubmit', project);
     this.props.createTask(
       title,
       description,
       size,
-      sprintId,
-      projectId,
+      sprint,
+      project,
       dueDate,
       comments,
       createdOn,
@@ -46,6 +47,7 @@ export default class TaskModal extends React.Component {
             projectId={this.props.projectId}
             close={this.props.close}
             onFormSubmit={this.onFormSubmit}
+            isResetForm={this.props.isCreateSuccess}
             isCreateFailure={this.props.isCreateFailure}
             currentSprintId={this.props.currentSprintId}
             nextSprintId={this.props.nextSprintId}
