@@ -20,12 +20,6 @@ export default class TaskDetail extends React.Component {
       comments: null,
       createdOn: null,
       createdBy: this.props.userId,
-
-      destination: {
-        sprintId: null,
-        projectId: this.props.projectId,
-      },
-
       projectId: this.props.projectId,
       today: formatDateHyphen(now),
     };
@@ -56,14 +50,7 @@ export default class TaskDetail extends React.Component {
         comments: task.comments,
         createdOn: task.createdOn,
         createdBy: task.createdBy,
-
-        destination: {
-          sprintId: task.sprintId,
-          projectId: newProps.projectId,
-        },
-
-        projectId: this.props.projectId,
-        today: formatDateHyphen(now),
+        projectId: task.projectId,
       })
     }
   }
@@ -78,11 +65,11 @@ export default class TaskDetail extends React.Component {
       this.state.description,
       this.state.size,
       this.state.sprintId,
+      this.state.projectId,
       this.state.dueDate,
       this.state.comments,
       Date.now(),
       this.state.createdBy,
-      this.state.destination,
     );
   }
 

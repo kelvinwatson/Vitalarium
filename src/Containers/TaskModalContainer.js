@@ -19,9 +19,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, own) => {
   return {
-    createTask: (title, description, size, sprint, dueDate, comments, createdOn, createdBy, destination)=>{
-      const task = new Task(null, title, description, size, sprint, dueDate, comments, createdOn, createdBy)
-      dispatch(createTask(task, destination));
+    createTask: (title, description, size, sprint, project, dueDate, comments, createdOn, createdBy)=>{
+      const task = new Task(null, title, description, size, sprint, project, dueDate, comments, createdOn, createdBy)
+      dispatch(createTask(task));
     },
     close: ()=>{
       dispatch(createTaskCloseModal());

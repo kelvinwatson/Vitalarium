@@ -174,36 +174,84 @@ export function task(state = {
         isCreateSuccess: false,
         isCreateFailure: true,
         isShowCreateCloseWarningModal: false,
+
+        isOpenUpdateTaskPanel: false,
+        isUpdating: false,
+        isUpdateSuccess: false,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
+
         task: action.task,
       });
     case TASK.CREATE.MODAL.OPEN:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
+        isCreating: false,
         isCreateSuccess: false,
+        isCreateFailure: false,
+        isShowCreateCloseWarningModal: false,
+
+        isOpenUpdateTaskPanel: false,
+        isUpdating: false,
+        isUpdateSuccess: false,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
       });
     case TASK.CREATE.MODAL.CLOSE.SUCCESS:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: false,
+        isCreating: false,
         isCreateSuccess: false,
+        isCreateFailure: false,
+        isShowCreateCloseWarningModal: false,
+
+        isOpenUpdateTaskPanel: false,
+        isUpdating: false,
+        isUpdateSuccess: false,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
       });
     case TASK.CREATE.MODAL.CLOSE.WARNING:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
-        isShowCreateCloseWarningModal: true,
+        isCreating: false,
         isCreateSuccess: false,
+        isCreateFailure: false,
+        isShowCreateCloseWarningModal: true,
+
+        isOpenUpdateTaskPanel: false,
+        isUpdating: false,
+        isUpdateSuccess: false,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
       });
     case TASK.CREATE.MODAL.CLOSE.CANCEL:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
-        isShowCreateCloseWarningModal: false,
+        isCreating: false,
         isCreateSuccess: false,
+        isCreateFailure: true,
+        isShowCreateCloseWarningModal: false,
+
+        isOpenUpdateTaskPanel: false,
+        isUpdating: false,
+        isUpdateSuccess: false,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
       });
     case TASK.CREATE.MODAL.CLOSE.DELETE:
       return Object.assign({}, state, {
         isOpenCreateTaskModal: false,
+        isCreating: false,
+        isCreateSuccess: false,
         isCreateFailure: true,
         isShowCreateCloseWarningModal: false,
-        isCreateSuccess: false,
+
+        isOpenUpdateTaskPanel: false,
+        isUpdating: false,
+        isUpdateSuccess: false,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
       });
     //UPDATE
     case TASK.UPDATE.PANEL.OPEN:

@@ -153,11 +153,21 @@ describe('Reducer: logout (initial state)', () => {
 describe('Reducer: task (initial state)', () => {
   it('should return the initial state', () => {
     expect(Reducer.task(undefined, Actions.TASK.CREATE)).toEqual({
+      //create task
       isOpenCreateTaskModal: false,
-      isSaving: false,
+      isCreating: false,
       isCreateSuccess: false,
       isCreateFailure: false,
       isShowCreateCloseWarningModal: false,
+
+      //update task
+      isOpenUpdateTaskPanel: false,
+      isUpdating: false,
+      isUpdateSuccess: false,
+      isUpdateFailure: false,
+      isShowUpdateCloseWarningModal: false,
+
+      task: undefined
     });
   });
 
@@ -167,23 +177,36 @@ describe('Reducer: task (initial state)', () => {
     };
     expect(Reducer.task(undefined, action)).toEqual({
       isOpenCreateTaskModal: true,
-      isSaving: false,
+      isCreating: false,
       isCreateSuccess: false,
       isCreateFailure: false,
       isShowCreateCloseWarningModal: false,
+
+      isOpenUpdateTaskPanel: false,
+      isUpdating: false,
+      isUpdateSuccess: false,
+      isUpdateFailure: false,
+      isShowUpdateCloseWarningModal: false,
+
     });
   });
 
   it('should return the close modal state', () => {
     const action = {
-      type: Actions.TASK.CREATE.MODAL.CLOSE,
+      type: Actions.TASK.CREATE.MODAL.CLOSE.SUCCESS,
     };
     expect(Reducer.task(undefined, action)).toEqual({
       isOpenCreateTaskModal: false,
-      isSaving: false,
+      isCreating: false,
       isCreateSuccess: false,
       isCreateFailure: false,
       isShowCreateCloseWarningModal: false,
+
+      isOpenUpdateTaskPanel: false,
+      isUpdating: false,
+      isUpdateSuccess: false,
+      isUpdateFailure: false,
+      isShowUpdateCloseWarningModal: false,
     });
   });
 
@@ -193,10 +216,16 @@ describe('Reducer: task (initial state)', () => {
     };
     expect(Reducer.task(undefined, action)).toEqual({
       isOpenCreateTaskModal: true,
-      isSaving: false,
+      isCreating: false,
       isCreateSuccess: false,
       isCreateFailure: false,
       isShowCreateCloseWarningModal: true,
+
+      isOpenUpdateTaskPanel: false,
+      isUpdating: false,
+      isUpdateSuccess: false,
+      isUpdateFailure: false,
+      isShowUpdateCloseWarningModal: false,
     });
   });
 
@@ -206,23 +235,35 @@ describe('Reducer: task (initial state)', () => {
     };
     expect(Reducer.task(undefined, action)).toEqual({
       isOpenCreateTaskModal: true,
-      isSaving: false,
+      isCreating: false,
       isCreateSuccess: false,
-      isCreateFailure: false,
+      isCreateFailure: true,
       isShowCreateCloseWarningModal: false,
+
+      isOpenUpdateTaskPanel: false,
+      isUpdating: false,
+      isUpdateSuccess: false,
+      isUpdateFailure: false,
+      isShowUpdateCloseWarningModal: false,
     });
   });
 
-  it('should return the close warning modal state', () => {
+  it('should return the close warning modal state and delete task', () => {
     const action = {
       type: Actions.TASK.CREATE.MODAL.CLOSE.DELETE,
     };
     expect(Reducer.task(undefined, action)).toEqual({
       isOpenCreateTaskModal: false,
-      isSaving: false,
+      isCreating: false,
       isCreateSuccess: false,
       isCreateFailure: true,
       isShowCreateCloseWarningModal: false,
+
+      isOpenUpdateTaskPanel: false,
+      isUpdating: false,
+      isUpdateSuccess: false,
+      isUpdateFailure: false,
+      isShowUpdateCloseWarningModal: false,
     });
   });
 });
