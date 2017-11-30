@@ -14,9 +14,9 @@ export default class TaskPanel extends React.Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
-  componentWillReceiveProps(nProps){
-    DebugLog('componentWillReceiveProps task', nProps.task);
-  }
+  // componentWillReceiveProps(nProps){
+  //   DebugLog('componentWillReceiveProps task', nProps.task);
+  // }
 
   /*
    * Preconditions: Assumes inputs not empty since "required" is true in all input attributes

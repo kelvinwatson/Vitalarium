@@ -17,26 +17,18 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onDropTask: (task, dropResult)=>{
-      preprocessTaskForDragDrop(task, dropResult);
-
-      DebugLog('dispatch updateTask here!!!');
+      const prevSprintId = task.sprint;
+      switch(dropResult.target){
+        case 'backlog':
+          task.sprint = 'backlog';
+          break;
+        default:
+          task.sprint = dropResult.sprint.id;
+      }
+      dispatch(updateTask(task, prevSprintId));
     }
   }
 }
-
-const preprocessTaskForDragDrop = (task, dropResult) => {
-  switch(dropResult.target){
-    case 'backlog':
-      break;
-    case 'sprint':
-      const previousSprint = task.sprint; //set source sprint
-      task.sprint = dropResult.sprint.id; //set destination sprint
-      return {
-
-      }
-      break;
-  }
-};
 
 const TaskContainer = connect(
   mapStateToProps,

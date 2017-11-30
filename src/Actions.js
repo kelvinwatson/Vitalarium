@@ -242,9 +242,9 @@ export function getProjectFromDb(projectId, dispatch, isPostTaskManipulation) {
       let backlog = projectResults[1] || [];
       project.sprints = sprints;
       project.backlog = backlog;
-      DebugLog('project BEFORE',project);
+      // DebugLog('project BEFORE',project);
       project = preprocessProjectDates(project);
-      DebugLog('project AFTER',project);
+      // DebugLog('project AFTER',project);
       dispatch(getProjectSuccess(project));
     });
   }).catch((err) => {
@@ -631,7 +631,7 @@ export function createTaskFailure(task, err) {
 export function updateTask(task, prevSprintId) {
 
   task = preprocessTaskDueDate(task);
-  DebugLog(' updateTask task',task);
+  // DebugLog(' updateTask task',task);
 
   //FIXME:
   return function(dispatch) {
@@ -727,10 +727,23 @@ export function updateTask(task, prevSprintId) {
               } else {
                 DebugLog('SPRINT-->BACKLOG');
                 task.sprint = null;
-                db.ref('tasks/'+task.id).set(task).then(()=>{
-                  dispatch(updateTaskSuccess(task));
-                  dispatch(updateTaskClosePanel());
-                  dispatch(getProject(task.project, true));
+                db.ref('projects/'+task.project).once('value').then((projectSnap)=>{
+                  let project = projectSnap.val();
+                  if (project){
+                    project.backlog = Array.isArray(project.backlog) ? project.backlog : [];
+                    project.backlog.push(task.id); //add the task to the backlog
+                    db.ref('projects/' + task.project).set(project).then(()=>{
+                      db.ref('tasks/'+task.id).set(task).then(()=>{
+                        dispatch(updateTaskSuccess(task));
+                        dispatch(updateTaskClosePanel());
+                        dispatch(getProject(task.project, true));
+                      }).catch((err)=>{
+                        dispatch(updateTaskFailure(task, err));
+                      });
+                    }).catch((err)=>{
+                      dispatch(updateTaskFailure(task, err));
+                    });
+                  }
                 }).catch((err)=>{
                   dispatch(updateTaskFailure(task, err));
                 });

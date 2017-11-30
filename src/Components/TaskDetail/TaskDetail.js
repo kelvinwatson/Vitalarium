@@ -31,7 +31,7 @@ export default class TaskDetail extends React.Component {
       prevSprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
       sprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
       project: this.props.task && this.props.task.project || this.props.projectId,
-      dueDate: this.props.task && this.props.task.dueDate && convertDateMillsecondsToHyphenated(this.props.task.dueDate) || now,
+      dueDate: this.props.task && this.props.task.dueDate && convertDateMillsecondsToHyphenated(this.props.task.dueDate) || convertDateMillsecondsToHyphenated(now),
       comments: this.props.task && this.props.task.comments || null,
       createdOn: this.props.task && this.props.task.createdOn || now,
       createdBy: this.props.task && this.props.task.createdOn || this.props.userId || null,
@@ -59,7 +59,7 @@ export default class TaskDetail extends React.Component {
         createdOn: task.createdOn || null,
         createdBy: task.createdBy,
         updatedOn: task.updatedOn || null,
-        updatedBy: task.updatedBy || null,
+        updatedBy: task.updatedBy || this.props.userId || null,
       });
     }
     if (newProps.isModal && newProps.isResetForm){ //only the create task modal should be able to reset form
@@ -72,7 +72,7 @@ export default class TaskDetail extends React.Component {
    */
   onFormSubmit(e){
     e.preventDefault();
-    DebugLog('onFormSubmit', this.state);
+    // DebugLog('onFormSubmit', this.state);
     this.props.onFormSubmit(
       this.state.id,
       this.state.title,
@@ -122,7 +122,7 @@ export default class TaskDetail extends React.Component {
   }
 
   onChangeDueDate(e){
-    DebugLog('e.target.value',e.target.value);
+    // DebugLog('e.target.value',e.target.value);
     this.setState({dueDate: e.target.value});
   }
 
@@ -150,7 +150,7 @@ export default class TaskDetail extends React.Component {
       isModal,
     } = this.props;
 
-    DebugLog('this.state.dueDate', this.state.dueDate);
+    // DebugLog('this.state.dueDate', this.state.dueDate);
 
     let body =
       <section>
