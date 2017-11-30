@@ -1,15 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { DraggableTypes } from '../../Models/DraggableTypes';
+import { DropTarget } from 'react-dnd';
 import Task from '../Task/Task';
 import DebugLog from '../../Utils/DebugLog';
 import './Sprints.css'
 
-export default class Sprints extends React.Component {
+const sprintTarget = {
+  drop(props,monitor){
+    DebugLog('drop',props);
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  };
+}
+
+class Sprints extends React.Component {
   render(){
     const {
       currSprint,
       nextSprint,
       onClickSprintTask,
+      connectDropTarget,
+      isOver,
     } = this.props;
 
     DebugLog('currSprint',currSprint);
@@ -30,7 +47,7 @@ export default class Sprints extends React.Component {
       renNextSprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>;
     }
 
-    return (
+    return connectDropTarget(
       <div className="mh4-ns Sprints">
         <header className="fn">
           <h1 className="f2 lh-title fw9 mb3 mt0 pt3 bw2">
@@ -81,7 +98,21 @@ export default class Sprints extends React.Component {
 
           </p>
         </div>*/}
+        {isOver &&
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: '100%',
+            zIndex: 1,
+            opacity: 0.5,
+            backgroundColor: 'red',
+          }} />
+        }
       </div>
     )
   }
 }
+
+export default DropTarget(DraggableTypes.TASK, sprintTarget, collect)(Sprints);

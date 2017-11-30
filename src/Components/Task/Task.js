@@ -1,12 +1,52 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { DragSource } from 'react-dnd';
+import { DraggableTypes } from '../../Models/DraggableTypes';
 import DebugLog from '../../Utils/DebugLog';
 import { convertTimeStampToDate }  from '../../Utils/DateUtils';
 import { switchTheme } from '../../Utils/Themes';
 import './Task.css'
 
-export default class Task extends React.Component {
+const taskSource = {
+  beginDrag(props){
+    DebugLog('beginDrag', props);
+    return {
+      taskId: props.id,
+    };
+  },
+  endDrag(props, monitor, component) {
+    DebugLog('endDrag props', props);
+    DebugLog('endDrag monitor', monitor);
+    DebugLog('endDrag component', component);
+
+    if (!monitor.didDrop()) {
+      return;
+    }
+
+    // When dropped on a compatible target, do something
+    const item = monitor.getItem();
+    const dropResult = monitor.getDropResult();
+    // CardActions.moveCardToList(item.id, dropResult.listId);
+  }
+};
+
+/**
+ * Specifies which props to inject into the Task component.
+ */
+function collect(connect, monitor) {
+  return {
+    // Call this function inside render()
+    // to let React DnD handle the drag events:
+    connectDragSource: connect.dragSource(),
+    // You can ask the monitor about the current drag state:
+    isDragging: monitor.isDragging()
+  };
+}
+
+class Task extends React.Component {
   render(){
+    const { connectDragSource, isDragging } = this.props;
+
     let task = this.props.task;
     let isLast = this.props.isLast;
     let isHighlight = this.props.isHighlight;
@@ -37,10 +77,17 @@ export default class Task extends React.Component {
           </div>
         </li>
     }
-    return (
-      <div>
+    return connectDragSource(
+      <div style={{
+        opacity: isDragging ? 0.5 : 1,
+        backgroundColor: isDragging? 'yellow':'',
+        // fontSize: 25,
+        // fontWeight: 'bold',
+        cursor: 'move'
+      }}>
         {ren}
       </div>
     )
   }
 }
+export default DragSource(DraggableTypes.TASK, taskSource, collect)(Task);

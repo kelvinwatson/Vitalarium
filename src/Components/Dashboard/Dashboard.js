@@ -1,5 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+//touch backend import { default as TouchBackend } from 'react-dnd-touch-backend';
+//https://github.com/yahoo/react-dnd-touch-backend
+
 import DebugLog from '../../Utils/DebugLog';
 import { switchTheme } from '../../Utils/Themes';
 import Loading from '../Loading/Loading';
@@ -10,7 +16,7 @@ import TaskPanelContainer from '../../Containers/TaskPanelContainer';
 import TutorialOverlayContainer from '../../Containers/TutorialOverlayContainer';
 import './Dashboard.css'
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
   componentWillReceiveProps(newProps){
     if (newProps.isLoginFailure){
       this.props.history.push('/');
@@ -59,3 +65,5 @@ export default class Dashboard extends React.Component {
     )
   }
 }
+
+export default DragDropContext(HTML5Backend)(Dashboard);
