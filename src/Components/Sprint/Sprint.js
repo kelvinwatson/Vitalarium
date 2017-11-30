@@ -26,10 +26,6 @@ function collect(connect, monitor) {
 }
 
 class Sprint extends React.Component {
-  // componentWillReceiveProps(newProps){
-  //   DebugLog('newProps.isOver', newProps.isOver);
-  // }
-
   render(){
     const {
       canDrop,
