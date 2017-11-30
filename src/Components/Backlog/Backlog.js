@@ -79,12 +79,13 @@ class Backlog extends React.Component {
         <h2 className="f3 mid-gray lh-title">Tasks not yet assigned to a sprint</h2>
         <time className="f6 ttu tracked gray">Drag & drop to add task to sprint</time>
 
-        <ul className={`list pl0 mt3 measure ${isOver ? 'bg-green' : '' }`}>
+        <ul className={`list pl0 mt3 measure ${isOver ? 'bg-green Backlog__CursorMove' : '' }`}>
           {ren}
         </ul>
 
         {isOver &&
           <div style={{
+            cursor: 'move',
             position: 'absolute',
             top: 0,
             left: 0,

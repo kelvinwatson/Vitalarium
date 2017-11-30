@@ -67,6 +67,6 @@ class Dashboard extends React.Component {
   }
 }
 export default DragDropContext(TouchBackend({
-  enableMouseEvents: true,
+  enableTouchEvents: true,
   enableMouseEvents: true}))(Dashboard);
 // export default DragDropContext(HTML5Backend)(Dashboard);

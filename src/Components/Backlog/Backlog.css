@@ -8,6 +8,9 @@
   height: 3rem;
   width: 3rem;
 }
+.Backlog__CursorMove{
+  cursor: move;
+}
 @media(max-width: 767px) {
   /* phones */
 }

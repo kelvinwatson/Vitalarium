@@ -56,7 +56,7 @@ class Sprint extends React.Component {
           <p className="f6 ttu tracked gray">{caption}</p>
 
           <div className="Sprint mt3">
-            <ul className={`list pl0 mt0 measure ${isOver ? 'bg-green' : '' }`}>
+            <ul className={`list pl0 mt0 measure ${isOver ? 'bg-green Sprint__CursorMove' : '' }`}>
               {sprintTasks}
             </ul>
           </div>
@@ -64,6 +64,7 @@ class Sprint extends React.Component {
 
         {isOver &&
           <div style={{
+            cursor: 'move',
             position: 'absolute',
             top: 0,
             left: 0,

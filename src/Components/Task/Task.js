@@ -87,10 +87,8 @@ class Task extends React.Component {
     return connectDragSource(
       <div style={{
         opacity: isDragging ? 0.5 : 1,
-        backgroundColor: isDragging? 'yellow':'',
-        // fontSize: 25,
-        // fontWeight: 'bold',
-        cursor: 'move'
+        backgroundColor: isDragging? 'yellow' : '',
+        cursor: 'move',
       }}>
         {ren}
       </div>

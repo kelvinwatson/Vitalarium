@@ -5,7 +5,9 @@
 .SprintTasksWrapper{
 
 }
-
+.Sprint__CursorMove{
+  cursor:move;
+}
 .Sprint__Time{
   color: black;
   font-weight: 500;
