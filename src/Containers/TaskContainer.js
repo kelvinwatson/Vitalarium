@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import DebugLog from '../Utils/DebugLog';
 import Task from '../Components/Task/Task';
-// import { scrollDown, scrollUp } from '../Actions';
+import { updateTask } from '../Actions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -10,17 +10,28 @@ const mapStateToProps = (state, ownProps) => {
     isLast: ownProps.isLast,
     isHighlight: ownProps.isHighlight,
     onClick: ownProps.onClick,
-
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onDropTask: (task, dropResult)=>{
+      preprocessTaskForDragDrop(task, dropResult);
+      
       DebugLog('dispatch updateTask here!!!');
     }
   }
 }
+
+const preprocessTaskForDragDrop = (task, dropResult) => {
+  switch(dropResult.target){
+    case 'backlog':
+      break;
+    case 'sprint':
+      break;
+  }
+  DebugLog('preprocessTaskForDragDrop');
+};
 
 const TaskContainer = connect(
   mapStateToProps,

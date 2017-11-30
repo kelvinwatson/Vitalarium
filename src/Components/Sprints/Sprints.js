@@ -21,11 +21,11 @@ export default class Sprints extends React.Component {
           </h1>
         </header>
 
-        <Sprint sprint={currSprint}
+        <Sprint sprint={currSprint} onClickSprintTask={onClickSprintTask}
           title={'Current Sprint'} caption={'-- YOUR TASKS FOR THIS SPRINT --'}
           hoverColor={'green'}/>
 
-        <Sprint sprint={nextSprint}
+        <Sprint sprint={nextSprint} onClickSprintTask={onClickSprintTask}
           title={'Next Sprint'} caption={'-- LOOKING AHEAD --'}
           hoverColor={'blue'}/>
       </div>
