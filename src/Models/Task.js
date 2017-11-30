@@ -10,6 +10,8 @@ export default class Task {
 		this.comments = comments;
 		this.createdOn = createdOn;
 		this.createdBy = createdBy;
+		this.updatedOn = createdOn; //initialize with creation date
+		this.updatedBy = createdBy; //initialize with creator
 		this.createdByCreatedOnIndex = this.createdBy + '_' + this.createdOn;
 	}
 }

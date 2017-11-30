@@ -32,10 +32,13 @@ export default class TaskDetail extends React.Component {
       sprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
       project: this.props.task && this.props.task.project || this.props.projectId,
       dueDate: this.props.task && this.props.task.dueDate && convertDateMillsecondsToHyphenated(this.props.task.dueDate) || now,
-      comments: null,
-      createdOn: null,
-      createdBy: this.props.userId,
+      comments: this.props.task && this.props.task.comments || null,
+      createdOn: this.props.task && this.props.task.createdOn || now,
+      createdBy: this.props.task && this.props.task.createdOn || this.props.userId || null,
       today: convertDateMillsecondsToHyphenated(now),
+
+      updatedOn: this.props.task && this.props.task.updatedOn || null,
+      updatedBy: this.props.task && this.props.task.updatedBy || this.props.userId || null,
     };
   }
 
@@ -53,8 +56,10 @@ export default class TaskDetail extends React.Component {
         project: task.project,
         dueDate: convertDateMillsecondsToHyphenated(task.dueDate),
         comments: task.comments || null,
-        createdOn: task.createdOn,
+        createdOn: task.createdOn || null,
         createdBy: task.createdBy,
+        updatedOn: task.updatedOn || null,
+        updatedBy: task.updatedBy || null,
       });
     }
     if (newProps.isModal && newProps.isResetForm){ //only the create task modal should be able to reset form
@@ -67,7 +72,7 @@ export default class TaskDetail extends React.Component {
    */
   onFormSubmit(e){
     e.preventDefault();
-    DebugLog('onFormSubmit', this.state.dueDate);
+    DebugLog('onFormSubmit', this.state);
     this.props.onFormSubmit(
       this.state.id,
       this.state.title,
@@ -77,9 +82,12 @@ export default class TaskDetail extends React.Component {
       this.state.project,
       this.state.dueDate,
       this.state.comments,
-      Date.now(), //FIXME: should be date modified
+      this.state.createdOn,
       this.state.createdBy,
-      this.state.prevSprint,
+
+      this.state.prevSprint, // for updates (TaskPanel)
+      Date.now(), // updatedOn (TaskPanel)
+      this.state.updatedBy || this.props.task.updatedBy || this.props.userId, // for updates (TaskPanel)
     );
   }
 
