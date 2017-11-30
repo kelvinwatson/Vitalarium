@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { DraggableTypes } from '../../Models/DraggableTypes';
 import { DropTarget } from 'react-dnd';
 import Task from '../Task/Task';
@@ -8,9 +7,8 @@ import './Sprint.css'
 
 const sprintTarget = {
   drop(props, monitor){
-    DebugLog('drop props',props);
-    DebugLog('drop monitor',monitor);
     return {
+      status: 'Moving task to sprint',
       sprint: props.sprint,
     }
   }
