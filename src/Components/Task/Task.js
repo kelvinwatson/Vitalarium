@@ -10,11 +10,14 @@ import './Task.css'
 const taskSource = {
   beginDrag(props){
     DebugLog('beginDrag', props);
+    //emit action that updates
     return {
       task: props.task,
     };
   },
   endDrag(props, monitor, component) {
+    //emit drag stop action
+
     if (!monitor.didDrop()) {
       return;
     }
@@ -60,7 +63,8 @@ class Task extends React.Component {
     let ren;
     if (task){
       ren =
-        <li onClick={onClick} className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task`}>
+        <li onClick={onClick}
+          className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task`}>
           <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{task.title}</span>

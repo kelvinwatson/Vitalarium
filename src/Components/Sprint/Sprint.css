@@ -1,19 +1,22 @@
-.Sprint{
+.Sprint {}
 
+.SprintTasksWrapper {}
+
+.Sprint__CursorMove {
+  cursor: move;
 }
 
-.SprintTasksWrapper{
-
-}
-.Sprint__CursorMove{
-  cursor:move;
-}
-.Sprint__Time{
+.Sprint__Time {
   color: black;
   font-weight: 500;
   text-transform: uppercase;
   /*font-family: monospace;*/
   /*font-size: 1rem;*/
+}
+
+.Sprint__DashedBorder {
+  border: 0.3rem dashed gray;
+  border-radius: 0.5rem;
 }
 
 @media(max-width: 767px) {

@@ -3,6 +3,7 @@ import { DraggableTypes } from '../../Models/DraggableTypes';
 import { DropTarget } from 'react-dnd';
 import TaskContainer from '../../Containers/TaskContainer';
 import DebugLog from '../../Utils/DebugLog';
+import '../../global.css';
 import './Sprint.css'
 
 const sprintTarget = {
@@ -12,27 +13,33 @@ const sprintTarget = {
       target: 'sprint',
       sprint: props.sprint,
     }
-  }
+  },
 };
 
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    // canDrop: monitor.canDrop(),
+    canDrop: monitor.canDrop(),
   };
 }
 
 class Sprint extends React.Component {
+  componentWillReceiveProps(newProps){
+    DebugLog('newProps.isOver', newProps.isOver);
+  }
+
   render(){
     const {
-      caption,
+      canDrop,
       hoverColor,
-      sprint,
-      title,
       onClickSprintTask,
       connectDropTarget,
       isOver,
+
+      caption,
+      sprint,
+      title,
     } = this.props;
 
     let sprintTasks;
@@ -55,26 +62,14 @@ class Sprint extends React.Component {
           <time className="Sprint__Time">{sprint.startDate} to {sprint.endDate}</time>
           <p className="f6 ttu tracked gray">{caption}</p>
 
-          <div className="Sprint mt3">
-            <ul className={`list pl0 mt0 measure ${isOver ? 'bg-green Sprint__CursorMove' : '' }`}>
-              {sprintTasks}
+          <div className="Sprint mb5">
+            <ul className={`list pl0 measure ${isOver ? 'bg-light-green DragDropTarget__CursorMove DragDropTarget__DashedRoundedBorder' : canDrop ? 'DragDropTarget__DashedRoundedBorder':''}`}>
+              <div className={`${isOver?'o-0':''}`}>
+                {sprintTasks}
+              </div>
             </ul>
           </div>
         </div>
-
-        {isOver &&
-          <div style={{
-            cursor: 'move',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            zIndex: 1,
-            opacity: 0.3,
-            backgroundColor: 'gray',
-          }} />
-        }
       </div>
     )
   }

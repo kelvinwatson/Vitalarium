@@ -10,6 +10,7 @@ const mapStateToProps = (state, ownProps) => {
     isLast: ownProps.isLast,
     isHighlight: ownProps.isHighlight,
     onClick: ownProps.onClick,
+    // isOver: ownProps.isOver,
   }
 }
 
@@ -31,7 +32,7 @@ const preprocessTaskForDragDrop = (task, dropResult) => {
       const previousSprint = task.sprint; //set source sprint
       task.sprint = dropResult.sprint.id; //set destination sprint
       return {
-        
+
       }
       break;
   }
