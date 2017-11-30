@@ -1,0 +1,8 @@
+.DragDropTarget__DashedRoundedBorder {
+  border: 0.3rem dashed gray;
+  border-radius: 0.5rem;
+}
+
+.DragDropTarget__CursorMove{
+  cursor: move;
+}

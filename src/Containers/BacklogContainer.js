@@ -17,7 +17,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(createTaskOpenModal());
     },
     onClickBacklogTask: (task) => {
-      DebugLog('onClickBacklogTask task',task);
       dispatch(updateTaskOpenPanel(task));
     },
   }

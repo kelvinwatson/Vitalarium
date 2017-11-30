@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseCreateTaskWarningModalContainer from '../../Containers/CloseCreateTaskWarningModalContainer';
 import DebugLog from '../../Utils/DebugLog';
-import { formatDateHyphen } from '../../Utils/DateUtils';
+import { convertDateMillsecondsToHyphenated } from '../../Utils/DateUtils';
 import 'date-input-polyfill';
 import './TaskDetail.css'
 
@@ -31,11 +31,11 @@ export default class TaskDetail extends React.Component {
       prevSprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
       sprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
       project: this.props.task && this.props.task.project || this.props.projectId,
-      dueDate: now,
+      dueDate: this.props.task && this.props.task.dueDate && convertDateMillsecondsToHyphenated(this.props.task.dueDate) || now,
       comments: null,
       createdOn: null,
       createdBy: this.props.userId,
-      today: formatDateHyphen(now),
+      today: convertDateMillsecondsToHyphenated(now),
     };
   }
 
@@ -51,7 +51,7 @@ export default class TaskDetail extends React.Component {
         prevSprint: task.sprint,
         sprint: task.sprint || null,
         project: task.project,
-        dueDate: task.dueDate,
+        dueDate: convertDateMillsecondsToHyphenated(task.dueDate),
         comments: task.comments || null,
         createdOn: task.createdOn,
         createdBy: task.createdBy,
@@ -67,6 +67,7 @@ export default class TaskDetail extends React.Component {
    */
   onFormSubmit(e){
     e.preventDefault();
+    DebugLog('onFormSubmit', this.state.dueDate);
     this.props.onFormSubmit(
       this.state.id,
       this.state.title,
@@ -76,7 +77,7 @@ export default class TaskDetail extends React.Component {
       this.state.project,
       this.state.dueDate,
       this.state.comments,
-      Date.now(),
+      Date.now(), //FIXME: should be date modified
       this.state.createdBy,
       this.state.prevSprint,
     );
@@ -113,6 +114,7 @@ export default class TaskDetail extends React.Component {
   }
 
   onChangeDueDate(e){
+    DebugLog('e.target.value',e.target.value);
     this.setState({dueDate: e.target.value});
   }
 
@@ -139,6 +141,8 @@ export default class TaskDetail extends React.Component {
       isCreateFailure,
       isModal,
     } = this.props;
+
+    DebugLog('this.state.dueDate', this.state.dueDate);
 
     let body =
       <section>
@@ -180,7 +184,7 @@ export default class TaskDetail extends React.Component {
             <div className="TaskDetailSizeFlexWrapper">
               <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
                 <label htmlFor="dueDateField">Due date</label>
-                <input type="date" onChange={this.onChangeDueDate} defaultValue={this.state.today} min={this.state.today}/>
+                <input type="date" onChange={this.onChangeDueDate} value={this.state.dueDate} min={this.state.today}/>
               </div>
 
             </div>

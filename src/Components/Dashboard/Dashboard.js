@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { DragDropContext } from 'react-dnd';
-// import HTML5Backend from 'react-dnd-html5-backend';
+import HTML5Backend from 'react-dnd-html5-backend';
 // replace above with touch backend
-import { default as TouchBackend } from 'react-dnd-touch-backend';
+// import { default as TouchBackend } from 'react-dnd-touch-backend';
 //https://github.com/yahoo/react-dnd-touch-backend
 
 import DebugLog from '../../Utils/DebugLog';
@@ -66,7 +66,7 @@ class Dashboard extends React.Component {
     )
   }
 }
-export default DragDropContext(TouchBackend({
-  enableTouchEvents: true,
-  enableMouseEvents: true}))(Dashboard);
-// export default DragDropContext(HTML5Backend)(Dashboard);
+// export default DragDropContext(TouchBackend({
+//   enableTouchEvents: true,
+//   enableMouseEvents: true}))(Dashboard);
+export default DragDropContext(HTML5Backend)(Dashboard);

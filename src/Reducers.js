@@ -149,10 +149,8 @@ export function task(state = {
 
   task: undefined
 }, action){
-  DebugLog('task', action);
   switch(action.type){
     case TASK.CREATE.LOADING:
-      DebugLog('what?');
       return Object.assign({}, state, {
         isOpenCreateTaskModal: true,
         isCreating: true,

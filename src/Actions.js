@@ -1,7 +1,7 @@
 import FirebaseUtil from './Utils/InitializeFirebase';
 import DebugLog from './Utils/DebugLog';
 import {
-  convertTimeStampToDate
+  convertDateMillsecondsToHyphenatedMonthName, convertDateHyphenatedToMilliseconds,
 } from './Utils/DateUtils';
 import User from './Models/User';
 import Project from './Models/Project';
@@ -122,7 +122,6 @@ export const PROJECT = {
  */
 export function getProject(projectId, isPostTaskManipulation) {
   return function(dispatch) {
-    DebugLog('getProject projectId', projectId);
     getProjectFromDb(projectId, dispatch, isPostTaskManipulation);
   }
 }
@@ -152,7 +151,7 @@ export function initializeUserObjectsInDb(redirectResult, dispatch) {
     dispatch(loginSuccess(user));
     project.sprints = [firstSprint, secondSprint];
 
-    project = preprocessSprintDates(project);
+    project = preprocessProjectDates(project);
     dispatch(getProjectSuccess(project));
   }).catch((err) => {
     dispatch(userUpdatedFailure(err));
@@ -160,31 +159,31 @@ export function initializeUserObjectsInDb(redirectResult, dispatch) {
 };
 
 export function getSprintsFromDb(sprintIds) {
-  DebugLog('sprintIds', sprintIds);
+  // DebugLog('sprintIds', sprintIds);
   return new Promise((resolve, reject) => {
     const db = FirebaseUtil.getFirebase().database();
     let sprintCalls = [];
     for (let i = 0; i < sprintIds.length; i += 1) {
-      DebugLog('sprintIds[i]',sprintIds[i]);
+      // DebugLog('sprintIds[i]',sprintIds[i]);
       sprintCalls.push(db.ref('sprints/' + sprintIds[i]).once('value'));
     }
     Promise.all(sprintCalls).then((sprintResponses) => {
       let sprints = [];
       for (let i = 0; i < sprintResponses.length; i += 1) {
         let sprint = sprintResponses[i].val();
-        DebugLog('sprint',sprint);
+        // DebugLog('sprint',sprint);
         if (Array.isArray(sprint.tasks)) {
           let taskCalls = [];
           for (let j = 0; j < sprint.tasks.length; j += 1) {
-            DebugLog('sprint.tasks[j]',sprint.tasks[j]);
+            // DebugLog('sprint.tasks[j]',sprint.tasks[j]);
             taskCalls.push(db.ref('tasks/' + sprint.tasks[j]).once('value'));
           }
           Promise.all(taskCalls).then((taskResults) => {
-            DebugLog('taskResults', taskResults);
+            // DebugLog('taskResults', taskResults);
             let tasks = [];
             for (let k = 0; k < taskResults.length; k += 1) {
               let task = taskResults[k].val();
-              DebugLog('task',task);
+              // DebugLog('task',task);
               tasks.push(taskResults[k].val());
             }
             tasks.sort(taskComparatorDesc);
@@ -197,8 +196,8 @@ export function getSprintsFromDb(sprintIds) {
         } else {
           sprint.tasks = [];
           sprints.push(sprint);
-          DebugLog('sprint',sprint);
-          DebugLog('sprints',sprints);
+          // DebugLog('sprint',sprint);
+          // DebugLog('sprints',sprints);
           if (sprints.length === sprintIds.length) {
             resolve(sprints);
           }
@@ -243,7 +242,9 @@ export function getProjectFromDb(projectId, dispatch, isPostTaskManipulation) {
       let backlog = projectResults[1] || [];
       project.sprints = sprints;
       project.backlog = backlog;
-      project = preprocessSprintDates(project);
+      DebugLog('project BEFORE',project);
+      project = preprocessProjectDates(project);
+      DebugLog('project AFTER',project);
       dispatch(getProjectSuccess(project));
     });
   }).catch((err) => {
@@ -263,7 +264,6 @@ export function initializeApp(filter) {
           let dbUser = snap.val();
           dispatch(loginSuccess(dbUser));
           if (dbUser && Array.isArray(dbUser.projects)) {
-            DebugLog('dbUser.projects', dbUser.projects);
             getProjectFromDb(dbUser.projects[0], dispatch); // one project only
           }
         }).catch((err) => {
@@ -510,7 +510,6 @@ export function getTasks(taskList) {
  */
 export function createTask(task) {
   return function(dispatch) {
-    DebugLog('Action createTask', task);
     dispatch(createTaskLoading());
     let db = FirebaseUtil.getFirebase().database();
     const taskRef = db.ref('tasks/').push();
@@ -630,13 +629,14 @@ export function createTaskFailure(task, err) {
  *  3. sprint-->backlog
  */
 export function updateTask(task, prevSprintId) {
+
+  task = preprocessTaskDueDate(task);
+  DebugLog(' updateTask task',task);
+
   //FIXME:
   return function(dispatch) {
-    DebugLog('Action updateTask', task);
-    DebugLog('prevSprintId', prevSprintId);
     dispatch(updateTaskLoading());
     let db = FirebaseUtil.getFirebase().database();
-    const taskRef = db.ref('tasks/' + task.id).set(task);
 
     //TODO: for future: did the user change the project???
 
@@ -842,14 +842,19 @@ export function getProjectFailure(err) {
 /*
  * Misc Utils
  */
-export function preprocessSprintDates(project) {
+export function preprocessProjectDates(project) {
   if (!project.sprints) //no sprints
     return project;
 
   for (let i = 0; i < project.sprints.length; i += 1) {
-    project.sprints[i].startDate = convertTimeStampToDate(project.sprints[i].startDate)
-    project.sprints[i].endDate = convertTimeStampToDate(project.sprints[i].endDate)
+    project.sprints[i].startDate = convertDateMillsecondsToHyphenatedMonthName(project.sprints[i].startDate)
+    project.sprints[i].endDate = convertDateMillsecondsToHyphenatedMonthName(project.sprints[i].endDate)
   }
 
   return project;
+}
+
+export function preprocessTaskDueDate(task){
+  task.dueDate = convertDateHyphenatedToMilliseconds(task.dueDate);
+  return task;
 }

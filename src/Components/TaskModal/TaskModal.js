@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseCreateTaskWarningModalContainer from '../../Containers/CloseCreateTaskWarningModalContainer';
 import DebugLog from '../../Utils/DebugLog';
-import { formatDateHyphen } from '../../Utils/DateUtils';
+import { convertDateMillsecondsToHyphenated } from '../../Utils/DateUtils';
 import TaskDetail from '../TaskDetail/TaskDetail';
 import 'date-input-polyfill';
 import './TaskModal.css'

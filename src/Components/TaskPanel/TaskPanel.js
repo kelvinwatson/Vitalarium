@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseCreateTaskWarningModalContainer from '../../Containers/CloseCreateTaskWarningModalContainer';
 import DebugLog from '../../Utils/DebugLog';
-import { formatDateHyphen } from '../../Utils/DateUtils';
+import { convertDateMillsecondsToHyphenated } from '../../Utils/DateUtils';
 import TaskDetail from '../TaskDetail/TaskDetail';
 import 'date-input-polyfill';
 import './TaskPanel.css'
@@ -12,6 +12,10 @@ export default class TaskPanel extends React.Component {
 
     this.showCloseCreateTaskWarningModal = this.showCloseCreateTaskWarningModal.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nProps){
+    DebugLog('componentWillReceiveProps task', nProps.task);
   }
 
   /*

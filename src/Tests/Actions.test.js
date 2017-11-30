@@ -459,7 +459,7 @@ describe('Actions: PROJECT', () => {
  */
 describe('Misc Action Utils', ()=>{
 
-	it('preprocessSprintDates should return a sprint with dates processed', () => {
+	it('preprocessProjectDates should return a sprint with dates processed', () => {
 		let mockProject = {};
 		mockProject.sprints = [{
 			startDate: 1511810873000,
@@ -468,7 +468,7 @@ describe('Misc Action Utils', ()=>{
 			startDate: 1513020474000,
 			endDate: 1514230073000
 		}]
-		expect(Actions.preprocessSprintDates(mockProject)).toEqual({
+		expect(Actions.preprocessProjectDates(mockProject)).toEqual({
 			sprints: [{
 				startDate: '27-Nov-2017',
 				endDate: '11-Dec-2017',
@@ -477,5 +477,10 @@ describe('Misc Action Utils', ()=>{
 				endDate: '25-Dec-2017',
 			}]
 		});
+	});
+
+	it('preprocessTaskDueDate should return a sprint with dates processed', () => {
+		let mockTask = { dueDate: '2018-01-01' }
+		expect(Actions.preprocessTaskDueDate(mockTask)).toEqual({dueDate: 1514764800000});
 	});
 });
