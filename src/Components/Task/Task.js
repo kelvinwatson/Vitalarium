@@ -15,10 +15,6 @@ const taskSource = {
     };
   },
   endDrag(props, monitor, component) {
-    // DebugLog('endDrag props', props);
-    // DebugLog('endDrag monitor', monitor);
-    // DebugLog('endDrag component', component);
-
     if (!monitor.didDrop()) {
       return;
     }
@@ -31,6 +27,7 @@ const taskSource = {
     // CardActions.moveCardToList(item.id, dropResult.listId);
 
     //TODO: dispatch(updateTask()) with new sprint
+    props.onDropTask(task, dropResult)
   }
 };
 
@@ -49,15 +46,21 @@ function collect(connect, monitor) {
 
 class Task extends React.Component {
   render(){
-    const { connectDragSource, isDragging } = this.props;
+    const {
+      caption,
+      cta,
+      isLast,
+      isHighlight,
+      onClick,
+      task,
+      connectDragSource,
+      isDragging,
+    } = this.props;
 
-    let task = this.props.task;
-    let isLast = this.props.isLast;
-    let isHighlight = this.props.isHighlight;
     let ren;
     if (task){
       ren =
-        <li onClick={this.props.onClick} className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task`}>
+        <li onClick={onClick} className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task`}>
           <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{task.title}</span>
@@ -70,14 +73,14 @@ class Task extends React.Component {
 
     } else { //empty state
       ren =
-        <li onClick={this.props.onClick} className="flex items-center ph0-l b--black-10 dim Task Task--Empty Task__AnimatedBackground--EmptyState bg-washed-green">
+        <li onClick={onClick} className="flex items-center ph0-l b--black-10 dim Task Task--Empty Task__AnimatedBackground--EmptyState bg-washed-green">
           <i className="fa fa-arrows w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
-            <span className="f6 db black-70">{this.props.caption}</span>
+            <span className="f6 db black-70">{caption}</span>
             <span className="f6 db black-70"></span>
           </div>
           <div>
-            <a className="f6 link blue hover-dark-gray">{this.props.cta}</a>
+            <a className="f6 link blue hover-dark-gray">{cta}</a>
           </div>
         </li>
     }

@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
   return {
     taskJustCreated: state.task.task,
     tasks: state.project.project.backlog,
+    project: state.project.project,
   }
 }
 
@@ -18,7 +19,7 @@ const mapDispatchToProps = (dispatch) => {
     onClickBacklogTask: (task) => {
       DebugLog('onClickBacklogTask task',task);
       dispatch(updateTaskOpenPanel(task));
-    }
+    },
   }
 }
 

@@ -1,14 +1,15 @@
 import React from 'react';
 import { DraggableTypes } from '../../Models/DraggableTypes';
 import { DropTarget } from 'react-dnd';
-import Task from '../Task/Task';
+import TaskContainer from '../../Containers/TaskContainer';
 import DebugLog from '../../Utils/DebugLog';
 import './Sprint.css'
 
 const sprintTarget = {
   drop(props, monitor){
     return {
-      status: 'Moving task to sprint',
+      status: 'Dropped task to sprint',
+      target: 'sprint',
       sprint: props.sprint,
     }
   }
@@ -37,11 +38,11 @@ class Sprint extends React.Component {
     let sprintTasks;
     if (sprint.tasks && sprint.tasks.length > 0){
       sprintTasks = sprint.tasks.map((task, index) =>
-        <Task onClick={(e)=>onClickSprintTask(task)} key={task.id} task={task}
+        <TaskContainer onClick={(e)=>onClickSprintTask(task)} key={task.id} task={task}
           isLast={index===(sprint.tasks.length-1)}/>
       );
     } else {
-      sprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>
+      sprintTasks = <TaskContainer task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>
     }
 
 

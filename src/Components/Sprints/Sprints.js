@@ -13,24 +13,6 @@ export default class Sprints extends React.Component {
       onClickSprintTask,
     } = this.props;
 
-    DebugLog('currSprint',currSprint);
-    DebugLog('nextSprint',nextSprint);
-    let renCurrSprintTasks, renNextSprintTasks;
-    if (currSprint.tasks && currSprint.tasks.length > 0){
-      renCurrSprintTasks = currSprint.tasks.map((task, index) => {
-        return <Task onClick={(e)=>onClickSprintTask(task)} key={task.id} task={task} isLast={index===(currSprint.tasks.length-1)}/>
-      });
-    } else {
-      renCurrSprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>
-    }
-    if (nextSprint.tasks && nextSprint.tasks.length > 0){
-      renNextSprintTasks = nextSprint.tasks.map((task, index) => {
-        return <Task onClick={(e)=>onClickSprintTask(task)} key={task.id} task={task} isLast={index===(nextSprint.tasks.length-1)}/>
-      });
-    }else{
-      renNextSprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>;
-    }
-
     return (
       <div className="mh4-ns Sprints">
         <header className="fn">

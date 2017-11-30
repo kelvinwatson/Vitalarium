@@ -1,15 +1,16 @@
 import React from 'react';
 import { DraggableTypes } from '../../Models/DraggableTypes';
 import { DropTarget } from 'react-dnd';
-import Task from '../../Components/Task/Task';
+import TaskContainer from '../../Containers/TaskContainer';
 import DebugLog from '../../Utils/DebugLog';
 import './Backlog.css'
 
 const backlogTarget = {
   drop(props, monitor){
     return {
-      status: 'Moving task to backlog',
-      project: props.sprint,
+      project: props.project,
+      status: 'Dropped task to backlog',
+      target: 'backlog',
     }
   }
 };
@@ -48,10 +49,10 @@ class Backlog extends React.Component {
     let ren;
     if (tasks && tasks.length > 0){
       ren = tasks.map((task, index) =>
-        <Task onClick={(e)=>this.onClickBacklogTask(task)} key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
+        <TaskContainer onClick={(e)=>this.onClickBacklogTask(task)} key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
       )
     } else { //empty
-      ren = <Task onClick={this.onClickAddTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
+      ren = <TaskContainer onClick={this.onClickAddTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
     }
     return connectDropTarget(
       <div className="mh4-ns Tasks">
