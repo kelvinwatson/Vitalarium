@@ -190,6 +190,7 @@ export function getSprintsFromDb(sprintIds) {
             sprint.tasks = tasks;
             sprints.push(sprint);
             if (sprints.length === sprintIds.length) {
+              sprints.sort(sprintComparatorDesc);
               resolve(sprints);
             }
           });
@@ -199,6 +200,7 @@ export function getSprintsFromDb(sprintIds) {
           // DebugLog('sprint',sprint);
           // DebugLog('sprints',sprints);
           if (sprints.length === sprintIds.length) {
+            sprints.sort(sprintComparatorDesc);
             resolve(sprints);
           }
         }
@@ -474,12 +476,12 @@ export function getTasksFailure(err) {
   }
 }
 
-export function taskComparatorDesc(a, b) {
-  if (a.createdOn < b.createdOn)
-    return 1;
-  if (a.createdOn > b.createdOn)
-    return -1;
-  return 0;
+export function taskComparatorDesc(a, b) {  
+  return (a.createdOn < b.createdOn) ? 1 : a.createdOn > b.createdOn ? -1 : 0;
+}
+
+export function sprintComparatorDesc(a, b) {
+  return (a.startDate < b.startDate) ? -1 : (a.startDate > b.startDate) ? 1 : 0;
 }
 
 export function getTasks(taskList) {
@@ -631,7 +633,8 @@ export function createTaskFailure(task, err) {
 export function updateTask(task, prevSprintId) {
 
   task = preprocessTaskDueDate(task);
-  // DebugLog(' updateTask task',task);
+  DebugLog('updateTask task',task);
+  DebugLog('updateTask prevSprintId',prevSprintId);
 
   //FIXME:
   return function(dispatch) {
@@ -641,20 +644,24 @@ export function updateTask(task, prevSprintId) {
     //TODO: for future: did the user change the project???
 
     if (prevSprintId !== task.sprint){
-      DebugLog('sprint has changed');
+      DebugLog('***SPRINT HAS CHANGED');
       if (prevSprintId === null || prevSprintId === 'backlog'){
-        DebugLog('BACKLOG-->SPRINT'); //task was in backlog, and did not live any sprint
+        DebugLog('***BACKLOG-->SPRINT'); //task was in backlog, and did not live any sprint
         //delete from project object
         db.ref('projects/'+task.project).once('value').then((projectSnap)=>{
           let project = projectSnap.val();
           if (project){
+            DebugLog('***PROJECT', project);
             project.backlog = Array.isArray(project.backlog) ? project.backlog : [];
+            DebugLog('***PRE FILTER project.backlog', project.backlog);
             project.backlog = project.backlog.filter(t => t !== task.id); //remove the task
+            DebugLog('***POST FILTER project.backlog', project.backlog);
             db.ref('projects/' + task.project).set(project).then(()=>{
-              // add task to a sprint
+              // add task to destination sprint
               db.ref('sprints/'+task.sprint).once('value').then((newSprintSnap)=>{
                 let destSprint = newSprintSnap.val();
                 if (destSprint){
+                  DebugLog('***destSprint', destSprint);
                   destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
                   if (destSprint.tasks.indexOf(task.id) === -1){ //check existence
                     destSprint.tasks.push(task.id); //add to the sprint
@@ -680,7 +687,6 @@ export function updateTask(task, prevSprintId) {
             dispatch(updateTaskFailure(task, 'Destination project does not exist.'));
           }
         });
-
       } else {
         //NOTE SPRINT-->BACKLOG OR SPRINT-->SPRINT
         //delete task id from previous sprint, then add to new sprint

@@ -50,10 +50,10 @@ class Backlog extends React.Component {
     let ren;
     if (tasks && tasks.length > 0){
       ren = tasks.map((task, index) =>{
-        return <TaskContainer onClick={(e)=>this.onClickBacklogTask(task)} key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
+        return <TaskContainer canDrag={true} onClick={(e)=>this.onClickBacklogTask(task)} key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
       });
     } else { //empty
-      ren = <TaskContainer onClick={this.onClickAddTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
+      ren = <TaskContainer canDrag={false} onClick={this.onClickAddTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
     }
     return connectDropTarget(
       <div className="mh4-ns Tasks">

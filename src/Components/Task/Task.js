@@ -15,6 +15,10 @@ const taskSource = {
     };
   },
 
+  canDrag: function(props, monitor) {
+    return props.canDrag; //disable empty task dragging
+  },
+
   endDrag(props, monitor, component) {
     //emit drag stop action
 

@@ -13,6 +13,9 @@ export default class Sprints extends React.Component {
       onClickSprintTask,
     } = this.props;
 
+    DebugLog('***SPRINTS currSprint',currSprint);
+    DebugLog('***SPRINTS nextSprint',nextSprint);
+
     return (
       <div className="mh4-ns Sprints">
         <header className="fn">
