@@ -132,11 +132,19 @@ export default class TaskDetail extends React.Component {
   }
 
   render(){
+    const {
+      isShowCloseWarning,
+      currentSprintId,
+      nextSprintId,
+      isCreateFailure,
+      isModal,
+    } = this.props;
+
     let body =
       <section>
         <header className="TaskModalHeader">
           <i onClick={this.onCloseClicked} className="fa fa-times" aria-hidden="true"></i>
-          <CloseCreateTaskWarningModalContainer isOpen={this.props.isShowCloseWarning}/>
+          <CloseCreateTaskWarningModalContainer isOpen={isShowCloseWarning}/>
         </header>
 
         <form onSubmit={this.onFormSubmit}>
@@ -163,8 +171,8 @@ export default class TaskDetail extends React.Component {
                 <label htmlFor="sprintField">Sprint</label>
                 <select onChange={this.onChangeSprint} value={this.state.sprint} id="sprintField">
                   <option value={'backlog'}>Backlog</option>
-                  <option value={this.props.currentSprintId}>Current sprint</option>
-                  <option value={this.props.nextSprintId}>Next sprint</option>
+                  <option value={currentSprintId}>Current sprint</option>
+                  <option value={nextSprintId}>Next sprint</option>
                 </select>
               </div>
             </div>
@@ -178,9 +186,9 @@ export default class TaskDetail extends React.Component {
             </div>
 
             <div className="TaskDetailButtons">
-              <div className={`TaskDetail_ErrorMessage ${this.props.isCreateFailure? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
+              <div className={`TaskDetail_ErrorMessage ${isCreateFailure ? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
               <input type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0"
-                value={`${this.props.isModal? 'Create Task' :'Save Changes'}`}/>
+                value={`${isModal? 'Create Task' :'Save Changes'}`}/>
             </div>
           </fieldset>
         </form>

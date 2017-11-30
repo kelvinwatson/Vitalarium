@@ -6,21 +6,25 @@ import './Sprints.css'
 
 export default class Sprints extends React.Component {
   render(){
-    const currSprint = this.props.currSprint;
-    const nextSprint = this.props.nextSprint;
+    const {
+      currSprint,
+      nextSprint,
+      onClickSprintTask,
+    } = this.props;
+
     DebugLog('currSprint',currSprint);
     DebugLog('nextSprint',nextSprint);
     let renCurrSprintTasks, renNextSprintTasks;
     if (currSprint.tasks && currSprint.tasks.length > 0){
       renCurrSprintTasks = currSprint.tasks.map((task, index) => {
-        return <Task key={task.id} task={task} isLast={index===(currSprint.tasks.length-1)}/>
+        return <Task onClick={(e)=>onClickSprintTask(task)} key={task.id} task={task} isLast={index===(currSprint.tasks.length-1)}/>
       });
     } else {
       renCurrSprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>
     }
     if (nextSprint.tasks && nextSprint.tasks.length > 0){
       renNextSprintTasks = nextSprint.tasks.map((task, index) => {
-        return <Task key={task.id} task={task} isLast={index===(nextSprint.tasks.length-1)}/>
+        return <Task onClick={(e)=>onClickSprintTask(task)} key={task.id} task={task} isLast={index===(nextSprint.tasks.length-1)}/>
       });
     }else{
       renNextSprintTasks = <Task task={null} caption={'DRAG AND DROP TASK HERE'} cta={''}/>;

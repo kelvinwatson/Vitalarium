@@ -37,7 +37,7 @@
   background-color: #fefefe;
   margin: 10% auto;
   /*position of modal 10% from top*/
-  padding: 20px;
+  padding: 1.5rem;
   border: 1px solid #888;
   width: 80%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import DebugLog from '../Utils/DebugLog';
 import Sprints from '../Components/Sprints/Sprints';
-// import { scrollDown, scrollUp } from '../Actions';
+import { updateTaskOpenPanel } from '../Actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -12,8 +12,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClickTask: ()=> {
-      DebugLog('task clicked');
+    // onClickTask: ()=> {
+    //   DebugLog('task clicked');
+    // },
+    onClickSprintTask: (task) => {
+      DebugLog('onClickSprintTask task',task);
+      dispatch(updateTaskOpenPanel(task));
     }
   }
 }
