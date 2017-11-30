@@ -27,8 +27,8 @@ export default class Backlog extends React.Component {
       ren = tasks.map((task, index) =>
         <Task onClick={(e)=>this.onClickBacklogTask(task)} key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
       )
-    } else {
-      ren = <Task onClick={this.onClickTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
+    } else { //empty
+      ren = <Task onClick={this.onClickAddTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
     }
     return (
       <div className="mh4-ns Tasks">
