@@ -47,13 +47,23 @@ class Backlog extends React.Component {
       connectDropTarget,
     } = this.props;
 
+    DebugLog('Backlog tasks', tasks);
+
     let ren;
     if (tasks && tasks.length > 0){
-      ren = tasks.map((task, index) =>{
-        return <TaskContainer canDrag={true} onClick={(e)=>this.onClickBacklogTask(task)} key={task.id} task={task} isLast={index==(tasks.length-1)} isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
-      });
+      ren = tasks.map((task, index) =>
+
+          <TaskContainer key={task.id} task={task} canDrag={true}
+            onClick={(e)=>this.onClickBacklogTask(task)}
+            isLast={index==(tasks.length-1)}
+            isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
+      );
     } else { //empty
-      ren = <TaskContainer canDrag={false} onClick={this.onClickAddTask} task={null} caption={'No tasks yet'} cta={'Add a new task'}/>
+      ren =
+        <TaskContainer task={null} canDrag={false}
+          onClick={this.onClickAddTask}
+          caption={'No tasks yet'}
+          cta={'Add a new task'}/>
     }
     return connectDropTarget(
       <div className="mh4-ns Tasks">
@@ -72,8 +82,6 @@ class Backlog extends React.Component {
             <div className="pl3 flex-auto">
               <span className="f6 db black-70">Add a new task</span>
             </div>
-            <div>
-            </div>
           </li>
         </ul>
 
@@ -85,8 +93,6 @@ class Backlog extends React.Component {
             {ren}
           </div>
         </ul>
-
-
       </div>
     )
   }
