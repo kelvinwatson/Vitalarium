@@ -51,7 +51,7 @@ class Sprint extends React.Component {
     } else {
       sprintTasks =
         <TaskContainer task={null} canDrag={false}
-          caption={'DRAG AND DROP TASK HERE'}
+          caption={'Drag and drop task here'}
           cta={''}/>
     }
 

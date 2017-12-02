@@ -61,7 +61,7 @@ class Backlog extends React.Component {
       ren =
         <TaskContainer task={null} canDrag={false}
           onClick={this.onClickAddTask}
-          caption={''} cta={'Add a new task'}/>
+          caption={'Add a new task'} cta={''}/>
     }
     return connectDropTarget(
       <div className="mh4-ns Tasks">
