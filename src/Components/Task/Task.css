@@ -35,6 +35,10 @@
   border: 0.01rem solid lightgray;
 }
 
+.Task__Cta{
+  margin-right: 1rem;
+}
+
 .Task__Status {}
 
 .Task__StatusIconWrapper {
