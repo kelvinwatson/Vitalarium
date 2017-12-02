@@ -69,8 +69,8 @@ class Task extends React.Component {
     if (task){
       ren =
         <li onClick={onClick}
-          className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task`}>
-          <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
+          className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task Task__NonEmpty`}>
+          <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-2x tc Task__Icon Task__NonEmptyIcon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{task.title}</span>
             {/*<span className="f6 db black-70">Sprint: {task.sprint}</span>*/}
@@ -83,10 +83,10 @@ class Task extends React.Component {
     } else { //empty state
       ren =
         <li onClick={onClick} className="flex items-center ph0-l b--black-10 dim Task Task--Empty Task__AnimatedBackground--EmptyState bg-washed-green">
-          <i className="fa fa-arrows w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
+          <i className="fa fa-arrows w2 h2 w3-ns h3-ns br-100 fa-2x tc Task__Icon Task--EmptyIcon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{caption}</span>
-            <span className="f6 db black-70"></span>
+            {/*<span className="f6 db black-70"></span>*/}
           </div>
           <div>
             <a className="f6 link blue hover-dark-gray">{cta}</a>

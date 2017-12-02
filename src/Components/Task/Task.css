@@ -31,6 +31,22 @@
 .Task--Empty{
   border-radius: 0.5rem;
   border: 0.3rem dashed gray;
+  position:relative;
+}
+.Task__NonEmpty{
+  position:relative;
+}
+.Task--EmptyIcon::before{
+  position:absolute;
+  left: 0.8rem;
+  top: 50%;
+  margin-top: -1rem;
+}
+.Task__NonEmptyIcon::before{
+  position:absolute;
+  left: 0.8rem;
+  top: 50%;
+  margin-top: -1rem;
 }
 
 .Task--Highlight{
