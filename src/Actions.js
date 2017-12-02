@@ -632,7 +632,7 @@ export function createTaskFailure(task, err) {
  */
 export function updateTask(task, prevSprintId) {
 
-  task = preprocessTaskDueDate(task);
+  // task = preprocessTaskDueDate(task);
   // DebugLog('updateTask task',task);
   // DebugLog('updateTask prevSprintId',prevSprintId);
 

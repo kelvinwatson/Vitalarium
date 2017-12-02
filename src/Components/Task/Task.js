@@ -76,7 +76,7 @@ class Task extends React.Component {
             <span className="f6 db black-70">Sprint: {task.sprint}</span>
           </div>
           <div>
-            <a className="f6 link blue hover-dark-gray">Due {convertDateMillsecondsToHyphenatedMonthName(task.dueDate)}</a>
+            <a className="f6 link blue hover-dark-gray">{task.status}</a>
           </div>
         </li>;
 

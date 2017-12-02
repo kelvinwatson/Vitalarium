@@ -1,5 +1,6 @@
 import React from 'react';
 import CloseCreateTaskWarningModalContainer from '../../Containers/CloseCreateTaskWarningModalContainer';
+import Task from '../../Models/Task';
 import DebugLog from '../../Utils/DebugLog';
 import { convertDateMillsecondsToHyphenated } from '../../Utils/DateUtils';
 import 'date-input-polyfill';
@@ -19,7 +20,7 @@ export default class TaskDetail extends React.Component {
     this.onChangeSize = this.onChangeSize.bind(this);
     this.onChangeSprint = this.onChangeSprint.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
-    this.onChangeDueDate = this.onChangeDueDate.bind(this);
+    // this.onChangeDueDate = this.onChangeDueDate.bind(this);
   }
 
   getInitialState(){
@@ -32,7 +33,7 @@ export default class TaskDetail extends React.Component {
       prevSprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
       sprint: this.props.task && this.props.task.sprint || this.props.sprintId || 'backlog',
       project: this.props.task && this.props.task.project || this.props.projectId,
-      dueDate: this.props.task && this.props.task.dueDate && convertDateMillsecondsToHyphenated(this.props.task.dueDate) || convertDateMillsecondsToHyphenated(now),
+      // dueDate: this.props.task && this.props.task.dueDate && convertDateMillsecondsToHyphenated(this.props.task.dueDate) || convertDateMillsecondsToHyphenated(now),
       comments: this.props.task && this.props.task.comments || null,
       createdOn: this.props.task && this.props.task.createdOn || now,
       createdBy: this.props.task && this.props.task.createdOn || this.props.userId || null,
@@ -56,7 +57,7 @@ export default class TaskDetail extends React.Component {
         prevSprint: task.sprint,
         sprint: task.sprint || null,
         project: task.project,
-        dueDate: convertDateMillsecondsToHyphenated(task.dueDate),
+        // dueDate: convertDateMillsecondsToHyphenated(task.dueDate),
         comments: task.comments || null,
         createdOn: task.createdOn || null,
         createdBy: task.createdBy,
@@ -75,24 +76,23 @@ export default class TaskDetail extends React.Component {
    */
   onFormSubmit(e){
     e.preventDefault();
-    // DebugLog('onFormSubmit', this.state);
-    this.props.onFormSubmit(
-      this.state.id,
-      this.state.title,
-      this.state.description,
-      this.state.size,
-      this.state.sprint,
-      this.state.project,
-      this.state.dueDate,
-      this.state.comments,
-      this.state.createdOn,
-      this.state.createdBy,
 
-      this.state.prevSprint, // for updates (TaskPanel)
-      Date.now(), // updatedOn (TaskPanel)
-      this.state.updatedBy || this.props.task.updatedBy || this.props.userId, // for updates (TaskPanel)
-      this.state.status || 'Not Started',
-    );
+    let task = new Task.Builder()
+      .withId(this.state.id)
+      .withTitle(this.state.title)
+      .withDescription(this.state.description)
+      .withSize(this.state.size)
+      .withSprint(this.state.sprint)
+      .withProject(this.state.project)
+      .withComments(this.state.comments)
+      .withCreatedOn(this.state.createdOn)
+      .withCreatedBy(this.state.createdBy)
+      .withUpdatedOn(Date.now())
+      .withUpdatedBy(this.state.updatedBy || this.props.task.updatedBy || this.props.userId)
+      .withStatus(this.state.status || 'Not Started')
+      .build();
+
+    this.props.onFormSubmit(task, this.state.prevSprint);
   }
 
   /*
@@ -130,10 +130,10 @@ export default class TaskDetail extends React.Component {
     });
   }
 
-  onChangeDueDate(e){
-    // DebugLog('e.target.value',e.target.value);
-    this.setState({dueDate: e.target.value});
-  }
+  // onChangeDueDate(e){
+  //   // DebugLog('e.target.value',e.target.value);
+  //   this.setState({dueDate: e.target.value});
+  // }
 
   onCloseClicked(){
     if (this.props.isModal){
@@ -199,12 +199,12 @@ export default class TaskDetail extends React.Component {
             </div>
 
             <div className="TaskDetailSizeFlexWrapper">
-              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
+              {/*<div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
                 <label htmlFor="dueDateField">Due date</label>
                 <input type="date" onChange={this.onChangeDueDate} value={this.state.dueDate} min={this.state.today}/>
-              </div>
+              </div>*/}
 
-              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Right">
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
                 <label htmlFor="statusField">Status</label>
                 <select onChange={this.onChangeStatus} value={this.state.status} id="statusField">
                   <option value="Not Started">Not Started</option>
