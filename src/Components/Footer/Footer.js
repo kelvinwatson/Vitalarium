@@ -46,7 +46,7 @@ export default class Footer extends React.Component {
             <span className="f6 ml3 pr2">Code Pen</span>
           </a>
 
-          <small className="pt4 f6 db tc white">© 2016 <b className="ttu">SOME COMPANY Inc</b>., All Rights Reserved</small>
+          <small className="pt4 f6 db tc white">© 2017 <b className="ttu">WatsonLogic Inc</b>., All Rights Reserved</small>
           <div className="tc mt3">
             <a href="/language/" title="Language" className="f6 dib ph2 link white dim">Language</a>
             <a href="/terms/"    title="Terms" className="f6 dib ph2 link white dim">Terms of Use</a>
