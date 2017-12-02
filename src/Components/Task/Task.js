@@ -65,18 +65,31 @@ class Task extends React.Component {
       isDragging,
     } = this.props;
 
+    //<a className={`f6 hover-dark-gray Task__Status ${task.status === 'Not Started' ? 'Task__Status--NotStarted' : task.status === 'In Progress' ? 'Task__Status--InProgress' : 'Task__Status--Done'}`}>{task.status}</a>
+
+    let statusIcon;
+    if (task){
+      if (task.status === 'Not Started'){
+        statusIcon = 'fa-circle-o Task__Status--NotStartedColor';
+      }
+      else if (task.status === 'In Progress'){
+        statusIcon = 'fa-spinner Task__Status--InProgressColor';
+      } else {
+        statusIcon = 'fa-check-circle-o Task__Status--DoneColor ';
+      }
+    }
     let ren;
     if (task){
       ren =
         <li onClick={onClick}
           className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task Task__NonEmpty`}>
-          <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-2x tc Task__Icon Task__NonEmptyIcon" aria-hidden="true"></i>
+          <i className="fa fa-pencil w2 h2 w3-ns h3-ns br-100 fa-2x tc Task__Icon Task__NonEmptyIcon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{task.title}</span>
             {/*<span className="f6 db black-70">Sprint: {task.sprint}</span>*/}
           </div>
-          <div>
-            <a className="f6 link blue hover-dark-gray">{task.status}</a>
+          <div className="Task__StatusIconWrapper">
+            <i className={`fa ${statusIcon} w2 h2 w3-ns h3-ns br-100 fa-2x Task__StatusIcon`} aria-hidden="true"></i>
           </div>
         </li>;
 
@@ -89,7 +102,7 @@ class Task extends React.Component {
             {/*<span className="f6 db black-70"></span>*/}
           </div>
           <div>
-            <a className="f6 link blue hover-dark-gray">{cta}</a>
+            <a className="f6 link blue hover-dark-gray Task__Cta">{cta}</a>
           </div>
         </li>
     }

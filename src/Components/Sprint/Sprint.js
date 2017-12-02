@@ -3,7 +3,6 @@ import { DraggableTypes } from '../../Models/DraggableTypes';
 import { DropTarget } from 'react-dnd';
 import TaskContainer from '../../Containers/TaskContainer';
 import DebugLog from '../../Utils/DebugLog';
-import { convertDateMillsecondsToDays }  from '../../Utils/DateUtils';
 
 import '../../global.css';
 import './Sprint.css'
@@ -39,6 +38,7 @@ class Sprint extends React.Component {
       caption,
       sprint,
       title,
+      daysRemainingTilEndOfSprint,
     } = this.props;
 
     let sprintTasks;
@@ -55,6 +55,12 @@ class Sprint extends React.Component {
           cta={''}/>
     }
 
+    let daysRemainingRen;
+    if (daysRemainingTilEndOfSprint){
+      daysRemainingRen =
+        <span className="Sprint__Time--DaysRemaining">({daysRemainingTilEndOfSprint} days remaining)</span>
+    }
+
 
     return connectDropTarget(
       <div>
@@ -64,7 +70,7 @@ class Sprint extends React.Component {
           </h2>
           <time className="Sprint__Time">
             <span className="Sprint__Time--DateRange">{sprint.startDate} to {sprint.endDate}</span>
-            <span className="Sprint__Time--DaysRemaining">({convertDateMillsecondsToDays(sprint.daysRemainingTilEndOfSprint)} days remaining)</span>
+            {daysRemainingRen}
           </time>
 
           {/*<p className="f6 ttu tracked gray">{caption}</p>*/}

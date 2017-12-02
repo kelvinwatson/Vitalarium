@@ -10,11 +10,13 @@ export default class Sprints extends React.Component {
     const {
       currSprint,
       nextSprint,
+      daysRemainingTilEndOfSprint,
       onClickSprintTask,
     } = this.props;
 
     DebugLog('***SPRINTS currSprint',currSprint);
     DebugLog('***SPRINTS nextSprint',nextSprint);
+    DebugLog('***SPRINTS daysRemainingTilEndOfSprint',daysRemainingTilEndOfSprint);
 
     return (
       <div className="mh4-ns Sprints">
@@ -26,7 +28,7 @@ export default class Sprints extends React.Component {
 
         <Sprint sprint={currSprint} onClickSprintTask={onClickSprintTask}
           title={'Current Sprint'} caption={'-- YOUR TASKS FOR THIS SPRINT --'}
-          hoverColor={'green'}/>
+          daysRemainingTilEndOfSprint={daysRemainingTilEndOfSprint} hoverColor={'green'}/>
 
         <Sprint sprint={nextSprint} onClickSprintTask={onClickSprintTask}
           title={'Next Sprint'} caption={'-- LOOKING AHEAD --'}

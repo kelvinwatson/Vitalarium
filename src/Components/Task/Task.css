@@ -1,60 +1,92 @@
 @keyframes BlinkGreen {
   0% {
-    background-color:rgba(232, 253, 245, 0);
+    background-color: rgba(232, 253, 245, 0);
   }
-  50%{
-    background-color:rgba(232, 253, 245, 1);
+  50% {
+    background-color: rgba(232, 253, 245, 1);
   }
-  60%{
-    background-color:rgba(232, 253, 245, 1);
+  60% {
+    background-color: rgba(232, 253, 245, 1);
   }
-  100%{
-    background-color:rgba(232, 253, 245, 0);
+  100% {
+    background-color: rgba(232, 253, 245, 0);
   }
 }
 
 @keyframes BlinkYellow {
   0% {
-    background-color:rgba(255, 252, 235, 0);
+    background-color: rgba(255, 252, 235, 0);
   }
-  50%{
-    background-color:rgba(255, 252, 235, 1);
+  50% {
+    background-color: rgba(255, 252, 235, 1);
   }
-  60%{
-    background-color:rgba(255, 252, 235, 1);
+  60% {
+    background-color: rgba(255, 252, 235, 1);
   }
-  100%{
-    background-color:rgba(255, 252, 235, 0);
+  100% {
+    background-color: rgba(255, 252, 235, 0);
   }
 }
 
-.Task--Empty{
+.TaskWrapper {
+  border: 0.01rem solid lightgray;
+}
+
+.Task__Status {}
+
+.Task__StatusIconWrapper {
+  position: relative;
+}
+
+.Task__StatusIcon {
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  margin-top: -1rem;
+}
+
+.Task__Status--NotStartedColor {
+  color: red;
+}
+
+.Task__Status--InProgressColor {
+  color: orange;
+}
+
+.Task__Status--DoneColor {
+  color: green;
+}
+
+.Task--Empty {
   border-radius: 0.5rem;
   border: 0.3rem dashed gray;
-  position:relative;
+  position: relative;
 }
-.Task__NonEmpty{
-  position:relative;
+
+.Task__NonEmpty {
+  position: relative;
 }
-.Task--EmptyIcon::before{
-  position:absolute;
-  left: 0.8rem;
-  top: 50%;
-  margin-top: -1rem;
-}
-.Task__NonEmptyIcon::before{
-  position:absolute;
+
+.Task--EmptyIcon::before {
+  position: absolute;
   left: 0.8rem;
   top: 50%;
   margin-top: -1rem;
 }
 
-.Task--Highlight{
+.Task__NonEmptyIcon::before {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  margin-top: -1rem;
+}
+
+.Task--Highlight {
   animation: BlinkYellow 1s ease-out;
   animation-iteration-count: 5;
 }
 
-.Task__AnimatedBackground--EmptyState{
+.Task__AnimatedBackground--EmptyState {
   animation: BlinkGreen 1s ease-out;
   animation-iteration-count: 2;
 }
