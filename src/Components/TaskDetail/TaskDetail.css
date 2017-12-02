@@ -16,6 +16,11 @@
   animation-duration: 0.3s
 }
 
+.TaskDetail__Description{
+  height: 13rem;
+  resize: vertical; /* user can resize vertically, but width is fixed */
+}
+
 .TaskDetailHeader {
   width: 100%;
   text-align: right;
@@ -116,7 +121,7 @@ input[type='checkbox'], input[type='radio'] {
 
 @media(max-width: 767px) {
   /* phones */
-  
+
 }
 
 @media(max-width: 767px) and (orientation: portrait) {

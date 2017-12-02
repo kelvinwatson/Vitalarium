@@ -175,7 +175,7 @@ export default class TaskDetail extends React.Component {
               value={this.state.title || ''} onChange={this.onChangeTitle} required/>
 
             <label htmlFor="descriptionField">Description</label>
-            <textarea placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"
+            <textarea className="TaskDetail__Description" placeholder="Describe your task in detail and be specific about it! (acceptance criteria)" id="descriptionField"
               value={this.state.description || ''} onChange={this.onChangeDescription}></textarea>
 
             <div className="TaskDetailSizeFlexWrapper">

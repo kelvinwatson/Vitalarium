@@ -20,3 +20,7 @@ export function convertDateMillsecondsToHyphenated(milliseconds){
 export function convertDateHyphenatedToMilliseconds(hyphenatedDate){
   return new Date(hyphenatedDate).getTime();
 }
+
+export function convertDateMillsecondsToDays(milliseconds){
+  return Math.floor(milliseconds / 1000 / 60 / 60 / 24);
+}

@@ -73,7 +73,7 @@ class Task extends React.Component {
           <i className="fa fa-edit w2 h2 w3-ns h3-ns br-100 fa-3x tc Task__Icon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{task.title}</span>
-            <span className="f6 db black-70">Sprint: {task.sprint}</span>
+            {/*<span className="f6 db black-70">Sprint: {task.sprint}</span>*/}
           </div>
           <div>
             <a className="f6 link blue hover-dark-gray">{task.status}</a>

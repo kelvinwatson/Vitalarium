@@ -9,9 +9,16 @@
 .Sprint__Time {
   color: black;
   font-weight: 500;
-  text-transform: uppercase;
   /*font-family: monospace;*/
-  /*font-size: 1rem;*/
+  font-size: 0.95rem;
+  letter-spacing: 0.03rem;
+}
+.Sprint__Time--DateRange{
+  color: gray;
+  letter-spacing: -0.06rem;
+}
+.Sprint__Time--DaysRemaining{
+  margin-left: 1rem;
 }
 
 .Sprint__DashedBorder {

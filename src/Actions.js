@@ -191,6 +191,11 @@ export function getSprintsFromDb(sprintIds) {
             sprints.push(sprint);
             if (sprints.length === sprintIds.length) {
               sprints.sort(sprintComparatorDesc);
+              const now = Date.now();
+              for (let l = 0; l < sprints.length; l += 1){
+                const daysRemainingTilEndOfSprint = sprints[l].endDate - now;
+                sprints[l].daysRemainingTilEndOfSprint = daysRemainingTilEndOfSprint;
+              }
               resolve(sprints);
             }
           });
@@ -201,6 +206,11 @@ export function getSprintsFromDb(sprintIds) {
           // DebugLog('sprints',sprints);
           if (sprints.length === sprintIds.length) {
             sprints.sort(sprintComparatorDesc);
+            const now = Date.now();
+            for (let l = 0; l < sprints.length; l += 1){
+              const daysRemainingTilEndOfSprint = sprints[l].endDate - now;
+              sprints[l].daysRemainingTilEndOfSprint = daysRemainingTilEndOfSprint;
+            }
             resolve(sprints);
           }
         }
