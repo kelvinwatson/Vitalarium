@@ -46,7 +46,7 @@ class Sprint extends React.Component {
       sprintTasks = sprint.tasks.map((task, index) =>
         <TaskContainer key={task.id} task={task} canDrag={true}
           onClick={(e)=>onClickSprintTask(task)}
-          isLast={index===(sprint.tasks.length-1)}/>
+          isLast={index===(sprint.tasks.length-1)} isOdd={index % 2 === 1}/>
       );
     } else {
       sprintTasks =

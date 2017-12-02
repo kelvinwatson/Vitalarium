@@ -52,11 +52,10 @@ class Backlog extends React.Component {
     let ren;
     if (tasks && tasks.length > 0){
       ren = tasks.map((task, index) =>
-
-          <TaskContainer key={task.id} task={task} canDrag={true}
-            onClick={(e)=>this.onClickBacklogTask(task)}
-            isLast={index==(tasks.length-1)}
-            isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
+        <TaskContainer key={task.id} task={task} canDrag={true}
+          onClick={(e)=>this.onClickBacklogTask(task)}
+          isLast={index==(tasks.length-1)} isOdd={(index % 2 === 1)}
+          isHighlight={taskJustCreated && taskJustCreated.id===task.id}/>
       );
     } else { //empty
       ren =

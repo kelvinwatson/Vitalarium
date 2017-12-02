@@ -58,6 +58,8 @@ class Task extends React.Component {
       caption,
       cta,
       isLast,
+      isOdd,
+      index,
       isHighlight,
       onClick,
       task,
@@ -65,6 +67,8 @@ class Task extends React.Component {
       isDragging,
     } = this.props;
 
+    DebugLog('isOdd', isOdd);
+    DebugLog('index', index);
     //<a className={`f6 hover-dark-gray Task__Status ${task.status === 'Not Started' ? 'Task__Status--NotStarted' : task.status === 'In Progress' ? 'Task__Status--InProgress' : 'Task__Status--Done'}`}>{task.status}</a>
 
     let statusIcon;
@@ -82,15 +86,15 @@ class Task extends React.Component {
     if (task){
       ren =
         <li onClick={onClick}
-          className={`${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':'bb'} b--black-10 dim Task Task__NonEmpty`}>
+          className={`${isOdd ? '':'Task__BackgroundGray'} ${isHighlight? 'Task--Highlight':''} flex items-center ph0-l ${isLast?'':''} b--black-10 dim Task Task__NonEmpty`}>
           <i className="fa fa-pencil w2 h2 w3-ns h3-ns br-100 fa-2x tc Task__Icon Task__NonEmptyIcon" aria-hidden="true"></i>
           <div className="pl3 flex-auto">
             <span className="f6 db black-70">{task.title}</span>
             {/*<span className="f6 db black-70">Sprint: {task.sprint}</span>*/}
           </div>
-          <div className="Task__StatusIconWrapper">
+          <a className="Task__StatusIconWrapper" title={task.status} aria-hidden="true">
             <i className={`fa ${statusIcon} w2 h2 w3-ns h3-ns br-100 fa-2x Task__StatusIcon`} aria-hidden="true"></i>
-          </div>
+          </a>
         </li>;
 
     } else { //empty state
