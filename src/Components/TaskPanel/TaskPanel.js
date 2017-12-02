@@ -21,7 +21,8 @@ export default class TaskPanel extends React.Component {
   /*
    * Preconditions: Assumes inputs not empty since "required" is true in all input attributes
    */
-  onFormSubmit(id, title, description, size, sprint, project, dueDate, comments, createdOn, createdBy, prevSprint, updatedOn, updatedBy){
+  onFormSubmit(id, title, description, size, sprint, project, dueDate, comments, createdOn, createdBy, prevSprint, updatedOn, updatedBy, status){
+    DebugLog('status', status);
     this.props.updateTask(
       id,
       title,
@@ -36,6 +37,7 @@ export default class TaskPanel extends React.Component {
       prevSprint,
       updatedOn,
       updatedBy,
+      status,
     );
   }
 

@@ -18,6 +18,7 @@ export default class TaskDetail extends React.Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeSize = this.onChangeSize.bind(this);
     this.onChangeSprint = this.onChangeSprint.bind(this);
+    this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onChangeDueDate = this.onChangeDueDate.bind(this);
   }
 
@@ -39,6 +40,7 @@ export default class TaskDetail extends React.Component {
 
       updatedOn: this.props.task && this.props.task.updatedOn || null,
       updatedBy: this.props.task && this.props.task.updatedBy || this.props.userId || null,
+      status: this.props.task && this.props.task.status || 'Not Started',
     };
   }
 
@@ -60,6 +62,7 @@ export default class TaskDetail extends React.Component {
         createdBy: task.createdBy,
         updatedOn: task.updatedOn || null,
         updatedBy: task.updatedBy || this.props.userId || null,
+        status: task.status || 'Not Started',
       });
     }
     if (newProps.isModal && newProps.isResetForm){ //only the create task modal should be able to reset form
@@ -88,6 +91,7 @@ export default class TaskDetail extends React.Component {
       this.state.prevSprint, // for updates (TaskPanel)
       Date.now(), // updatedOn (TaskPanel)
       this.state.updatedBy || this.props.task.updatedBy || this.props.userId, // for updates (TaskPanel)
+      this.state.status || 'Not Started',
     );
   }
 
@@ -109,6 +113,11 @@ export default class TaskDetail extends React.Component {
 
   onChangeSize(e) {
     this.setState({size: e.target.value});
+  }
+
+  onChangeStatus(e){
+    DebugLog('onChangeStatus', e.target.value);
+    this.setState({status: e.target.value});
   }
 
   onChangeSprint(e){
@@ -193,6 +202,15 @@ export default class TaskDetail extends React.Component {
               <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Left">
                 <label htmlFor="dueDateField">Due date</label>
                 <input type="date" onChange={this.onChangeDueDate} value={this.state.dueDate} min={this.state.today}/>
+              </div>
+
+              <div className="TaskDetailSizeFlexItem TaskDetailSizeFlexItem--Right">
+                <label htmlFor="statusField">Status</label>
+                <select onChange={this.onChangeStatus} value={this.state.status} id="statusField">
+                  <option value="Not Started">Not Started</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Done">Done</option>
+                </select>
               </div>
 
             </div>
