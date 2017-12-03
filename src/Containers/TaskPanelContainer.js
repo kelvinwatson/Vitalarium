@@ -12,6 +12,7 @@ const mapStateToProps = (state) => {
     currentSprintId: state.project.project.sprints[0].id,
     nextSprintId: state.project.project.sprints[1].id,
     isOpen: state.task.isOpenUpdateTaskPanel,
+    isUpdating: state.task.isUpdating,
     // isShowCloseWarning: state.task.isShowCreateCloseWarningModal,
     // isCreateFailure: state.task.isCreateFailure,
   }

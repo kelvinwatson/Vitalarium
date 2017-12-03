@@ -1,5 +1,6 @@
 import React from 'react';
 import CloseCreateTaskWarningModalContainer from '../../Containers/CloseCreateTaskWarningModalContainer';
+import Loading from '../Loading/Loading';
 import Task from '../../Models/Task';
 import DebugLog from '../../Utils/DebugLog';
 import { convertDateMillsecondsToHyphenated } from '../../Utils/DateUtils';
@@ -20,7 +21,13 @@ export default class TaskDetail extends React.Component {
     this.onChangeSize = this.onChangeSize.bind(this);
     this.onChangeSprint = this.onChangeSprint.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
+    this.onClickSubmit = this.onClickSubmit.bind(this);
     // this.onChangeDueDate = this.onChangeDueDate.bind(this);
+  }
+
+  onClickSubmit(e){
+    e.preventDefault();
+    DebugLog('what?');
   }
 
   getInitialState(){
@@ -155,7 +162,10 @@ export default class TaskDetail extends React.Component {
       isShowCloseWarning,
       currentSprintId,
       nextSprintId,
+      isCreating,
+      isCreateSuccess,
       isCreateFailure,
+      isUpdating,
       isModal,
     } = this.props;
 
@@ -217,7 +227,10 @@ export default class TaskDetail extends React.Component {
 
             <div className="TaskDetailButtons">
               <div className={`TaskDetail_ErrorMessage ${isCreateFailure ? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
-              <input type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0"
+              <span className="TaskDetail__LoadingWrapper">
+                <Loading isLoading={isCreating} />
+              </span>
+              <input disabled={isCreating || isUpdating} type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0"
                 value={`${isModal? 'Create Task' :'Save Changes'}`}/>
             </div>
           </fieldset>

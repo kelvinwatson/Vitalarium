@@ -42,6 +42,7 @@ export default class TaskPanel extends React.Component {
           isOpenPanel={this.props.isOpenPanel}
           close={this.props.close}
           onFormSubmit={this.onFormSubmit}
+          isUpdating={this.props.isUpdating}
           isCreateFailure={this.props.isCreateFailure}
           currentSprintId={this.props.currentSprintId}
           nextSprintId={this.props.nextSprintId}

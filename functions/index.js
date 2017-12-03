@@ -94,6 +94,94 @@ exports.initializeUserObjectsInDb = functions.https.onRequest((request, response
   });
 });
 
+exports.createTask = functions.https.onRequest((request, response)=>{
+  cors(request, response, () => {
+    let task = request.body.task;
+    const db = admin.database();
+    const taskRef = db.ref('tasks/').push();
+    task.id = taskRef.key;
+    if (task.sprint && task.sprint !== 'backlog') { //save to sprint
+      db.ref('sprints/' + task.sprint).once('value').then((sprintSnap) => {
+        let destSprint = sprintSnap.val();
+        if (destSprint) {
+          destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
+          destSprint.tasks.push(taskRef.key);
+          let sprintCalls = [];
+          sprintCalls.push(db.ref(`tasks/${taskRef.key}`).set(task));
+          sprintCalls.push(db.ref(`sprints/'${task.sprint}`).set(destSprint));
+          Promise.all(sprintCalls).then((responses) => {
+            let obj = {
+              task: task,
+              success: true,
+            };
+            response.send(obj);
+          }).catch((err) => {
+            let obj = {
+              err,
+              success: false,
+              task,
+            }
+            response.send(obj);
+          });
+        } else {
+          let obj = {
+            err: 'Destination sprint does not exist.',
+            success: false,
+            task,
+          }
+          response.send(obj);
+        }
+      }).catch((err) => {
+        let obj = {
+          success: false,
+          err,
+          task,
+        }
+        response.send(obj);
+      });
+    } else if (task.project) { //save to backlog since no sprint specified
+      db.ref('projects/' + task.project).once('value').then((projectSnap) => {
+        let destProject = projectSnap.val();
+        if (destProject) {
+          destProject.backlog = Array.isArray(destProject.backlog) ? destProject.backlog : [];
+          destProject.backlog.push(taskRef.key);
+          let projectCalls = [];
+          projectCalls.push(db.ref('tasks/' + taskRef.key).set(task));
+          projectCalls.push(db.ref('projects/' + task.project).set(destProject));
+          Promise.all(projectCalls).then((responses) => {
+            let obj = {
+              task: task,
+              success: true,
+            };
+            response.send(obj);
+          }).catch((err) => {
+            let obj = {
+              success: false,
+              err,
+              task,
+            }
+            response.send(obj);
+          });
+        } else {
+          let obj = {
+            err: 'Destination sprint does not exist.',
+            success: false,
+            task,
+          }
+          response.send(obj);
+        }
+      }).catch((err) => {
+        let obj = {
+          success: false,
+          err,
+          task,
+        }
+        response.send(obj);
+      });
+    }
+  });
+});
+
 const getTasksFromDb = (taskList) => {
   return new Promise((resolve, reject) => {
     let calls = [];

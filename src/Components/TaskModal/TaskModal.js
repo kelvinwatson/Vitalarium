@@ -38,6 +38,7 @@ export default class TaskModal extends React.Component {
             close={this.props.close}
             onFormSubmit={this.onFormSubmit}
             isResetForm={this.props.isCreateSuccess}
+            isCreating={this.props.isCreating}
             isCreateFailure={this.props.isCreateFailure}
             currentSprintId={this.props.currentSprintId}
             nextSprintId={this.props.nextSprintId}

@@ -143,35 +143,6 @@ export function initializeUserObjectsInDb(redirectResult, dispatch) {
     DebugLog('initializeUserObjectsInDb NAY', err);
     dispatch(userUpdatedFailure(err));
   });
-
-  // const db = FirebaseUtil.getFirebase().database();
-  // let firstSprintRef = db.ref('sprints/').push();
-  // let secondSprintRef = db.ref('sprints/').push();
-  // let projectRef = db.ref('projects/').push();
-  // let firstSprint = new Sprint(firstSprintRef.key, [], Date.now(), new Date().setDate(new Date().getDate() + 14));
-  // let secondSprint = new Sprint(secondSprintRef.key, [], new Date().setDate(new Date().getDate() + 14), new Date().setDate(new Date().getDate() + 28));
-  // let project = new Project(projectRef.key, [firstSprintRef.key, secondSprintRef.key], [], Intl.DateTimeFormat().resolvedOptions().timeZone);
-  // let user = new User(redirectResult.user.uid,
-  //   redirectResult.user.displayName,
-  //   redirectResult.user.email,
-  //   redirectResult.user.photoURL,
-  //   redirectResult.additionalUserInfo && redirectResult.additionalUserInfo.providerId, [projectRef.key]);
-  // //push all to DB
-  // let calls = [
-  //   db.ref('sprints/' + firstSprintRef.key).set(firstSprint),
-  //   db.ref('sprints/' + secondSprintRef.key).set(secondSprint),
-  //   db.ref('projects/' + projectRef.key).set(project),
-  //   db.ref('users/' + user.id).set(user)
-  // ];
-  // Promise.all(calls).then((results) => {
-  //   dispatch(loginSuccess(user));
-  //   project.sprints = [firstSprint, secondSprint];
-  //
-  //   project = preprocessProjectDates(project);
-  //   dispatch(getProjectSuccess(project));
-  // }).catch((err) => {
-  //   dispatch(userUpdatedFailure(err));
-  // });
 };
 
 
@@ -451,54 +422,73 @@ export function getTasks(taskList) {
 export function createTask(task) {
   return function(dispatch) {
     dispatch(createTaskLoading());
-    let db = FirebaseUtil.getFirebase().database();
-    const taskRef = db.ref('tasks/').push();
-    task.id = taskRef.key;
-    if (task.sprint && task.sprint !== 'backlog') { //save to sprint
-      db.ref('sprints/' + task.sprint).once('value').then((sprintSnap) => {
-        let destSprint = sprintSnap.val();
-        if (destSprint) {
-          destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
-          destSprint.tasks.push(taskRef.key);
-          let sprintCalls = [];
-          sprintCalls.push(db.ref('tasks/' + taskRef.key).set(task));
-          sprintCalls.push(db.ref('sprints/' + task.sprint).set(destSprint));
-          Promise.all(sprintCalls).then((responses) => {
-            dispatch(createTaskSuccess(task));
-            dispatch(createTaskCloseModal());
-            dispatch(getProject(task.project, true));
-          }).catch((err) => {
-            dispatch(createTaskFailure(task, err));
-          });
-        } else {
-          dispatch(createTaskFailure(task, 'Destination sprint does not exist.'));
-        }
-      }).catch((err) => {
-        dispatch(createTaskFailure(task, err));
-      });
-    } else if (task.project) { //save to backlog since no sprint specified
-      db.ref('projects/' + task.project).once('value').then((projectSnap) => {
-        let destProject = projectSnap.val();
-        if (destProject) {
-          destProject.backlog = Array.isArray(destProject.backlog) ? destProject.backlog : [];
-          destProject.backlog.push(taskRef.key);
-          let projectCalls = [];
-          projectCalls.push(db.ref('tasks/' + taskRef.key).set(task));
-          projectCalls.push(db.ref('projects/' + task.project).set(destProject));
-          Promise.all(projectCalls).then((responses) => {
-            dispatch(createTaskSuccess(task));
-            dispatch(createTaskCloseModal());
-            dispatch(getProject(task.project, true));
-          }).catch((err) => {
-            dispatch(createTaskFailure(task, err));
-          });
-        } else {
-          dispatch(createTaskFailure(task, 'Destination project does not exist.'));
-        }
-      }).catch((err) => {
-        dispatch(createTaskFailure(task, err));
-      });
-    }
+
+    axios.post(`${functionUrl}/createTask`, {
+      task: task,
+    }).then((response)=>{
+      DebugLog('createTask YAY', response);
+      const data = response.data;
+      if (data.success === true){
+        dispatch(createTaskSuccess(response.data.task));
+        dispatch(createTaskCloseModal());
+        dispatch(getProject(response.data.task.project, true));
+      } else {
+        dispatch(createTaskFailure(response.data.task, response.data.err));
+      }
+    }).catch((err)=>{
+      DebugLog('createTask NAY', err);
+      dispatch(createTaskFailure(task, err));
+    });
+
+
+    // let db = FirebaseUtil.getFirebase().database();
+    // const taskRef = db.ref('tasks/').push();
+    // task.id = taskRef.key;
+    // if (task.sprint && task.sprint !== 'backlog') { //save to sprint
+    //   db.ref('sprints/' + task.sprint).once('value').then((sprintSnap) => {
+    //     let destSprint = sprintSnap.val();
+    //     if (destSprint) {
+    //       destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
+    //       destSprint.tasks.push(taskRef.key);
+    //       let sprintCalls = [];
+    //       sprintCalls.push(db.ref('tasks/' + taskRef.key).set(task));
+    //       sprintCalls.push(db.ref('sprints/' + task.sprint).set(destSprint));
+    //       Promise.all(sprintCalls).then((responses) => {
+    //         dispatch(createTaskSuccess(task));
+    //         dispatch(createTaskCloseModal());
+    //         dispatch(getProject(task.project, true));
+    //       }).catch((err) => {
+    //         dispatch(createTaskFailure(task, err));
+    //       });
+    //     } else {
+    //       dispatch(createTaskFailure(task, 'Destination sprint does not exist.'));
+    //     }
+    //   }).catch((err) => {
+    //     dispatch(createTaskFailure(task, err));
+    //   });
+    // } else if (task.project) { //save to backlog since no sprint specified
+    //   db.ref('projects/' + task.project).once('value').then((projectSnap) => {
+    //     let destProject = projectSnap.val();
+    //     if (destProject) {
+    //       destProject.backlog = Array.isArray(destProject.backlog) ? destProject.backlog : [];
+    //       destProject.backlog.push(taskRef.key);
+    //       let projectCalls = [];
+    //       projectCalls.push(db.ref('tasks/' + taskRef.key).set(task));
+    //       projectCalls.push(db.ref('projects/' + task.project).set(destProject));
+    //       Promise.all(projectCalls).then((responses) => {
+    //         dispatch(createTaskSuccess(task));
+    //         dispatch(createTaskCloseModal());
+    //         dispatch(getProject(task.project, true));
+    //       }).catch((err) => {
+    //         dispatch(createTaskFailure(task, err));
+    //       });
+    //     } else {
+    //       dispatch(createTaskFailure(task, 'Destination project does not exist.'));
+    //     }
+    //   }).catch((err) => {
+    //     dispatch(createTaskFailure(task, err));
+    //   });
+    // }
   }
 }
 
