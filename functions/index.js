@@ -53,7 +53,7 @@ exports.getProjectFromDb = functions.https.onRequest((request, response) => {
 
 exports.initializeUserObjectsInDb = functions.https.onRequest((request, response) => {
   cors(request, response, () => {
-    const user = request.body.user;
+    const u = request.body.user; //user
     const db = admin.database();
     let firstSprintRef = db.ref('sprints/').push();
     let secondSprintRef = db.ref('sprints/').push();
@@ -62,7 +62,7 @@ exports.initializeUserObjectsInDb = functions.https.onRequest((request, response
     let firstSprint = Sprint(firstSprintRef.key, [], Date.now(), new Date().setDate(new Date().getDate() + 14));
     let secondSprint = Sprint(secondSprintRef.key, [], new Date().setDate(new Date().getDate() + 14), new Date().setDate(new Date().getDate() + 28));
     let project = Project(projectRef.key, [firstSprintRef.key, secondSprintRef.key], [], Intl.DateTimeFormat().resolvedOptions().timeZone);
-    let user = User(user.uid, user.displayName, user.email, user.photoURL, [projectRef.key]);
+    let user = User(u.uid, u.displayName, u.email, u.photoURL, [projectRef.key]);
 
     let calls = [
       db.ref('sprints/' + firstSprintRef.key).set(firstSprint),

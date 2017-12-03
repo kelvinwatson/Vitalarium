@@ -131,9 +131,10 @@ export function getProject(projectId, isPostTaskManipulation) {
 /*
  * Create initial sprint objects and push to database
  */
-export function initializeUserObjectsInDb(redirectResult, dispatch) {
+export function initializeUserObjectsInDb(u, dispatch) {
+  dispatch(getProjectLoading());
   axios.post(`${functionUrl}/initializeUserObjectsInDb`, {
-    redirectResult: redirectResult,
+    user: u,
   }).then((response)=>{
     DebugLog('initializeUserObjectsInDb YAY', response);
     dispatch(loginSuccess(response.data.user));
@@ -194,6 +195,7 @@ export function initializeApp(filter) {
           let userResult = userSnap.val();
           if (!userResult) {
             //no user exists, initialize user data for the first time.
+            DebugLog('result.user', result.user);
             initializeUserObjectsInDb(result.user, dispatch);
           } else {
             dispatch(loginSuccess(userResult));

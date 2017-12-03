@@ -12,7 +12,7 @@ export default class Login extends React.Component {
   }
 
   componentDidUpdate(){
-    if (this.props.user){
+    if (this.props.user || this.props.isLoggedIn){
       this.props.history.push('/dashboard');
     }
   }

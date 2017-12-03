@@ -8,6 +8,7 @@ const mapStateToProps = (state) => {
     isLoginInProgress: state.login.isLoading,
     isLoginSuccess: state.login.isSuccess,
     isLoginFailure: state.login.isFailure,
+    isLoggedIn: state.login.isLoggedIn,
     user: state.login.user,
     status: state.login.status,
     previousProvider: state.login.previousProvider,
