@@ -228,7 +228,7 @@ export default class TaskDetail extends React.Component {
             <div className="TaskDetailButtons">
               <div className={`TaskDetail_ErrorMessage ${isCreateFailure ? 'dib':'dn'} red`}>Unable to comply. Please try again later.</div>
               <span className="TaskDetail__LoadingWrapper">
-                <Loading isLoading={isCreating} />
+                <Loading isLoading={isCreating || isUpdating} />
               </span>
               <input disabled={isCreating || isUpdating} type="submit" className="input-reset f6 link grow br1 ba ph3 pv2 mb2 dib black b--black" href="#0"
                 value={`${isModal? 'Create Task' :'Save Changes'}`}/>

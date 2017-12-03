@@ -93,6 +93,203 @@ exports.initializeUserObjectsInDb = functions.https.onRequest((request, response
     });
   });
 });
+exports.updateTask = functions.https.onRequest((request, response)=>{
+  cors(request, response, ()=>{
+    //TODO: for future: did the user change the project???
+    const task = request.body.task;
+    const prevSprintId = request.body.prevSprintId;
+    const db = admin.database();
+    if (prevSprintId !== task.sprint){
+      if (prevSprintId === undefined || prevSprintId === null || prevSprintId === 'backlog'){
+        // DebugLog('***BACKLOG-->SPRINT'); //task was in backlog, and did not live any sprint
+        //delete from project object
+        db.ref(`projects/${task.project}`).once('value').then((projectSnap)=>{
+          let project = projectSnap.val();
+          if (project){
+            project.backlog = Array.isArray(project.backlog) ? project.backlog : [];
+            project.backlog = project.backlog.filter(t => t !== task.id); //remove the task
+            db.ref(`projects/${task.project}`).set(project).then(()=>{
+              // add task to destination sprint
+              db.ref(`sprints/${task.sprint}`).once('value').then((newSprintSnap)=>{
+                let destSprint = newSprintSnap.val();
+                if (destSprint){
+                  destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
+                  destSprint.tasks.push(task.id); //add to the sprint
+                  let sprintCalls = [];
+                  sprintCalls.push(db.ref(`tasks/${task.id}`).set(task));
+                  sprintCalls.push(db.ref(`sprints/${task.sprint}`).set(destSprint));
+                  Promise.all(sprintCalls).then((responses)=>{
+                    let obj = {
+                      task: task,
+                      success: true,
+                    };
+                    response.send(obj);
+
+                    // dispatch(updateTaskSuccess(task));
+                    // dispatch(updateTaskClosePanel());
+                    // dispatch(getProject(task.project, true));
+                  }).catch((err)=>{
+                    let obj = {
+                      err,
+                      success: false,
+                      task,
+                    }
+                    response.send(obj);
+
+                    // dispatch(updateTaskFailure(task, err));
+                  });
+                }
+              }).catch((err)=>{
+                let obj = {
+                  err,
+                  success: false,
+                  task,
+                }
+                response.send(obj);
+                // dispatch(updateTaskFailure(task, err)); //unable to delete task from previous sprint
+              });
+            });
+          } else {
+            let obj = {
+              err: 'Destination project does not exist.',
+              success: false,
+              task,
+            }
+            response.send(obj);
+            // dispatch(updateTaskFailure(task, 'Destination project does not exist.'));
+          }
+        });
+      } else {
+        //NOTE SPRINT-->BACKLOG OR SPRINT-->SPRINT
+        //delete task id from previous sprint, then add to new sprint
+        db.ref(`sprints/${prevSprintId}`).once('value').then((sprintSnap)=>{
+          let prevSprint = sprintSnap.val();
+          if (prevSprint && prevSprint.tasks){
+            prevSprint.tasks = Array.isArray(prevSprint.tasks) ? prevSprint.tasks : [];
+            //filter out all occurrences of the task
+            prevSprint.tasks = prevSprint.tasks.filter(taskId => taskId !== task.id);
+            db.ref(`sprints/${prevSprintId}`).set(prevSprint).then(() => {
+              //update the new sprint
+              if (task.sprint && task.sprint !== 'backlog') {
+                // DebugLog('SPRINT-->SPRINT');
+                db.ref(`sprints/${task.sprint}`).once('value').then((newSprintSnap)=>{
+                  let destSprint = newSprintSnap.val();
+                  if (destSprint){
+                    destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
+                    destSprint.tasks.push(task.id); //add to the sprint
+                    let sprintCalls = [];
+                    sprintCalls.push(db.ref(`tasks/${task.id}`).set(task));
+                    sprintCalls.push(db.ref(`sprints/${task.sprint}`).set(destSprint));
+                    Promise.all(sprintCalls).then((responses)=>{
+                      let obj = {
+                        task: task,
+                        success: true,
+                      };
+                      response.send(obj);
+                      //
+                      // dispatch(updateTaskSuccess(task));
+                      // dispatch(updateTaskClosePanel());
+                      // dispatch(getProject(task.project, true));
+                    }).catch((err)=>{
+                      let obj = {
+                        err,
+                        success: false,
+                        task,
+                      }
+                      response.send(obj);
+                      // dispatch(updateTaskFailure(task, err));
+                    });
+                  }
+                }).catch((err)=>{
+                  let obj = {
+                    err,
+                    success: false,
+                    task,
+                  }
+                  response.send(obj);
+                  // dispatch(updateTaskFailure(task, err)); //unable to delete task from previous sprint
+                });
+              } else {
+                // DebugLog('SPRINT-->BACKLOG');
+                task.sprint = null;
+                db.ref(`projects/${task.project}`).once('value').then((projectSnap)=>{
+                  let project = projectSnap.val();
+                  if (project){
+                    project.backlog = Array.isArray(project.backlog) ? project.backlog : [];
+                    project.backlog.push(task.id); //add the task to the backlog
+                    db.ref(`projects/${task.project}`).set(project).then(()=>{
+                      db.ref(`tasks/${task.id}`).set(task).then(()=>{
+                        let obj = {
+                          task: task,
+                          success: true,
+                        };
+                        response.send(obj);
+                        // dispatch(updateTaskSuccess(task));
+                        // dispatch(updateTaskClosePanel());
+                        // dispatch(getProject(task.project, true));
+                      }).catch((err)=>{
+                        let obj = {
+                          err,
+                          success: false,
+                          task,
+                        }
+                        response.send(obj);
+                        // dispatch(updateTaskFailure(task, err));
+                      });
+                    }).catch((err)=>{
+                      let obj = {
+                        err,
+                        success: false,
+                        task,
+                      }
+                      response.send(obj);
+                      // dispatch(updateTaskFailure(task, err));
+                    });
+                  }
+                }).catch((err)=>{
+                  let obj = {
+                    err,
+                    success: false,
+                    task,
+                  }
+                  response.send(obj);
+                  // dispatch(updateTaskFailure(task, err));
+                });
+              }
+            }).catch((err) => {
+              let obj = {
+                err,
+                success: false,
+                task,
+              }
+              response.send(obj);
+              // dispatch(updateTaskFailure(task, err));
+            });
+          }
+        })
+      }
+    } else {
+      db.ref(`tasks/${task.id}`).set(task).then(()=>{
+        let obj = {
+          task: task,
+          success: true,
+        };
+        response.send(obj);
+        // dispatch(updateTaskSuccess(task));
+        // dispatch(updateTaskClosePanel());
+        // dispatch(getProject(task.project, true));
+      }).catch((err)=>{
+        let obj = {
+          err,
+          success: false,
+          task,
+        }
+        response.send(obj);
+        // dispatch(updateTaskFailure(task, err));
+      });
+    }
+  });
+});
 
 exports.createTask = functions.https.onRequest((request, response)=>{
   cors(request, response, () => {

@@ -427,68 +427,17 @@ export function createTask(task) {
       task: task,
     }).then((response)=>{
       DebugLog('createTask YAY', response);
-      const data = response.data;
-      if (data.success === true){
-        dispatch(createTaskSuccess(response.data.task));
+      if (response.data.success === true){
+        dispatch(createTaskSuccess(task));
         dispatch(createTaskCloseModal());
-        dispatch(getProject(response.data.task.project, true));
+        dispatch(getProject(task.project, true));
       } else {
-        dispatch(createTaskFailure(response.data.task, response.data.err));
+        dispatch(createTaskFailure(task, response.data.err));
       }
     }).catch((err)=>{
       DebugLog('createTask NAY', err);
       dispatch(createTaskFailure(task, err));
     });
-
-
-    // let db = FirebaseUtil.getFirebase().database();
-    // const taskRef = db.ref('tasks/').push();
-    // task.id = taskRef.key;
-    // if (task.sprint && task.sprint !== 'backlog') { //save to sprint
-    //   db.ref('sprints/' + task.sprint).once('value').then((sprintSnap) => {
-    //     let destSprint = sprintSnap.val();
-    //     if (destSprint) {
-    //       destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
-    //       destSprint.tasks.push(taskRef.key);
-    //       let sprintCalls = [];
-    //       sprintCalls.push(db.ref('tasks/' + taskRef.key).set(task));
-    //       sprintCalls.push(db.ref('sprints/' + task.sprint).set(destSprint));
-    //       Promise.all(sprintCalls).then((responses) => {
-    //         dispatch(createTaskSuccess(task));
-    //         dispatch(createTaskCloseModal());
-    //         dispatch(getProject(task.project, true));
-    //       }).catch((err) => {
-    //         dispatch(createTaskFailure(task, err));
-    //       });
-    //     } else {
-    //       dispatch(createTaskFailure(task, 'Destination sprint does not exist.'));
-    //     }
-    //   }).catch((err) => {
-    //     dispatch(createTaskFailure(task, err));
-    //   });
-    // } else if (task.project) { //save to backlog since no sprint specified
-    //   db.ref('projects/' + task.project).once('value').then((projectSnap) => {
-    //     let destProject = projectSnap.val();
-    //     if (destProject) {
-    //       destProject.backlog = Array.isArray(destProject.backlog) ? destProject.backlog : [];
-    //       destProject.backlog.push(taskRef.key);
-    //       let projectCalls = [];
-    //       projectCalls.push(db.ref('tasks/' + taskRef.key).set(task));
-    //       projectCalls.push(db.ref('projects/' + task.project).set(destProject));
-    //       Promise.all(projectCalls).then((responses) => {
-    //         dispatch(createTaskSuccess(task));
-    //         dispatch(createTaskCloseModal());
-    //         dispatch(getProject(task.project, true));
-    //       }).catch((err) => {
-    //         dispatch(createTaskFailure(task, err));
-    //       });
-    //     } else {
-    //       dispatch(createTaskFailure(task, 'Destination project does not exist.'));
-    //     }
-    //   }).catch((err) => {
-    //     dispatch(createTaskFailure(task, err));
-    //   });
-    // }
   }
 }
 
@@ -559,136 +508,23 @@ export function createTaskFailure(task, err) {
  *  3. sprint-->backlog
  */
 export function updateTask(task, prevSprintId) {
-
-  // task = preprocessTaskDueDate(task);
-  // DebugLog('updateTask task',task);
-  // DebugLog('updateTask prevSprintId',prevSprintId);
-
-  //FIXME:
   return function(dispatch) {
     dispatch(updateTaskLoading());
-    let db = FirebaseUtil.getFirebase().database();
-
-    //TODO: for future: did the user change the project???
-
-    if (prevSprintId !== task.sprint){
-      // DebugLog('***SPRINT HAS CHANGED');
-      if (prevSprintId === undefined || prevSprintId === null || prevSprintId === 'backlog'){
-        // DebugLog('***BACKLOG-->SPRINT'); //task was in backlog, and did not live any sprint
-        //delete from project object
-        db.ref('projects/'+task.project).once('value').then((projectSnap)=>{
-          let project = projectSnap.val();
-          if (project){
-            // DebugLog('***PROJECT', project);
-            project.backlog = Array.isArray(project.backlog) ? project.backlog : [];
-            // DebugLog('***PRE FILTER project.backlog', project.backlog);
-            project.backlog = project.backlog.filter(t => t !== task.id); //remove the task
-            // DebugLog('***POST FILTER project.backlog', project.backlog);
-            db.ref('projects/' + task.project).set(project).then(()=>{
-              // add task to destination sprint
-              db.ref('sprints/'+task.sprint).once('value').then((newSprintSnap)=>{
-                let destSprint = newSprintSnap.val();
-                if (destSprint){
-                  DebugLog('***destSprint', destSprint);
-                  destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
-                  destSprint.tasks.push(task.id); //add to the sprint
-                  let sprintCalls = [];
-                  sprintCalls.push(db.ref('tasks/'+task.id).set(task));
-                  sprintCalls.push(db.ref('sprints/'+task.sprint).set(destSprint));
-                  Promise.all(sprintCalls).then((responses)=>{
-                    dispatch(updateTaskSuccess(task));
-                    dispatch(updateTaskClosePanel());
-                    dispatch(getProject(task.project, true));
-                  }).catch((err)=>{
-                    dispatch(updateTaskFailure(task, err));
-                  });
-                }
-              }).catch((err)=>{
-                dispatch(updateTaskFailure(task, err)); //unable to delete task from previous sprint
-              });
-            });
-          } else {
-            dispatch(updateTaskFailure(task, 'Destination project does not exist.'));
-          }
-        });
-      } else {
-        //NOTE SPRINT-->BACKLOG OR SPRINT-->SPRINT
-        //delete task id from previous sprint, then add to new sprint
-        db.ref('sprints/'+prevSprintId).once('value').then((sprintSnap)=>{
-          // DebugLog('GOT prevSprint', sprintSnap.val());
-          let prevSprint = sprintSnap.val();
-          if (prevSprint && prevSprint.tasks){
-            prevSprint.tasks = Array.isArray(prevSprint.tasks) ? prevSprint.tasks : [];
-            //filter out all occurrences of the task
-            DebugLog('prevSprint.tasks', prevSprint.tasks);
-            prevSprint.tasks = prevSprint.tasks.filter(taskId => taskId !== task.id);
-
-            db.ref('sprints/'+prevSprintId).set(prevSprint).then(() => {
-              // DebugLog('deleted task from the previous sprint');
-              //update the new sprint
-              if (task.sprint && task.sprint !== 'backlog') {
-                // DebugLog('SPRINT-->SPRINT');
-                db.ref('sprints/'+task.sprint).once('value').then((newSprintSnap)=>{
-                  let destSprint = newSprintSnap.val();
-                  // DebugLog('destSprint.tasks', destSprint.tasks);
-                  // DebugLog('taskId', task.id);
-                  if (destSprint){
-                    destSprint.tasks = Array.isArray(destSprint.tasks) ? destSprint.tasks : [];
-                    destSprint.tasks.push(task.id); //add to the sprint
-                    let sprintCalls = [];
-                    sprintCalls.push(db.ref('tasks/'+task.id).set(task));
-                    sprintCalls.push(db.ref('sprints/'+task.sprint).set(destSprint));
-                    Promise.all(sprintCalls).then((responses)=>{
-                      dispatch(updateTaskSuccess(task));
-                      dispatch(updateTaskClosePanel());
-                      dispatch(getProject(task.project, true));
-                    }).catch((err)=>{
-                      dispatch(updateTaskFailure(task, err));
-                    });
-                  }
-                }).catch((err)=>{
-                  dispatch(updateTaskFailure(task, err)); //unable to delete task from previous sprint
-                });
-              } else {
-                // DebugLog('SPRINT-->BACKLOG');
-                task.sprint = null;
-                db.ref('projects/'+task.project).once('value').then((projectSnap)=>{
-                  let project = projectSnap.val();
-                  if (project){
-                    project.backlog = Array.isArray(project.backlog) ? project.backlog : [];
-                    project.backlog.push(task.id); //add the task to the backlog
-                    db.ref('projects/' + task.project).set(project).then(()=>{
-                      db.ref('tasks/'+task.id).set(task).then(()=>{
-                        dispatch(updateTaskSuccess(task));
-                        dispatch(updateTaskClosePanel());
-                        dispatch(getProject(task.project, true));
-                      }).catch((err)=>{
-                        dispatch(updateTaskFailure(task, err));
-                      });
-                    }).catch((err)=>{
-                      dispatch(updateTaskFailure(task, err));
-                    });
-                  }
-                }).catch((err)=>{
-                  dispatch(updateTaskFailure(task, err));
-                });
-              }
-            }).catch((err) => {
-              dispatch(updateTaskFailure(task, err));
-            });
-          }
-        })
-      }
-    } else {
-      DebugLog('SPRINT HAS NOT CHANGED');
-      db.ref('tasks/'+task.id).set(task).then(()=>{
+    axios.post(`${functionUrl}/updateTask`, {
+      task: task,
+      prevSprintId: prevSprintId,
+    }).then((response)=>{
+      if(response.data.success === true){
         dispatch(updateTaskSuccess(task));
         dispatch(updateTaskClosePanel());
         dispatch(getProject(task.project, true));
-      }).catch((err)=>{
-        dispatch(updateTaskFailure(task, err));
-      });
-    }
+      } else {
+        dispatch(updateTaskFailure(task, response.data.err));
+      }
+    }).catch((err)=>{
+      dispatch(updateTaskFailure(task, err));
+
+    });
   }
 }
 

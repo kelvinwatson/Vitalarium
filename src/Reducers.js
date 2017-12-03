@@ -287,6 +287,54 @@ export function task(state = {
         isShowUpdateCloseWarningModal: false,
       });
     //UPDATE
+    case TASK.UPDATE.LOADING:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: false,
+        isCreating: false,
+        isCreateSuccess: false,
+        isCreateFailure: false,
+        isShowCreateCloseWarningModal: false,
+
+        isOpenUpdateTaskPanel: true,
+        isUpdating: true,
+        isUpdateSuccess: false,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
+
+        task: action.task,
+      });
+    case TASK.UPDATE.SUCCESS:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: false,
+        isCreating: false,
+        isCreateSuccess: false,
+        isCreateFailure: false,
+        isShowCreateCloseWarningModal: false,
+
+        isOpenUpdateTaskPanel: false,
+        isUpdating: false,
+        isUpdateSuccess: true,
+        isUpdateFailure: false,
+        isShowUpdateCloseWarningModal: false,
+
+        task: action.task,
+      });
+    case TASK.UPDATE.FAILURE:
+      return Object.assign({}, state, {
+        isOpenCreateTaskModal: false,
+        isCreating: false,
+        isCreateSuccess: false,
+        isCreateFailure: false,
+        isShowCreateCloseWarningModal: false,
+
+        isOpenUpdateTaskPanel: true,
+        isUpdating: false,
+        isUpdateSuccess: false,
+        isUpdateFailure: true,
+        isShowUpdateCloseWarningModal: false,
+
+        task: action.task,
+      });
     case TASK.UPDATE.PANEL.OPEN:
       return Object.assign({}, state, {
         isOpenUpdateTaskPanel: true,
