@@ -12,7 +12,6 @@ import Task from './Models/Task';
 /**
  * action types
  */
-
 export const APP = {
   INITIALIZE: 'INITIALIZE_APP',
 };
@@ -195,7 +194,7 @@ export function initializeApp(filter) {
           let userResult = userSnap.val();
           if (!userResult) {
             //no user exists, initialize user data for the first time.
-            initializeUserObjectsInDb(result, dispatch);
+            initializeUserObjectsInDb(result.user, dispatch);
           } else {
             dispatch(loginSuccess(userResult));
           }
@@ -211,7 +210,6 @@ export function initializeApp(filter) {
     });
   }
 }
-
 
 /*
  * User
@@ -391,27 +389,6 @@ export function taskComparatorDesc(a, b) {
 
 export function sprintComparatorDesc(a, b) {
   return (a.startDate < b.startDate) ? -1 : (a.startDate > b.startDate) ? 1 : 0;
-}
-
-export function getTasks(taskList) {
-  return function(dispatch) {
-    let calls = [];
-    let db = FirebaseUtil.getFirebase().database();
-    for (let i = 0; i < taskList.length; i += 1) {
-      calls.push(db.ref('tasks/' + taskList[i]).once('value'));
-    }
-    Promise.all(calls).then((results) => {
-      let tasks = [];
-      for (let i = 0; i < results.length; i += 1) {
-        let task = results[i].val();
-        tasks.push(task);
-      }
-      tasks.sort(taskComparatorDesc);
-      dispatch(getTasksSuccess(tasks));
-    }).catch((err) => {
-      dispatch(getTasksFailure(err));
-    });
-  }
 }
 
 /*

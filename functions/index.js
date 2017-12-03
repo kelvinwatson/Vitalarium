@@ -53,7 +53,7 @@ exports.getProjectFromDb = functions.https.onRequest((request, response) => {
 
 exports.initializeUserObjectsInDb = functions.https.onRequest((request, response) => {
   cors(request, response, () => {
-    const redirectResult = request.body.redirectResult;
+    const user = request.body.user;
     const db = admin.database();
     let firstSprintRef = db.ref('sprints/').push();
     let secondSprintRef = db.ref('sprints/').push();
@@ -62,12 +62,7 @@ exports.initializeUserObjectsInDb = functions.https.onRequest((request, response
     let firstSprint = Sprint(firstSprintRef.key, [], Date.now(), new Date().setDate(new Date().getDate() + 14));
     let secondSprint = Sprint(secondSprintRef.key, [], new Date().setDate(new Date().getDate() + 14), new Date().setDate(new Date().getDate() + 28));
     let project = Project(projectRef.key, [firstSprintRef.key, secondSprintRef.key], [], Intl.DateTimeFormat().resolvedOptions().timeZone);
-    let user = User(redirectResult.user.uid,
-      redirectResult.user.displayName,
-      redirectResult.user.email,
-      redirectResult.user.photoURL,
-      redirectResult.additionalUserInfo && redirectResult.additionalUserInfo.providerId,
-      [projectRef.key]);
+    let user = User(user.uid, user.displayName, user.email, user.photoURL, [projectRef.key]);
 
     let calls = [
       db.ref('sprints/' + firstSprintRef.key).set(firstSprint),
@@ -490,13 +485,12 @@ function Sprint(id, tasks, startDate, endDate) {
 	}
 }
 
-function User(id, displayName, email, photoUrl, providerId, projects) {
+function User(id, displayName, email, photoUrl, projects) {
 	return {
 		id: id,
 		displayName: displayName,
 		email: email,
 		photoUrl: photoUrl,
-		providerId: providerId,
 		projects: projects
 	}
 }
