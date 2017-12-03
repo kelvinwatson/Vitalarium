@@ -295,7 +295,7 @@ export function task(state = {
         isCreateFailure: false,
         isShowCreateCloseWarningModal: false,
 
-        isOpenUpdateTaskPanel: true,
+        // isOpenUpdateTaskPanel: true,
         isUpdating: true,
         isUpdateSuccess: false,
         isUpdateFailure: false,

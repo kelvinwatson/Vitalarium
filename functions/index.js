@@ -300,7 +300,7 @@ exports.createTask = functions.https.onRequest((request, response)=>{
           destSprint.tasks.push(taskRef.key);
           let sprintCalls = [];
           sprintCalls.push(db.ref(`tasks/${taskRef.key}`).set(task));
-          sprintCalls.push(db.ref(`sprints/'${task.sprint}`).set(destSprint));
+          sprintCalls.push(db.ref(`sprints/${task.sprint}`).set(destSprint));
           Promise.all(sprintCalls).then((responses) => {
             let obj = {
               task: task,
