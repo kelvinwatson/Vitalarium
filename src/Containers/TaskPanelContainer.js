@@ -20,8 +20,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, own) => {
   return {
     updateTask: (task, prevSprint) => {
-      DebugLog('updateTask task', task);
-      DebugLog('updateTask prevSprint', prevSprint);
       dispatch(updateTask(task, prevSprint));
     },
     close: ()=>{

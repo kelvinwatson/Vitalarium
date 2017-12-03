@@ -21,7 +21,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, own) => {
   return {
     createTask: (task)=>{
-      DebugLog('createTask task',task);
       dispatch(createTask(task));
     },
     close: ()=>{

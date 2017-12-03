@@ -4,7 +4,6 @@ import Task from '../Components/Task/Task';
 import { updateTask } from '../Actions';
 
 const mapStateToProps = (state, ownProps) => {
-  DebugLog('ownProps',ownProps);
   return {
     caption: ownProps.caption,
     cta: ownProps.cta,

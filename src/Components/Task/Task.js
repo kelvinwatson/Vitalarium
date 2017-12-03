@@ -9,7 +9,6 @@ import './Task.css'
 
 const taskSource = {
   beginDrag(props){
-    DebugLog('beginDrag',props.task);
     return {
       task: props.task,
     };
@@ -32,9 +31,6 @@ const taskSource = {
     // CardActions.moveCardToList(item.id, dropResult.listId);
 
     //TODO: dispatch(updateTask()) with new sprint
-    DebugLog('item', item);
-    DebugLog('endDrag task',item.task);
-    DebugLog('endDrag dropResult',dropResult);
     props.onDropTask(item.task, dropResult)
   }
 };
@@ -67,8 +63,6 @@ class Task extends React.Component {
       isDragging,
     } = this.props;
 
-    DebugLog('isOdd', isOdd);
-    DebugLog('index', index);
     //<a className={`f6 hover-dark-gray Task__Status ${task.status === 'Not Started' ? 'Task__Status--NotStarted' : task.status === 'In Progress' ? 'Task__Status--InProgress' : 'Task__Status--Done'}`}>{task.status}</a>
 
     let statusIcon;

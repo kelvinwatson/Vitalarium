@@ -47,8 +47,6 @@ class Backlog extends React.Component {
       connectDropTarget,
     } = this.props;
 
-    DebugLog('Backlog tasks', tasks);
-
     let ren;
     if (tasks && tasks.length > 0){
       ren = tasks.map((task, index) =>

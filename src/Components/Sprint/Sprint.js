@@ -9,7 +9,6 @@ import './Sprint.css'
 
 const sprintTarget = {
   drop(props, monitor){
-    DebugLog('drop props',props);
     return {
       status: 'Dropped task to sprint',
       target: 'sprint',
